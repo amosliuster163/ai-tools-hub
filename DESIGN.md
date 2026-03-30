@@ -98,12 +98,18 @@ box-shadow: 0 8px 24px rgba(30,58,95,0.12);
 │            MAIN（内容区）             │
 │                                     │
 │  ┌─────────────────────────────────┐│
-│  │ 💡 需求洞察专栏                  ││
+│  │ 💡 需求洞察专栏（动态显示）        ││
 │  │ [痛点研究卡片]                   ││
 │  └─────────────────────────────────┘│
 │                                     │
-│  🤖 AI工具                          │
+│  {动态分隔符标题}                    │
+│  根据 分类按钮 动态变化：             │
+│  - 全部内容 → 🤖 AI工具              │
+│  - 需求洞察 → 隐藏                   │
+│  - 其他分类 → 对应分类名             │
+│                                     │
 │  [SkillBoss] [问问AI] [DeepSeek]    │
+│  [占位卡片：图像/视频/搜索/音频...]   │
 │                                     │
 ├─────────────────────────────────────┤
 │            FOOTER                    │
@@ -111,6 +117,11 @@ box-shadow: 0 8px 24px rgba(30,58,95,0.12);
 │  双平台地址                          │
 └─────────────────────────────────────┘
 ```
+
+**动态显示规则（v1.1更新）：**
+- 需求洞察专栏：仅在"全部内容"和"需求洞察"分类下显示
+- 分隔符标题：根据分类动态变化（见分类名称映射表）
+- 占位卡片：空分类显示"🚧 筹备中"提示
 
 ### 3.2 详情页结构
 
@@ -203,25 +214,64 @@ box-shadow: 0 8px 24px rgba(30,58,95,0.12);
 
 ## 五、交互规范
 
-### 5.1 分类筛选
+### 5.1 分类筛选（v1.1更新）
 
 **交互流程：**
 1. 用户点击分类按钮
 2. 按钮变为active状态（深蓝背景）
 3. 卡片根据data-category筛选显示/隐藏
-4. 计数器更新显示数量
+4. 需求洞察专栏动态显示/隐藏
+5. 分隔符标题动态更新
+6. 计数器更新显示数量
 
-**筛选逻辑：**
+**分类名称映射表：**
 ```javascript
-const category = btn.dataset.category;
-cards.forEach(card => {
-    if (category === 'all' || card.dataset.category === category) {
-        card.style.display = 'block';
-    } else {
-        card.style.display = 'none';
-    }
+const categoryNames = {
+  'all': '🤖 AI工具',
+  'insight': '',           // 空字符串 → 隐藏分隔符
+  'model': '🤖 大模型',
+  'image': '🎨 图像生成',
+  'video': '🎬 视频生成',
+  'search': '🔍 搜索工具',
+  'audio': '🎵 音频音乐',
+  'doc': '📄 文档处理',
+  'other': '📦 其他工具'
+};
+```
+
+**完整筛选逻辑（v1.1）：**
+```javascript
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const category = this.dataset.category;
+      
+      // 1. 筛选卡片
+      cards.forEach(card => {
+        card.style.display = 
+          (category === 'all' || card.dataset.category === category) 
+          ? 'block' : 'none';
+      });
+      
+      // 2. 需求洞察专栏显示控制
+      insightSection.style.display = 
+        (category === 'all' || category === 'insight') 
+        ? 'block' : 'none';
+      
+      // 3. 分隔符标题动态更新
+      divider.textContent = categoryNames[category] || '';
+      divider.style.display = categoryNames[category] ? 'block' : 'none';
+      
+      // 4. 更新计数
+      sectionCount.textContent = `${visibleCount} 个内容`;
+    });
+  });
 });
 ```
+
+**特殊处理：**
+- `insight`分类：分隔符标题为空字符串，自动隐藏
+- 空分类：显示占位卡片+"筹备中"提示
 
 ### 5.2 卡片Hover
 
@@ -370,12 +420,15 @@ git push
 
 ### 11.1 当前设计不足
 
-| 问题 | 建议 | 优先级 |
-|------|------|--------|
-| 卡片无真实图片 | 可添加工具logo或截图 | 中 |
-| 无搜索功能 | 添加搜索框快速定位工具 | 低 |
-| 无收藏功能 | 用户可收藏感兴趣的工具 | 低 |
-| 无分享功能 | 分享到社交媒体 | 低 |
+| 问题 | 建议 | 优先级 | 状态 |
+|------|------|--------|------|
+| 卡片无真实图片 | 可添加工具logo或截图 | 中 | 待处理 |
+| 无搜索功能 | 添加搜索框快速定位工具 | 低 | 待处理 |
+| 无收藏功能 | 用户可收藏感兴趣的工具 | 低 | 待处理 |
+| 无分享功能 | 分享到社交媒体 | 低 | 待处理 |
+| 分类筛选逻辑不完整 | 动态显示分隔符标题 | 高 | ✅ 已完成（v1.1） |
+| 需求洞察专栏未参与筛选 | 条件显示隐藏 | 高 | ✅ 已完成（v1.1） |
+| 空分类无提示 | 添加占位卡片 | 中 | ✅ 已完成（v1.1） |
 
 ### 11.2 后续扩展方向
 
@@ -400,5 +453,9 @@ git push
 **文档结束**
 
 ---
+
+**文档版本**: v1.1  
+**最后更新**: 2026-03-30 18:44  
+**更新内容**: 分类筛选动态显示、分隔符标题动态变化、需求洞察专栏条件显示
 
 *本设计文档由小金创建，后续修改请遵循本规范，如有不合理之处请提出更新。*
