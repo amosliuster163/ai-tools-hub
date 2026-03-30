@@ -552,6 +552,19 @@
     
     <!-- 分类筛选脚本 -->
     <script>
+        // 分类名称映射
+        const categoryNames = {
+            'all': '🤖 AI工具',
+            'insight': '',
+            'model': '🤖 大模型',
+            'image': '🎨 图像生成',
+            'video': '🎬 视频生成',
+            'search': '🔍 搜索工具',
+            'audio': '🎵 音频音乐',
+            'doc': '📄 文档处理',
+            'other': '📦 其他工具'
+        };
+        
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 // 更新按钮状态
@@ -583,13 +596,11 @@
                     }
                 }
                 
-                // 控制AI工具分隔符显示
+                // 动态更新分隔符标题
                 if (divider) {
-                    if (category === 'all' || (category !== 'insight' && category !== 'all')) {
-                        divider.style.display = 'block';
-                    } else {
-                        divider.style.display = 'none';
-                    }
+                    const title = categoryNames[category] || '';
+                    divider.textContent = title;
+                    divider.style.display = title ? 'block' : 'none';
                 }
                 
                 // 更新计数
