@@ -449,12 +449,96 @@
                     </div>
                 </div>
             </article>
-        </div>
-        
-        <!-- 空状态提示 -->
-        <div class="empty-state" style="display: none; text-align: center; padding: 60px 20px; color: var(--color-muted);">
-            <p style="font-size: 1.2rem; margin-bottom: 10px;">🚧 该分类内容正在筹备中</p>
-            <p style="font-size: 0.9rem;">敬请期待更多精彩工具！</p>
+            
+            <!-- 图像生成 -->
+            <article class="tool-card" data-category="image">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%);">
+                    <div class="card-icon-placeholder">🎨</div>
+                    <span class="card-category-badge">图像生成</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">图像生成工具</h3>
+                    <p class="card-desc">AI绘画、图像创作、设计辅助工具精选，敬请期待。</p>
+                    <div class="card-meta">
+                        <span class="meta-item coming">🚧 筹备中</span>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- 视频生成 -->
+            <article class="tool-card" data-category="video">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);">
+                    <div class="card-icon-placeholder">🎬</div>
+                    <span class="card-category-badge">视频生成</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">视频生成工具</h3>
+                    <p class="card-desc">AI视频创作、剪辑、特效生成工具精选，敬请期待。</p>
+                    <div class="card-meta">
+                        <span class="meta-item coming">🚧 筹备中</span>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- 搜索工具 -->
+            <article class="tool-card" data-category="search">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #1ABC9C 0%, #16A085 100%);">
+                    <div class="card-icon-placeholder">🔍</div>
+                    <span class="card-category-badge">搜索工具</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">智能搜索工具</h3>
+                    <p class="card-desc">AI搜索引擎、知识检索、智能问答工具精选，敬请期待。</p>
+                    <div class="card-meta">
+                        <span class="meta-item coming">🚧 筹备中</span>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- 音频音乐 -->
+            <article class="tool-card" data-category="audio">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);">
+                    <div class="card-icon-placeholder">🎵</div>
+                    <span class="card-category-badge">音频音乐</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">音频音乐工具</h3>
+                    <p class="card-desc">AI音乐创作、语音合成、音频处理工具精选，敬请期待。</p>
+                    <div class="card-meta">
+                        <span class="meta-item coming">🚧 筹备中</span>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- 文档处理 -->
+            <article class="tool-card" data-category="doc">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #2C3E50 0%, #1E3A5F 100%);">
+                    <div class="card-icon-placeholder">📄</div>
+                    <span class="card-category-badge">文档处理</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">文档处理工具</h3>
+                    <p class="card-desc">AI写作、文档编辑、智能排版工具精选，敬请期待。</p>
+                    <div class="card-meta">
+                        <span class="meta-item coming">🚧 筹备中</span>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- 其他 -->
+            <article class="tool-card" data-category="other">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #7F8C8D 0%, #6B7B8C 100%);">
+                    <div class="card-icon-placeholder">📦</div>
+                    <span class="card-category-badge">其他</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">更多AI工具</h3>
+                    <p class="card-desc">AI编程、数据分析、自动化工具精选，敬请期待。</p>
+                    <div class="card-meta">
+                        <span class="meta-item coming">🚧 筹备中</span>
+                    </div>
+                </div>
+            </article>
         </div>
     </main>
     
@@ -477,8 +561,6 @@
                 // 筛选卡片
                 const category = btn.dataset.category;
                 const cards = document.querySelectorAll('.tool-card');
-                const insightSection = document.querySelector('.insight-section');
-                const divider = document.querySelector('.category-divider');
                 let visibleCount = 0;
                 
                 cards.forEach(card => {
@@ -490,38 +572,8 @@
                     }
                 });
                 
-                // 控制需求洞察专栏显示
-                if (insightSection) {
-                    if (category === 'all' || category === 'insight') {
-                        insightSection.style.display = 'block';
-                    } else {
-                        insightSection.style.display = 'none';
-                    }
-                }
-                
-                // 控制AI工具分隔符显示
-                if (divider) {
-                    if (category === 'all' || category === 'model' || category === 'image' || category === 'video' || category === 'search' || category === 'audio' || category === 'doc' || category === 'other') {
-                        divider.style.display = 'block';
-                    } else {
-                        divider.style.display = 'none';
-                    }
-                }
-                
                 // 更新计数
                 document.querySelector('.section-count').textContent = `${visibleCount} 个内容`;
-                
-                // 显示空状态提示
-                const emptyState = document.querySelector('.empty-state');
-                if (emptyState) {
-                    // 检查是否是空分类（不是all和insight）
-                    const emptyCategories = ['image', 'video', 'search', 'audio', 'doc', 'other'];
-                    if (emptyCategories.includes(category) && visibleCount === 0) {
-                        emptyState.style.display = 'block';
-                    } else {
-                        emptyState.style.display = 'none';
-                    }
-                }
             });
         });
     </script>
