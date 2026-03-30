@@ -356,14 +356,15 @@
     <!-- 分类导航 -->
     <nav class="category-nav">
         <div class="category-list">
-            <button class="category-btn active" data-category="all">全部工具</button>
-            <button class="category-btn" data-category="model">大模型</button>
-            <button class="category-btn" data-category="image">图像生成</button>
-            <button class="category-btn" data-category="video">视频生成</button>
-            <button class="category-btn" data-category="search">搜索工具</button>
-            <button class="category-btn" data-category="audio">音频音乐</button>
-            <button class="category-btn" data-category="doc">文档处理</button>
-            <button class="category-btn" data-category="other">其他</button>
+            <button class="category-btn active" data-category="all">全部内容</button>
+            <button class="category-btn" data-category="insight">💡 需求洞察</button>
+            <button class="category-btn" data-category="model">🤖 大模型</button>
+            <button class="category-btn" data-category="image">🎨 图像生成</button>
+            <button class="category-btn" data-category="video">🎬 视频生成</button>
+            <button class="category-btn" data-category="search">🔍 搜索工具</button>
+            <button class="category-btn" data-category="audio">🎵 音频音乐</button>
+            <button class="category-btn" data-category="doc">📄 文档处理</button>
+            <button class="category-btn" data-category="other">📦 其他</button>
         </div>
     </nav>
     
@@ -388,10 +389,10 @@
                     <div class="card-content">
                         <span class="tool-tag hot">热门</span>
                         <h4 class="tool-name">人类痛点研究</h4>
-                        <p class="tool-desc">痛点需求分析 · 市场机会洞察 · 优先级排序</p>
+                        <p class="tool-desc">痛点需求分析 · 市场机会洞察 · 产品方向挖掘</p>
                         <div class="tool-stats">
-                            <span class="stat-item">687个痛点</span>
                             <span class="stat-item">8大分类</span>
+                            <span class="stat-item">Top5排名</span>
                         </div>
                     </div>
                 </article>
@@ -482,7 +483,7 @@
                 });
                 
                 // 更新计数
-                document.querySelector('.section-count').textContent = `${visibleCount} 个工具`;
+                document.querySelector('.section-count').textContent = `${visibleCount} 个内容`;
             });
         });
     </script>
