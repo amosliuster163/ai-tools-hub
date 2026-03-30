@@ -1,0 +1,9 @@
+# robots.txt for AI Tools Hub
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://amosliuster163.github.io/ai-tools-hub/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
