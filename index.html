@@ -561,6 +561,8 @@
                 // 筛选卡片
                 const category = btn.dataset.category;
                 const cards = document.querySelectorAll('.tool-card');
+                const insightSection = document.querySelector('.insight-section');
+                const divider = document.querySelector('.category-divider');
                 let visibleCount = 0;
                 
                 cards.forEach(card => {
@@ -571,6 +573,24 @@
                         card.style.display = 'none';
                     }
                 });
+                
+                // 控制需求洞察专栏标题显示
+                if (insightSection) {
+                    if (category === 'all' || category === 'insight') {
+                        insightSection.style.display = 'block';
+                    } else {
+                        insightSection.style.display = 'none';
+                    }
+                }
+                
+                // 控制AI工具分隔符显示
+                if (divider) {
+                    if (category === 'all' || (category !== 'insight' && category !== 'all')) {
+                        divider.style.display = 'block';
+                    } else {
+                        divider.style.display = 'none';
+                    }
+                }
                 
                 // 更新计数
                 document.querySelector('.section-count').textContent = `${visibleCount} 个内容`;
