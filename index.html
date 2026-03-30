@@ -575,44 +575,48 @@
             }
         }
         
-        // 页面加载时初始化
-        updateDividerTitle('all');
-        
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // 更新按钮状态
-                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                // 筛选卡片
-                const category = btn.dataset.category;
-                const cards = document.querySelectorAll('.tool-card');
-                const insightSection = document.querySelector('.insight-section');
-                let visibleCount = 0;
-                
-                cards.forEach(card => {
-                    if (category === 'all' || card.dataset.category === category) {
-                        card.style.display = 'block';
-                        visibleCount++;
-                    } else {
-                        card.style.display = 'none';
+        // DOM加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化分隔符标题
+            updateDividerTitle('all');
+            
+            // 绑定点击事件
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 更新按钮状态
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 筛选卡片
+                    const category = this.dataset.category;
+                    const cards = document.querySelectorAll('.tool-card');
+                    const insightSection = document.querySelector('.insight-section');
+                    let visibleCount = 0;
+                    
+                    cards.forEach(card => {
+                        if (category === 'all' || card.dataset.category === category) {
+                            card.style.display = 'block';
+                            visibleCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    // 控制需求洞察专栏标题显示
+                    if (insightSection) {
+                        if (category === 'all' || category === 'insight') {
+                            insightSection.style.display = 'block';
+                        } else {
+                            insightSection.style.display = 'none';
+                        }
                     }
+                    
+                    // 更新分隔符标题
+                    updateDividerTitle(category);
+                    
+                    // 更新计数
+                    document.querySelector('.section-count').textContent = `${visibleCount} 个内容`;
                 });
-                
-                // 控制需求洞察专栏标题显示
-                if (insightSection) {
-                    if (category === 'all' || category === 'insight') {
-                        insightSection.style.display = 'block';
-                    } else {
-                        insightSection.style.display = 'none';
-                    }
-                }
-                
-                // 更新分隔符标题
-                updateDividerTitle(category);
-                
-                // 更新计数
-                document.querySelector('.section-count').textContent = `${visibleCount} 个内容`;
             });
         });
     </script>
