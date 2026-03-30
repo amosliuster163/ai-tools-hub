@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI工具集 | 发现最好的AI工具</title>
+    
+    <!-- 字体：Playfair Display + Source Serif Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #F5F1E8;          /* 米白底色 */
+            --bg-card: #FFFFFF;
+            --color-primary: #1E3A5F;    /* 深蓝主色 */
+            --color-accent: #C9A227;     /* 金色点缀 */
+            --color-text: #2C3E50;
+            --color-muted: #6B7B8C;
+            --shadow-soft: 0 4px 20px rgba(30, 58, 95, 0.08);
+            --shadow-hover: 0 8px 40px rgba(30, 58, 95, 0.15);
+            --radius: 12px;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Source Serif 4', serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-main);
+            color: var(--color-text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        /* 页面加载动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ===== HEADER ===== */
+        header {
+            background: var(--color-primary);
+            color: #fff;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(201, 162, 39, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .site-title {
+            font-family: var(--font-display);
+            font-size: 4.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .site-subtitle {
+            font-size: 1.3rem;
+            font-weight: 400;
+            opacity: 0.85;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        
+        .accent-line {
+            width: 80px;
+            height: 3px;
+            background: var(--color-accent);
+            margin: 30px 0;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+        
+        /* ===== 分类导航 ===== */
+        .category-nav {
+            background: #fff;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(30, 58, 95, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .category-list {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--color-muted);
+            position: relative;
+        }
+        
+        .category-btn:hover {
+            color: var(--color-primary);
+            background: rgba(30, 58, 95, 0.05);
+        }
+        
+        .category-btn.active {
+            color: var(--color-primary);
+            background: rgba(201, 162, 39, 0.15);
+        }
+        
+        .category-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: var(--color-accent);
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .section-count {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            padding: 4px 12px;
+            background: rgba(30, 58, 95, 0.08);
+            border-radius: 20px;
+        }
+        
+        /* ===== 工具卡片网格 ===== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 32px;
+        }
+        
+        .tool-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: fadeInUp 0.6s ease-out both;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .tool-card:nth-child(1) { animation-delay: 0.1s; }
+        .tool-card:nth-child(2) { animation-delay: 0.15s; }
+        .tool-card:nth-child(3) { animation-delay: 0.2s; }
+        .tool-card:nth-child(4) { animation-delay: 0.25s; }
+        .tool-card:nth-child(5) { animation-delay: 0.3s; }
+        .tool-card:nth-child(6) { animation-delay: 0.35s; }
+        
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .tool-card:hover .card-image {
+            transform: scale(1.05);
+        }
+        
+        .card-image-wrapper {
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, var(--color-primary) 0%, #2D4A6F 100%);
+        }
+        
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        /* 卡片图标占位 */
+        .card-icon-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: var(--font-display);
+        }
+        
+        .card-category-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            background: var(--color-accent);
+            color: #fff;
+            border-radius: 4px;
+            letter-spacing: 0.03em;
+        }
+        
+        .card-content {
+            padding: 24px;
+        }
+        
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+        
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        
+        .card-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+        
+        .meta-item {
+            color: var(--color-muted);
+        }
+        
+        .meta-item.price {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--color-primary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 40px;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .footer-text {
+            font-size: 0.9rem;
+        }
+        
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: 2.5rem;
+            }
+            
+            header {
+                padding: 40px 20px;
+            }
+            
+            main {
+                padding: 40px 20px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .category-nav {
+                padding: 16px 20px;
+            }
+            
+            .category-list {
+                gap: 12px;
+            }
+            
+            .category-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <h1 class="site-title">AI 工具集</h1>
+            <p class="site-subtitle">发现最好的AI工具，一站式探索人工智能世界</p>
+            <div class="accent-line"></div>
+        </div>
+    </header>
+    
+    <!-- 分类导航 -->
+    <nav class="category-nav">
+        <div class="category-list">
+            <button class="category-btn active" data-category="all">全部工具</button>
+            <button class="category-btn" data-category="model">大模型</button>
+            <button class="category-btn" data-category="image">图像生成</button>
+            <button class="category-btn" data-category="video">视频生成</button>
+            <button class="category-btn" data-category="search">搜索工具</button>
+            <button class="category-btn" data-category="audio">音频音乐</button>
+            <button class="category-btn" data-category="doc">文档处理</button>
+            <button class="category-btn" data-category="other">其他</button>
+        </div>
+    </nav>
+    
+    <!-- MAIN -->
+    <main>
+        <div class="section-header">
+            <h2 class="section-title">精选工具</h2>
+            <span class="section-count">3 个工具</span>
+        </div>
+        
+        <div class="tools-grid">
+            <!-- SkillBoss -->
+            <article class="tool-card" data-category="model" onclick="location.href='detail-skillboss.html'">
+                <div class="card-image-wrapper">
+                    <div class="card-icon-placeholder">⚡</div>
+                    <span class="card-category-badge">大模型</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">SkillBoss</h3>
+                    <p class="card-desc">687个API端点聚合，一个Key调用62家供应商，涵盖聊天、图像、视频、搜索等全功能。</p>
+                    <div class="card-meta">
+                        <span class="meta-item">API聚合</span>
+                        <span class="meta-item price">部分免费</span>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- 问问AI -->
+            <article class="tool-card" data-category="model" onclick="location.href='detail-wenwen.html'">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);">
+                    <div class="card-icon-placeholder">🤖</div>
+                    <span class="card-category-badge">大模型</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">问问AI</h3>
+                    <p class="card-desc">国产AI助手，支持对话、写作、翻译、代码生成，中文优化体验。</p>
+                    <div class="card-meta">
+                        <span class="meta-item">对话AI</span>
+                        <span class="meta-item price">免费使用</span>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- DeepSeek -->
+            <article class="tool-card" data-category="model" onclick="location.href='detail-deepseek.html'">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);">
+                    <div class="card-icon-placeholder">🔍</div>
+                    <span class="card-category-badge">大模型</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">DeepSeek</h3>
+                    <p class="card-desc">深度求索大模型，代码能力强，开源版本可本地部署，性价比极高。</p>
+                    <div class="card-meta">
+                        <span class="meta-item">开源模型</span>
+                        <span class="meta-item price">API低价</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+    
+    <!-- FOOTER -->
+    <footer>
+        <p class="footer-text">AI工具集 · 持续更新中 · 2026</p>
+    </footer>
+    
+    <!-- 分类筛选脚本 -->
+    <script>
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 更新按钮状态
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // 筛选卡片
+                const category = btn.dataset.category;
+                const cards = document.querySelectorAll('.tool-card');
+                let visibleCount = 0;
+                
+                cards.forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // 更新计数
+                document.querySelector('.section-count').textContent = `${visibleCount} 个工具`;
+            });
+        });
+    </script>
+</body>
+</html>
