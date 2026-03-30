@@ -450,6 +450,12 @@
                 </div>
             </article>
         </div>
+        
+        <!-- 空状态提示 -->
+        <div class="empty-state" style="display: none; text-align: center; padding: 60px 20px; color: var(--color-muted);">
+            <p style="font-size: 1.2rem; margin-bottom: 10px;">🚧 该分类内容正在筹备中</p>
+            <p style="font-size: 0.9rem;">敬请期待更多精彩工具！</p>
+        </div>
     </main>
     
     <!-- FOOTER -->
@@ -471,6 +477,8 @@
                 // 筛选卡片
                 const category = btn.dataset.category;
                 const cards = document.querySelectorAll('.tool-card');
+                const insightSection = document.querySelector('.insight-section');
+                const divider = document.querySelector('.category-divider');
                 let visibleCount = 0;
                 
                 cards.forEach(card => {
@@ -482,8 +490,38 @@
                     }
                 });
                 
+                // 控制需求洞察专栏显示
+                if (insightSection) {
+                    if (category === 'all' || category === 'insight') {
+                        insightSection.style.display = 'block';
+                    } else {
+                        insightSection.style.display = 'none';
+                    }
+                }
+                
+                // 控制AI工具分隔符显示
+                if (divider) {
+                    if (category === 'all' || category === 'model' || category === 'image' || category === 'video' || category === 'search' || category === 'audio' || category === 'doc' || category === 'other') {
+                        divider.style.display = 'block';
+                    } else {
+                        divider.style.display = 'none';
+                    }
+                }
+                
                 // 更新计数
                 document.querySelector('.section-count').textContent = `${visibleCount} 个内容`;
+                
+                // 显示空状态提示
+                const emptyState = document.querySelector('.empty-state');
+                if (emptyState) {
+                    // 检查是否是空分类（不是all和insight）
+                    const emptyCategories = ['image', 'video', 'search', 'audio', 'doc', 'other'];
+                    if (emptyCategories.includes(category) && visibleCount === 0) {
+                        emptyState.style.display = 'block';
+                    } else {
+                        emptyState.style.display = 'none';
+                    }
+                }
             });
         });
     </script>
