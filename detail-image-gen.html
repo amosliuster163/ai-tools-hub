@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI图像生成工具大全 - 老刘聊AI</title>
+    
+    <!-- 字体：Playfair Display + Source Serif Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #F5F1E8;
+            --bg-card: #FFFFFF;
+            --color-primary: #1E3A5F;
+            --color-accent: #C9A227;
+            --color-text: #2C3E50;
+            --color-muted: #6B7B8C;
+            --shadow-soft: 0 4px 20px rgba(30, 58, 95, 0.08);
+            --shadow-hover: 0 8px 40px rgba(30, 58, 95, 0.15);
+            --radius: 12px;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Source Serif 4', serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-main);
+            color: var(--color-text);
+            line-height: 1.7;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ===== HEADER ===== */
+        header {
+            background: var(--color-primary);
+            padding: 30px 40px;
+        }
+        
+        .header-back {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: var(--color-accent);
+        }
+        
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            color: #fff;
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+        
+        .hero-desc {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 600px;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+        
+        /* ===== MAIN ===== */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(201, 162, 39, 0.3);
+        }
+        
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        
+        /* ===== 工具卡片网格 ===== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .tool-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s;
+            border: 1px solid rgba(30, 58, 95, 0.1);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .tool-icon {
+            font-size: 2rem;
+        }
+        
+        .tool-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .tool-desc {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            margin-bottom: 12px;
+        }
+        
+        .tool-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .tool-tag {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: rgba(201, 162, 39, 0.15);
+            color: var(--color-accent);
+            border-radius: 4px;
+        }
+        
+        .tool-tag.free {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27AE60;
+        }
+        
+        .tool-tag.premium {
+            background: rgba(231, 76, 60, 0.15);
+            color: #E74C3C;
+        }
+        
+        /* ===== 价格表格 ===== */
+        .price-table {
+            background: #fff;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            margin-top: 24px;
+        }
+        
+        .price-row {
+            display: flex;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(30, 58, 95, 0.1);
+        }
+        
+        .price-row:last-child {
+            border-bottom: none;
+        }
+        
+        .price-label {
+            flex: 1;
+            font-weight: 600;
+        }
+        
+        .price-value {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+        
+        /* ===== 提示词技巧 ===== */
+        .prompt-tips {
+            background: rgba(201, 162, 39, 0.1);
+            padding: 24px;
+            border-radius: var(--radius);
+            margin-top: 24px;
+        }
+        
+        .prompt-tip {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .prompt-tip::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+        
+        .prompt-tip strong {
+            color: var(--color-primary);
+        }
+        
+        /* ===== 官网按钮 ===== */
+        .official-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .official-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--color-primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .official-link:hover {
+            background: #2D4A6F;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .official-link.secondary {
+            background: #6B7B8C;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--color-primary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            margin-top: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero {
+                padding: 50px 20px;
+            }
+            
+            main {
+                padding: 40px 20px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .official-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-back">
+            <a href="index.html" class="back-link">← 返回老刘聊AI</a>
+        </div>
+    </header>
+    
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">🎨 AI创意工具</span>
+            <h1 class="hero-title">AI图像生成工具大全</h1>
+            <p class="hero-desc">从文字到图像，AI绘画工具让创意无限。Midjourney、DALL-E、Flux、Stable Diffusion...一文掌握主流工具特点、价格、使用技巧。</p>
+        </div>
+    </section>
+    
+    <!-- MAIN -->
+    <main>
+        <!-- 工具列表 -->
+        <section class="section">
+            <h2 class="section-title">主流图像生成工具</h2>
+            <p class="section-content">
+                AI图像生成已从实验走向实用，以下是6款主流工具的对比：
+            </p>
+            
+            <div class="tools-grid">
+                <!-- Midjourney -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🎨</span>
+                        <span class="tool-name">Midjourney</span>
+                    </div>
+                    <p class="tool-desc">艺术风格最强，画面惊艳。适合创意插画、概念设计、海报制作。需通过Discord使用。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag premium">付费</span>
+                        <span class="tool-tag">艺术风格</span>
+                        <span class="tool-tag">Discord</span>
+                    </div>
+                </div>
+                
+                <!-- DALL-E 3 -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🤖</span>
+                        <span class="tool-name">DALL-E 3</span>
+                    </div>
+                    <p class="tool-desc">OpenAI出品，理解力最强。完美还原复杂提示词，支持ChatGPT直接调用。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag premium">付费</span>
+                        <span class="tool-tag">理解力强</span>
+                        <span class="tool-tag">ChatGPT</span>
+                    </div>
+                </div>
+                
+                <!-- Flux -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">⚡</span>
+                        <span class="tool-name">Flux</span>
+                    </div>
+                    <p class="tool-desc">黑森林实验室新作，开源免费。画质媲美MJ，本地可运行，API调用便宜。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费开源</span>
+                        <span class="tool-tag">高画质</span>
+                        <span class="tool-tag">本地运行</span>
+                    </div>
+                </div>
+                
+                <!-- Stable Diffusion -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🔓</span>
+                        <span class="tool-name">Stable Diffusion</span>
+                    </div>
+                    <p class="tool-desc">开源标杆，生态最丰富。海量模型、插件、教程，可本地部署，完全免费。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费开源</span>
+                        <span class="tool-tag">生态丰富</span>
+                        <span class="tool-tag">本地部署</span>
+                    </div>
+                </div>
+                
+                <!-- Adobe Firefly -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🔥</span>
+                        <span class="tool-name">Adobe Firefly</span>
+                    </div>
+                    <p class="tool-desc">Adobe全家桶集成，商用最安全。版权清晰，直接在PS/ Illustrator中使用。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag premium">付费</span>
+                        <span class="tool-tag">商用安全</span>
+                        <span class="tool-tag">Adobe集成</span>
+                    </div>
+                </div>
+                
+                <!-- Leonardo.ai -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🌟</span>
+                        <span class="tool-name">Leonardo.ai</span>
+                    </div>
+                    <p class="tool-desc">游戏资产神器，模型可微调。专注角色、场景、道具设计，免费额度充足。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费额度</span>
+                        <span class="tool-tag">游戏资产</span>
+                        <span class="tool-tag">模型微调</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 价格对比 -->
+        <section class="section">
+            <h2 class="section-title">价格对比</h2>
+            <p class="section-content">
+                各工具定价策略不同，按需选择：
+            </p>
+            
+            <div class="price-table">
+                <div class="price-row">
+                    <span class="price-label">Midjourney</span>
+                    <span class="price-value">$10/月起（约200张）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">DALL-E 3</span>
+                    <span class="price-value">$0.04/张（API）或ChatGPT Plus</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Flux</span>
+                    <span class="price-value">免费（开源）或$0.03/张（API）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Stable Diffusion</span>
+                    <span class="price-value">免费（本地运行）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Adobe Firefly</span>
+                    <span class="price-value">Creative Cloud订阅（含生成积分）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Leonardo.ai</span>
+                    <span class="price-value">免费150张/天 或 $12/月</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 提示词技巧 -->
+        <section class="section">
+            <h2 class="section-title">提示词技巧</h2>
+            <p class="section-content">
+                好的提示词是生成高质量图像的关键：
+            </p>
+            
+            <div class="prompt-tips">
+                <div class="prompt-tip">
+                    <strong>结构清晰</strong>：主体 + 风格 + 环境 + 细节 + 尺寸<br>
+                    <em>例：一只猫咪，赛博朋克风格，霓虹灯背景，高清细节，16:9宽屏</em>
+                </div>
+                <div class="prompt-tip">
+                    <strong>风格关键词</strong>：photorealistic（写实）、anime（动漫）、oil painting（油画）、watercolor（水彩）
+                </div>
+                <div class="prompt-tip">
+                    <strong>质量关键词</strong>：high detail、4K、professional、masterpiece
+                </div>
+                <div class="prompt-tip">
+                    <strong>负面提示词</strong>：blurry、low quality、deformed、watermark（避免生成）
+                </div>
+                <div class="prompt-tip">
+                    <strong>参考艺术家</strong>：in style of Van Gogh、by Studio Ghibli
+                </div>
+            </div>
+        </section>
+        
+        <!-- 选择建议 -->
+        <section class="section">
+            <h2 class="section-title">如何选择</h2>
+            <p class="section-content">
+                <strong>追求艺术效果</strong> → Midjourney（风格最惊艳）<br>
+                <strong>复杂提示词理解</strong> → DALL-E 3（理解力最强）<br>
+                <strong>免费/本地运行</strong> → Flux 或 Stable Diffusion<br>
+                <strong>商用安全</strong> → Adobe Firefly（版权清晰）<br>
+                <strong>游戏/角色设计</strong> → Leonardo.ai（专业场景）
+            </p>
+        </section>
+        
+        <!-- 官网链接 -->
+        <section class="section">
+            <h2 class="section-title">官方网站</h2>
+            <div class="official-links">
+                <a href="https://midjourney.com" target="_blank" class="official-link">
+                    <span>Midjourney →</span>
+                </a>
+                <a href="https://openai.com/dall-e-3" target="_blank" class="official-link secondary">
+                    <span>DALL-E 3 →</span>
+                </a>
+                <a href="https://blackforestlabs.ai/flux" target="_blank" class="official-link secondary">
+                    <span>Flux →</span>
+                </a>
+                <a href="https://stability.ai" target="_blank" class="official-link secondary">
+                    <span>Stable Diffusion →</span>
+                </a>
+                <a href="https://firefly.adobe.com" target="_blank" class="official-link secondary">
+                    <span>Adobe Firefly →</span>
+                </a>
+                <a href="https://leonardo.ai" target="_blank" class="official-link secondary">
+                    <span>Leonardo.ai →</span>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- FOOTER -->
+    <footer>
+        <p>老刘聊AI · 2026</p>
+        <div class="footer-links">
+            <a href="https://amosliuster163.github.io/ai-tools-hub/">GitHub Pages</a>
+            <a href="https://ai-tools-hub-zeta.vercel.app/">Vercel</a>
+            <a href="https://github.com/amosliuster163">GitHub</a>
+        </div>
+    </footer>
+</body>
+</html>
