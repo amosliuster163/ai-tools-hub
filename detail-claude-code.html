@@ -132,11 +132,14 @@
         <section class="section">
             <h2 class="section-title">安装与使用</h2>
             <div class="code-block">
-                <pre># 安装Claude Code CLI
-npm install -g @anthropic-ai/claude-code
+                <pre># MacOS/Linux (推荐)
+curl -fsSL https://claude.ai/install.sh | bash
 
-# 或使用Homebrew (macOS)
-brew install claude-code
+# Homebrew (macOS/Linux)
+brew install --cask claude-code
+
+# Windows (推荐)
+irm https://claude.ai/install.ps1 | iex
 
 # 启动交互模式
 claude
@@ -145,10 +148,7 @@ claude
 claude "解释这个函数的作用"
 
 # 编辑文件
-claude "优化app.py中的性能瓶颈"
-
-# 项目级操作
-claude "重构整个项目的错误处理逻辑"</pre>
+claude "优化app.py中的性能瓶颈"</pre>
             </div>
             <div class="tech-tags">
                 <span class="tech-tag">Node.js</span>
@@ -206,7 +206,7 @@ claude "重构整个项目的错误处理逻辑"</pre>
         <section class="section">
             <h2 class="section-title">官方资源</h2>
             <p class="section-content">Anthropic官方文档和GitHub仓库。</p>
-            <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank" class="official-link">
+            <a href="https://code.claude.com/docs/en/overview" target="_blank" class="official-link">
                 <span>官方文档</span>
                 <span>→</span>
             </a>
