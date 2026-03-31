@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI音频音乐工具大全 - 老刘聊AI</title>
+    
+    <!-- 字体：Playfair Display + Source Serif Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #F5F1E8;
+            --bg-card: #FFFFFF;
+            --color-primary: #1E3A5F;
+            --color-accent: #C9A227;
+            --color-text: #2C3E50;
+            --color-muted: #6B7B8C;
+            --shadow-soft: 0 4px 20px rgba(30, 58, 95, 0.08);
+            --shadow-hover: 0 8px 40px rgba(30, 58, 95, 0.15);
+            --radius: 12px;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Source Serif 4', serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-main);
+            color: var(--color-text);
+            line-height: 1.7;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        header {
+            background: var(--color-primary);
+            padding: 30px 40px;
+        }
+        
+        .header-back {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: var(--color-accent);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
+            color: #fff;
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+        
+        .hero-desc {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 600px;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+        
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(201, 162, 39, 0.3);
+        }
+        
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .tool-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s;
+            border: 1px solid rgba(30, 58, 95, 0.1);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .tool-icon {
+            font-size: 2rem;
+        }
+        
+        .tool-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .tool-desc {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            margin-bottom: 12px;
+        }
+        
+        .tool-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .tool-tag {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: rgba(201, 162, 39, 0.15);
+            color: var(--color-accent);
+            border-radius: 4px;
+        }
+        
+        .tool-tag.free {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27AE60;
+        }
+        
+        .tool-tag.premium {
+            background: rgba(231, 76, 60, 0.15);
+            color: #E74C3C;
+        }
+        
+        .price-table {
+            background: #fff;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            margin-top: 24px;
+        }
+        
+        .price-row {
+            display: flex;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(30, 58, 95, 0.1);
+        }
+        
+        .price-row:last-child {
+            border-bottom: none;
+        }
+        
+        .price-label {
+            flex: 1;
+            font-weight: 600;
+        }
+        
+        .price-value {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+        
+        .audio-tips {
+            background: rgba(201, 162, 39, 0.1);
+            padding: 24px;
+            border-radius: var(--radius);
+            margin-top: 24px;
+        }
+        
+        .audio-tip {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .audio-tip::before {
+            content: '🎵';
+            position: absolute;
+            left: 0;
+        }
+        
+        .audio-tip strong {
+            color: var(--color-primary);
+        }
+        
+        .official-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .official-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--color-primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .official-link:hover {
+            background: #2D4A6F;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .official-link.secondary {
+            background: #6B7B8C;
+        }
+        
+        footer {
+            background: var(--color-primary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            margin-top: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.2rem; }
+            .hero { padding: 50px 20px; }
+            main { padding: 40px 20px; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .official-links { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-back">
+            <a href="index.html" class="back-link">← 返回老刘聊AI</a>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">🎵 AI音频创作</span>
+            <h1 class="hero-title">AI音频音乐工具大全</h1>
+            <p class="hero-desc">从文字生成语音、AI作曲、音频编辑...Suno、ElevenLabs、Udio...一文掌握主流工具特点、价格、使用技巧。</p>
+        </div>
+    </section>
+    
+    <main>
+        <section class="section">
+            <h2 class="section-title">主流音频音乐工具</h2>
+            <p class="section-content">AI音频工具分为语音合成、音乐生成、音频处理三大类：</p>
+            
+            <div class="tools-grid">
+                <!-- Suno -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🎶</span>
+                        <span class="tool-name">Suno</span>
+                    </div>
+                    <p class="tool-desc">AI音乐生成之王，输入歌词/风格自动生成完整歌曲。支持多种风格，免费额度充足。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费50首/月</span>
+                        <span class="tool-tag">AI作曲</span>
+                        <span class="tool-tag">完整歌曲</span>
+                    </div>
+                </div>
+                
+                <!-- ElevenLabs -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🗣️</span>
+                        <span class="tool-name">ElevenLabs</span>
+                    </div>
+                    <p class="tool-desc">顶级AI语音合成，声音最自然。支持声音克隆、多语言、情感控制。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费额度</span>
+                        <span class="tool-tag">语音合成</span>
+                        <span class="tool-tag">声音克隆</span>
+                    </div>
+                </div>
+                
+                <!-- Udio -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🎸</span>
+                        <span class="tool-name">Udio</span>
+                    </div>
+                    <p class="tool-desc">Suno最强对手，音乐质量更高。支持更精细的风格控制，适合专业创作。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费额度</span>
+                        <span class="tool-tag">高音质</span>
+                        <span class="tool-tag">专业级</span>
+                    </div>
+                </div>
+                
+                <!-- OpenAI TTS -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🤖</span>
+                        <span class="tool-name">OpenAI TTS</span>
+                    </div>
+                    <p class="tool-desc">ChatGPT内置语音，6种声音可选。API调用便宜，适合批量语音生成。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag premium">付费</span>
+                        <span class="tool-tag">ChatGPT</span>
+                        <span class="tool-tag">API</span>
+                    </div>
+                </div>
+                
+                <!-- 喜马拉雅AI -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🇨🇳</span>
+                        <span class="tool-name">喜马拉雅AI配音</span>
+                    </div>
+                    <p class="tool-desc">国产配音神器，中文最自然。适合有声书、播客、短视频配音。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费额度</span>
+                        <span class="tool-tag">国产</span>
+                        <span class="tool-tag">配音</span>
+                    </div>
+                </div>
+                
+                <!-- Descript -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🎙️</span>
+                        <span class="tool-name">Descript</span>
+                    </div>
+                    <p class="tool-desc">AI音频编辑+转录，像编辑文档一样编辑音频。支持声音克隆、降噪。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费额度</span>
+                        <span class="tool-tag">音频编辑</span>
+                        <span class="tool-tag">转录</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">价格对比</h2>
+            <p class="section-content">音频工具定价差异较大：</p>
+            
+            <div class="price-table">
+                <div class="price-row">
+                    <span class="price-label">Suno</span>
+                    <span class="price-value">免费50首/月 或 $10/月（500首）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">ElevenLabs</span>
+                    <span class="price-value">免费10分钟/月 或 $5/月（30分钟）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Udio</span>
+                    <span class="price-value">免费额度 或 $10/月</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">OpenAI TTS</span>
+                    <span class="price-value">$0.015/分钟（API）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">喜马拉雅AI配音</span>
+                    <span class="price-value">免费额度 或 ¥49/月</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Descript</span>
+                    <span class="price-value">免费1小时/月 或 $12/月</span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">使用技巧</h2>
+            <p class="section-content">AI音频工具各有特色：</p>
+            
+            <div class="audio-tips">
+                <div class="audio-tip">
+                    <strong>音乐生成提示词</strong>：描述风格+情绪+乐器<br>
+                    <em>例：一首轻快的电子舞曲，带有合成器和鼓点，适合健身</em>
+                </div>
+                <div class="audio-tip">
+                    <strong>语音合成技巧</strong>：注意断句和语速控制<br>
+                    <em>例：用逗号控制停顿，用标点控制语气</em>
+                </div>
+                <div class="audio-tip">
+                    <strong>声音克隆</strong>：提供10秒以上清晰样本<br>
+                    <em>ElevenLabs声音克隆效果最好</em>
+                </div>
+                <div class="audio-tip">
+                    <strong>音乐版权</strong>：付费版歌曲可用于商业，免费版仅个人使用
+                </div>
+                <div class="audio-tip">
+                    <strong>中文语音</strong>：喜马拉雅AI配音最自然，ElevenLabs也不错
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">如何选择</h2>
+            <p class="section-content">
+                <strong>AI作曲/歌曲生成</strong> → Suno（最易用）或 Udio（更高质）<br>
+                <strong>语音合成</strong> → ElevenLabs（最自然）或 喜马拉雅AI（中文）<br>
+                <strong>批量语音</strong> → OpenAI TTS（API便宜）<br>
+                <strong>音频编辑</strong> → Descript（转录+编辑一体化）<br>
+                <strong>声音克隆</strong> → ElevenLabs（效果最好）
+            </p>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">官方网站</h2>
+            <div class="official-links">
+                <a href="https://suno.ai" target="_blank" class="official-link">
+                    <span>Suno →</span>
+                </a>
+                <a href="https://elevenlabs.io" target="_blank" class="official-link secondary">
+                    <span>ElevenLabs →</span>
+                </a>
+                <a href="https://udio.com" target="_blank" class="official-link secondary">
+                    <span>Udio →</span>
+                </a>
+                <a href="https://openai.com" target="_blank" class="official-link secondary">
+                    <span>OpenAI TTS →</span>
+                </a>
+                <a href="https://www.ximalaya.com" target="_blank" class="official-link secondary">
+                    <span>喜马拉雅 →</span>
+                </a>
+                <a href="https://descript.com" target="_blank" class="official-link secondary">
+                    <span>Descript →</span>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>老刘聊AI · 2026</p>
+        <div class="footer-links">
+            <a href="https://amosliuster163.github.io/ai-tools-hub/">GitHub Pages</a>
+            <a href="https://ai-tools-hub-zeta.vercel.app/">Vercel</a>
+            <a href="https://github.com/amosliuster163">GitHub</a>
+        </div>
+    </footer>
+</body>
+</html>
