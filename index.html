@@ -387,6 +387,7 @@
             <button class="category-btn" data-category="audio">🎵 音频音乐</button>
             <button class="category-btn" data-category="doc">📄 文档处理</button>
             <button class="category-btn" data-category="other">📦 其他</button>
+            <button class="category-btn" data-category="openclaw">🦐 OpenClaw生态</button>
         </div>
     </nav>
     
@@ -547,6 +548,38 @@
                 </div>
             </article>
             
+            <!-- ClawdHome -->
+            <article class="tool-card" data-category="openclaw" onclick="location.href='detail-clawdhome.html'">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);">
+                    <div class="card-icon-placeholder">🦐</div>
+                    <span class="card-category-badge">OpenClaw</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">ClawdHome</h3>
+                    <p class="card-desc">Mac多实例管理控制台，安全隔离运行多个独立OpenClaw Agent，支持克隆、监控、一键配置。</p>
+                    <div class="card-meta">
+                        <span class="meta-item">多实例管理</span>
+                        <span class="meta-item price">开源免费</span>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Clawith -->
+            <article class="tool-card" data-category="openclaw" onclick="location.href='detail-clawith.html'">
+                <div class="card-image-wrapper" style="background: linear-gradient(135deg, #27AE60 0%, #229954 100%);">
+                    <div class="card-icon-placeholder">💬</div>
+                    <span class="card-category-badge">OpenClaw</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Clawith</h3>
+                    <p class="card-desc">桌面AI聊天客户端，支持15+平台、本地知识库RAG、联网搜索、Agent模式，跨平台支持。</p>
+                    <div class="card-meta">
+                        <span class="meta-item">多平台聚合</span>
+                        <span class="meta-item price">开源免费</span>
+                    </div>
+                </div>
+            </article>
+            
             <!-- 其他 -->
             <article class="tool-card" data-category="other">
                 <div class="card-image-wrapper" style="background: linear-gradient(135deg, #7F8C8D 0%, #6B7B8C 100%);">
@@ -584,7 +617,8 @@
             'search': '🔍 搜索工具',
             'audio': '🎵 音频音乐',
             'doc': '📄 文档处理',
-            'other': '📦 其他工具'
+            'other': '📦 其他工具',
+            'openclaw': '🦐 OpenClaw生态'
         };
         
         // 更新分隔符标题函数
