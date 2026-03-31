@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能搜索工具大全 - 老刘聊AI</title>
+    
+    <!-- 字体：Playfair Display + Source Serif Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #F5F1E8;
+            --bg-card: #FFFFFF;
+            --color-primary: #1E3A5F;
+            --color-accent: #C9A227;
+            --color-text: #2C3E50;
+            --color-muted: #6B7B8C;
+            --shadow-soft: 0 4px 20px rgba(30, 58, 95, 0.08);
+            --shadow-hover: 0 8px 40px rgba(30, 58, 95, 0.15);
+            --radius: 12px;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Source Serif 4', serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-main);
+            color: var(--color-text);
+            line-height: 1.7;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ===== HEADER ===== */
+        header {
+            background: var(--color-primary);
+            padding: 30px 40px;
+        }
+        
+        .header-back {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: var(--color-accent);
+        }
+        
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%);
+            color: #fff;
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+        
+        .hero-desc {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 600px;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+        
+        /* ===== MAIN ===== */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(201, 162, 39, 0.3);
+        }
+        
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        
+        /* ===== 工具卡片网格 ===== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .tool-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s;
+            border: 1px solid rgba(30, 58, 95, 0.1);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .tool-icon {
+            font-size: 2rem;
+        }
+        
+        .tool-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .tool-desc {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            margin-bottom: 12px;
+        }
+        
+        .tool-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .tool-tag {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: rgba(201, 162, 39, 0.15);
+            color: var(--color-accent);
+            border-radius: 4px;
+        }
+        
+        .tool-tag.free {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27AE60;
+        }
+        
+        .tool-tag.premium {
+            background: rgba(231, 76, 60, 0.15);
+            color: #E74C3C;
+        }
+        
+        /* ===== 价格表格 ===== */
+        .price-table {
+            background: #fff;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            margin-top: 24px;
+        }
+        
+        .price-row {
+            display: flex;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(30, 58, 95, 0.1);
+        }
+        
+        .price-row:last-child {
+            border-bottom: none;
+        }
+        
+        .price-label {
+            flex: 1;
+            font-weight: 600;
+        }
+        
+        .price-value {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+        
+        /* ===== 使用技巧 ===== */
+        .search-tips {
+            background: rgba(201, 162, 39, 0.1);
+            padding: 24px;
+            border-radius: var(--radius);
+            margin-top: 24px;
+        }
+        
+        .search-tip {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .search-tip::before {
+            content: '🔍';
+            position: absolute;
+            left: 0;
+        }
+        
+        .search-tip strong {
+            color: var(--color-primary);
+        }
+        
+        /* ===== 官网按钮 ===== */
+        .official-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .official-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--color-primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .official-link:hover {
+            background: #2D4A6F;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .official-link.secondary {
+            background: #6B7B8C;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--color-primary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            margin-top: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero {
+                padding: 50px 20px;
+            }
+            
+            main {
+                padding: 40px 20px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .official-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-back">
+            <a href="index.html" class="back-link">← 返回老刘聊AI</a>
+        </div>
+    </header>
+    
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">🔍 AI智能搜索</span>
+            <h1 class="hero-title">AI智能搜索工具大全</h1>
+            <p class="hero-desc">AI搜索引擎让搜索更智能。Perplexity、秘塔AI搜索、Kimi...一文掌握主流工具特点、价格、使用技巧。</p>
+        </div>
+    </section>
+    
+    <!-- MAIN -->
+    <main>
+        <!-- 工具列表 -->
+        <section class="section">
+            <h2 class="section-title">主流AI搜索引擎</h2>
+            <p class="section-content">
+                AI搜索引擎能理解你的问题，给出直接答案而非链接列表：
+            </p>
+            
+            <div class="tools-grid">
+                <!-- Perplexity -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🔍</span>
+                        <span class="tool-name">Perplexity</span>
+                    </div>
+                    <p class="tool-desc">AI搜索标杆，答案+引用来源。支持学术搜索、代码搜索，Pro版可切换模型。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费额度</span>
+                        <span class="tool-tag">引用来源</span>
+                        <span class="tool-tag">学术搜索</span>
+                    </div>
+                </div>
+                
+                <!-- 秘塔AI搜索 -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🇨🇳</span>
+                        <span class="tool-name">秘塔AI搜索</span>
+                    </div>
+                    <p class="tool-desc">国产AI搜索最强，中文优化。结构化答案，无广告，学术/全网模式切换。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费</span>
+                        <span class="tool-tag">国产</span>
+                        <span class="tool-tag">无广告</span>
+                    </div>
+                </div>
+                
+                <!-- Kimi -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🌙</span>
+                        <span class="tool-name">Kimi</span>
+                    </div>
+                    <p class="tool-desc">月之暗面出品，长文本之王。支持20万字上下文，联网搜索，文件解析。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费</span>
+                        <span class="tool-tag">长文本</span>
+                        <span class="tool-tag">联网搜索</span>
+                    </div>
+                </div>
+                
+                <!-- Google AI Overview -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🌐</span>
+                        <span class="tool-name">Google AI Overview</span>
+                    </div>
+                    <p class="tool-desc">Google搜索内置AI摘要。无需额外工具，搜索结果直接显示AI生成答案。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费</span>
+                        <span class="tool-tag">内置</span>
+                        <span class="tool-tag">英文优先</span>
+                    </div>
+                </div>
+                
+                <!-- Bing Chat -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">💬</span>
+                        <span class="tool-name">Bing Chat (Copilot)</span>
+                    </div>
+                    <p class="tool-desc">微软AI助手，集成Bing搜索。支持多轮对话搜索，GPT-4驱动。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费</span>
+                        <span class="tool-tag">GPT-4</span>
+                        <span class="tool-tag">多轮对话</span>
+                    </div>
+                </div>
+                
+                <!-- Felo -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🤖</span>
+                        <span class="tool-name">Felo</span>
+                    </div>
+                    <p class="tool-desc">日本AI搜索，跨语言搜索神器。支持日/英/中搜索，自动翻译结果。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费</span>
+                        <span class="tool-tag">跨语言</span>
+                        <span class="tool-tag">日本</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 价格对比 -->
+        <section class="section">
+            <h2 class="section-title">价格对比</h2>
+            <p class="section-content">
+                大部分AI搜索引擎提供免费额度：
+            </p>
+            
+            <div class="price-table">
+                <div class="price-row">
+                    <span class="price-label">Perplexity</span>
+                    <span class="price-value">免费5次/天 或 $20/月（Pro）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">秘塔AI搜索</span>
+                    <span class="price-value">完全免费</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Kimi</span>
+                    <span class="price-value">免费 或 ¥19/月（会员）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Google AI Overview</span>
+                    <span class="price-value">完全免费（需登录Google）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Bing Chat</span>
+                    <span class="price-value">完全免费</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Felo</span>
+                    <span class="price-value">完全免费</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 使用技巧 -->
+        <section class="section">
+            <h2 class="section-title">搜索技巧</h2>
+            <p class="section-content">
+                AI搜索与传统搜索不同，技巧也不同：
+            </p>
+            
+            <div class="search-tips">
+                <div class="search-tip">
+                    <strong>像提问一样搜索</strong>：AI搜索理解自然语言<br>
+                    <em>传统：人工智能 发展历史</em><br>
+                    <em>AI：请介绍人工智能的发展历史和关键里程碑</em>
+                </div>
+                <div class="search-tip">
+                    <strong>追问深入</strong>：支持多轮对话，可以追问细节<br>
+                    <em>例：ChatGPT是什么？→ 它和Claude有什么区别？</em>
+                </div>
+                <div class="search-tip">
+                    <strong>指定来源</strong>：要求引用来源验证答案<br>
+                    <em>例：请列出2024年诺贝尔奖得主，并附上来源</em>
+                </div>
+                <div class="search-tip">
+                    <strong>学术模式</strong>：搜索学术论文时切换学术模式<br>
+                    <em>例：搜索"Transformer架构 论文"</em>
+                </div>
+                <div class="search-tip">
+                    <strong>文件解析</strong>：上传PDF/Word让AI解读<br>
+                    <em>例：上传论文让Kimi总结要点</em>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 选择建议 -->
+        <section class="section">
+            <h2 class="section-title">如何选择</h2>
+            <p class="section-content">
+                <strong>中文搜索</strong> → 秘塔AI搜索（中文优化，无广告）<br>
+                <strong>学术研究</strong> → Perplexity（引用来源完整）<br>
+                <strong>长文档解析</strong> → Kimi（20万字上下文）<br>
+                <strong>日常搜索</strong> → Google AI Overview / Bing Chat（无需额外工具）<br>
+                <strong>跨语言搜索</strong> → Felo（自动翻译结果）
+            </p>
+        </section>
+        
+        <!-- 官网链接 -->
+        <section class="section">
+            <h2 class="section-title">官方网站</h2>
+            <div class="official-links">
+                <a href="https://perplexity.ai" target="_blank" class="official-link">
+                    <span>Perplexity →</span>
+                </a>
+                <a href="https://metaso.cn" target="_blank" class="official-link secondary">
+                    <span>秘塔AI搜索 →</span>
+                </a>
+                <a href="https://kimi.moonshot.cn" target="_blank" class="official-link secondary">
+                    <span>Kimi →</span>
+                </a>
+                <a href="https://www.google.com" target="_blank" class="official-link secondary">
+                    <span>Google →</span>
+                </a>
+                <a href="https://www.bing.com" target="_blank" class="official-link secondary">
+                    <span>Bing Chat →</span>
+                </a>
+                <a href="https://felo.ai" target="_blank" class="official-link secondary">
+                    <span>Felo →</span>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- FOOTER -->
+    <footer>
+        <p>老刘聊AI · 2026</p>
+        <div class="footer-links">
+            <a href="https://amosliuster163.github.io/ai-tools-hub/">GitHub Pages</a>
+            <a href="https://ai-tools-hub-zeta.vercel.app/">Vercel</a>
+            <a href="https://github.com/amosliuster163">GitHub</a>
+        </div>
+    </footer>
+</body>
+</html>
