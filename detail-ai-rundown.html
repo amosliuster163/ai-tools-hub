@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Rundown 一周摘要 - AI Tools Hub</title>
+    <meta name="description" content="每周AI技术动态精华，深度分析行业趋势，提供实用行动建议">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1E3A5F;
+            --accent-color: #C9A227;
+            --bg-color: #F5F1E8;
+            --text-color: #333333;
+            --light-text: #666666;
+            --border-color: #E0DCC8;
+            --card-bg: #FFFFFF;
+            --hover-shadow: 0 12px 24px rgba(30, 58, 95, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+        
+        /* 导航栏 */
+        nav {
+            background: linear-gradient(135deg, var(--primary-color), #2A4A6F);
+            padding: 1.2rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        nav a:hover {
+            color: var(--accent-color);
+        }
+        
+        /* Hero区域 */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2A4A6F 50%, #3A5A7F 100%);
+            color: #fff;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom right, transparent 49%, var(--bg-color) 50%);
+        }
+        
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        /* 主容器 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* 最新周报卡片 */
+        .latest-issue {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 18px rgba(30, 58, 95, 0.1);
+            border: 1px solid var(--border-color);
+        }
+        
+        .latest-issue-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .issue-date {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .issue-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        /* 周报内容样式 */
+        .report-content {
+            background: #1a1a2e;
+            color: #e8e8e8;
+            border-radius: 12px;
+            padding: 2rem;
+            font-size: 0.95rem;
+        }
+        
+        .report-content h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-color);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .report-content h3 {
+            color: #4CAF50;
+            margin: 1rem 0 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .report-content p {
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+        
+        .report-content .event-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .report-content .importance-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        
+        .importance-high {
+            background: #ff6b6b;
+            color: #fff;
+        }
+        
+        .importance-medium {
+            background: #4CAF50;
+            color: #fff;
+        }
+        
+        .importance-low {
+            background: #64b5f6;
+            color: #fff;
+        }
+        
+        .report-content .domain-tag {
+            display: inline-block;
+            background: rgba(201, 162, 39, 0.3);
+            color: var(--accent-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        
+        .report-content a {
+            color: #64b5f6;
+            text-decoration: none;
+        }
+        
+        .report-content a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 历史周报列表 */
+        .archive-section {
+            margin-top: 2rem;
+        }
+        
+        .archive-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .archive-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .archive-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.08);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .archive-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .archive-item-date {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .archive-item-content {
+            flex: 1;
+        }
+        
+        .archive-item-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .archive-item-desc {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+        
+        .archive-item-link {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+        
+        .archive-item-link:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+        
+        /* 功能说明 */
+        .feature-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 6px 18px rgba(30, 58, 95, 0.1);
+            border: 1px solid var(--border-color);
+        }
+        
+        .feature-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-color), #D4B237);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .feature-text h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+        
+        .feature-text p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        /* 底部 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        footer a {
+            color: var(--primary-color);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .latest-issue {
+                padding: 1.5rem;
+            }
+            
+            .report-content {
+                padding: 1rem;
+            }
+            
+            .archive-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">
+            <span>←</span>
+            <span>AI Tools Hub</span>
+        </a>
+    </nav>
+    
+    <section class="hero">
+        <h1>AI Rundown 一周摘要</h1>
+        <p class="subtitle">每周精选AI技术动态，深度分析行业趋势，为您提供可落地的行动建议</p>
+        <span class="hero-badge">📡 自动化生成 · 每周一更</span>
+    </section>
+    
+    <main class="container">
+        <!-- 最新周报 -->
+        <section class="latest-issue">
+            <div class="latest-issue-header">
+                <span class="issue-date">2026-03-31</span>
+                <span class="issue-label">最新一期</span>
+            </div>
+            
+            <div class="report-content">
+                <h2>🤖 本周核心事件</h2>
+                
+                <div class="event-item">
+                    <h3>Anthropic意外泄露'Mythos'旗舰模型 <span class="importance-badge importance-high">重要度:5</span></h3>
+                    <p><span class="domain-tag">AI模型</span> Anthropic网站意外暴露新旗舰模型'Mythos'信息，随后迅速删除。业内推测这可能是下一代Claude模型的代号。</p>
+                    <p><a href="#">查看原文 →</a></p>
+                </div>
+                
+                <div class="event-item">
+                    <h3>OpenAI关闭Sora视频项目转向Spud <span class="importance-badge importance-high">重要度:5</span></h3>
+                    <p><span class="domain-tag">AI产品</span> OpenAI宣布关闭视频生成项目Sora，团队转向新项目'Spud'。业内猜测Spud可能是多模态融合的新尝试。</p>
+                    <p><a href="#">查看原文 →</a></p>
+                </div>
+                
+                <div class="event-item">
+                    <h3>Meta开源TRIBE v2脑神经预测模型 <span class="importance-badge importance-medium">重要度:4</span></h3>
+                    <p><span class="domain-tag">开源AI</span> Meta发布TRIBE v2，可预测大脑对视觉刺激的神经活动反应，为神经科学研究提供新工具。</p>
+                    <p><a href="#">查看原文 →</a></p>
+                </div>
+                
+                <div class="event-item">
+                    <h3>ARC-AGI-3基准测试发布 <span class="importance-badge importance-medium">重要度:4</span></h3>
+                    <p><span class="domain-tag">AI评测</span> 新版ARC-AGI基准测试发布，当前顶尖模型得分接近零，显示通用智能仍是AI的核心挑战。</p>
+                    <p><a href="#">查看原文 →</a></p>
+                </div>
+                
+                <div class="event-item">
+                    <h3>Claude推出远程控制电脑功能 <span class="importance-badge importance-medium">重要度:4</span></h3>
+                    <p><span class="domain-tag">AI应用</span> Anthropic为Claude添加远程电脑控制功能，用户可通过Claude操作远程设备，开启AI助手新场景。</p>
+                    <p><a href="#">查看原文 →</a></p>
+                </div>
+                
+                <div class="event-item">
+                    <h3>Alibaba Accio Work智能体系统 <span class="importance-badge importance-low">重要度:3</span></h3>
+                    <p><span class="domain-tag">企业AI</span> Alibaba.com推出Accio Work智能体系统，帮助采购商自动化询价、比价和供应商筛选流程。</p>
+                    <p><a href="#">查看原文 →</a></p>
+                </div>
+                
+                <div class="event-item">
+                    <h3>Amazon收购Fauna Robotics <span class="importance-badge importance-low">重要度:3</span></h3>
+                    <p><span class="domain-tag">机器人</span> Amazon收购人形机器人初创公司Fauna Robotics，加速仓储自动化布局。</p>
+                    <p><a href="#">查看原文 →</a></p>
+                </div>
+                
+                <h2>💡 本周洞察</h2>
+                <p>本周AI领域呈现几个关键趋势：</p>
+                <ul style="margin-left: 1rem;">
+                    <li><strong>模型竞争加剧</strong>：Anthropic和OpenAI都在筹备下一代旗舰产品</li>
+                    <li><strong>基准测试挑战</strong>：ARC-AGI-3暴露了当前模型的通用智能短板</li>
+                    <li><strong>应用场景扩展</strong>：Claude远程控制开启AI助手物理交互新方向</li>
+                    <li><strong>企业自动化</strong>：阿里和亚马逊都在推进AI驱动的业务流程优化</li>
+                </ul>
+                
+                <p style="margin-top: 1rem; padding: 1rem; background: rgba(201, 162, 39, 0.2); border-radius: 8px;">
+                    <strong>📌 下周关注</strong>：关注Anthropic'Mythos'正式发布动态，以及ARC-AGI-3对模型研发的影响。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 历史周报 -->
+        <section class="archive-section">
+            <h2 class="archive-title">📚 历史周报</h2>
+            <div class="archive-list">
+                <article class="archive-item">
+                    <div class="archive-item-date">2026-03-31</div>
+                    <div class="archive-item-content">
+                        <div class="archive-item-title">第1期：AI模型新动态</div>
+                        <div class="archive-item-desc">Anthropic Mythos泄露、OpenAI Spud转向、ARC-AGI-3发布</div>
+                    </div>
+                    <a href="#latest" class="archive-item-link">查看</a>
+                </article>
+                
+                <!-- 更多历史周报会自动添加 -->
+                <article class="archive-item" style="opacity: 0.6;">
+                    <div class="archive-item-date">待发布</div>
+                    <div class="archive-item-content">
+                        <div class="archive-item-title">第2期</div>
+                        <div class="archive-item-desc">每周一自动更新...</div>
+                    </div>
+                    <span style="color: var(--light-text);">敬请期待</span>
+                </article>
+            </div>
+        </section>
+        
+        <!-- 功能说明 -->
+        <section class="feature-section">
+            <h2 class="feature-title">🎯 AI Rundown 是什么？</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📧</div>
+                    <div class="feature-text">
+                        <h4>自动采集</h4>
+                        <p>从AI Rundown邮件自动提取每周技术动态</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-text">
+                        <h4>深度分析</h4>
+                        <p>4阶段分析流程，从事件到趋势再到行动</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-text">
+                        <h4>重要度排序</h4>
+                        <p>自动评估事件重要性，聚焦核心动态</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">💡</div>
+                    <div class="feature-text">
+                        <h4>行动建议</h4>
+                        <p>提供可落地的实践建议，不只是信息</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(30, 58, 95, 0.05); border-radius: 8px;">
+                <p style="color: var(--light-text);">
+                    <strong style="color: var(--primary-color);">技术栈</strong>：Python + 百炼API (GLM-5) + IMAP邮箱采集 + 4阶段LLM分析流水线
+                </p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>AI Tools Hub · <a href="https://amosliuster163.github.io/ai-tools-hub/">GitHub Pages</a> · <a href="https://ai-tools-hub-zeta.vercel.app/">Vercel</a></p>
+        <p style="margin-top: 0.5rem;">Powered by OpenClaw + AI Rundown 自动化系统</p>
+    </footer>
+</body>
+</html>
