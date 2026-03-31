@@ -418,10 +418,18 @@
         ];
         
         function calculateCost() {
-            const dailyConversations = parseInt(document.getElementById('dailyConversations').value) || 50;
-            const inputTokens = parseInt(document.getElementById('inputTokens').value) || 1000;
-            const outputTokens = parseInt(document.getElementById('outputTokens').value) || 500;
-            const usageDays = parseInt(document.getElementById('usageDays').value) || 30;
+            // 安全获取输入值，确保是有效数字
+            const getInputValue = (id, defaultVal) => {
+                const el = document.getElementById(id);
+                if (!el) return defaultVal;
+                const val = parseInt(el.value);
+                return (isNaN(val) || val < 1) ? defaultVal : val;
+            };
+            
+            const dailyConversations = getInputValue('dailyConversations', 50);
+            const inputTokens = getInputValue('inputTokens', 1000);
+            const outputTokens = getInputValue('outputTokens', 500);
+            const usageDays = getInputValue('usageDays', 30);
             
             // 计算总词元数
             const totalInputTokens = dailyConversations * inputTokens * usageDays;
@@ -528,6 +536,10 @@
         }
         
         function formatPrice(price) {
+            // 检查是否为有效数字
+            if (isNaN(price) || !isFinite(price)) {
+                return '¥0.00';
+            }
             if (price >= 100) {
                 return '¥' + price.toFixed(2);
             } else if (price >= 1) {
