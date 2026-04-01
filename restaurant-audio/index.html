@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>餐厅翻译助手 - 测试音频播放器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #eee; min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 10px; color: #00d4ff; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+
+        .controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; transition: all 0.3s; }
+        .btn-primary { background: #00d4ff; color: #000; }
+        .btn-primary:hover { background: #00a8cc; }
+        .btn-warning { background: #ff9800; color: #000; }
+        .btn-warning:hover { background: #e68900; }
+        .btn-secondary { background: #333; color: #fff; }
+        .btn-secondary:hover { background: #444; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        
+        .settings { background: #252540; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .settings-title { color: #00d4ff; margin-bottom: 15px; font-weight: bold; }
+        .settings-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
+        .settings label { color: #aaa; }
+        .settings input[type="number"] { width: 60px; padding: 8px; border: 1px solid #444; border-radius: 5px; background: #1a1a2e; color: #fff; }
+
+        .now-playing { background: linear-gradient(135deg, #252540, #1a1a2e); padding: 25px; border-radius: 15px; margin-bottom: 20px; text-align: center; border: 1px solid #00d4ff; }
+        .now-playing .segment-id { font-size: 14px; color: #00d4ff; margin-bottom: 5px; }
+        .now-playing .segment-name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+        .now-playing .speaker { color: #888; margin-bottom: 15px; }
+        .now-playing .mode-badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; margin-left: 10px; }
+        .mode-normal { background: #4ecdc430; color: #4ecdc4; }
+        .mode-restaurant { background: #ff6b6b30; color: #ff6b6b; }
+        .mode-command { background: #ffd93d30; color: #ffd93d; }
+        .now-playing .text { font-size: 18px; line-height: 1.6; margin-bottom: 10px; }
+        .now-playing .text-zh { color: #fff; }
+        .now-playing .text-en { color: #aaa; font-size: 14px; }
+        .now-playing .text-th { color: #888; font-size: 14px; }
+        .now-playing .timer { color: #00d4ff; font-size: 14px; margin-top: 10px; }
+        .now-playing .total-time { color: #ff6b6b; font-size: 16px; font-weight: bold; margin-top: 10px; }
+        .now-playing-controls { margin-top: 15px; }
+        .btn-sm { padding: 8px 16px; font-size: 14px; margin: 0 5px; }
+
+        .playlist { background: #252540; border-radius: 15px; overflow: hidden; }
+        .playlist-header { padding: 15px 20px; background: #1a1a2e; font-weight: bold; }
+        .playlist-item { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid #333; cursor: pointer; transition: background 0.3s; }
+        .playlist-item:hover { background: #2a2a4a; }
+        .playlist-item.active { background: #00d4ff20; border-left: 3px solid #00d4ff; }
+        .playlist-item.playing { background: #00d4ff30; }
+        .playlist-item .id { width: 40px; color: #00d4ff; font-weight: bold; }
+        .playlist-item .info { flex: 1; }
+        .playlist-item .name { font-weight: 500; }
+        .playlist-item .speaker { font-size: 12px; color: #888; }
+        .playlist-item .lang { padding: 3px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px; }
+        .lang-zh { background: #ff6b6b30; color: #ff6b6b; }
+        .lang-en { background: #4ecdc430; color: #4ecdc4; }
+        .lang-th { background: #ffd93d30; color: #ffd93d; }
+        .playlist-item .pause { color: #888; font-size: 12px; margin-left: 10px; min-width: 50px; }
+
+        .progress { height: 4px; background: #333; margin-top: 20px; border-radius: 2px; }
+        .progress-bar { height: 100%; background: #00d4ff; border-radius: 2px; transition: width 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>餐厅翻译助手测试</h1>
+        <p class="subtitle">自动播放测试音频，模拟真实对话场景</p>
+
+        
+        <div class="controls">
+            <button class="btn btn-secondary" id="prevBtn" onclick="playPrev()" disabled>⏮ 上一个</button>
+            <button class="btn btn-primary" id="playBtn" onclick="startAutoPlay()">▶ 播放</button>
+            <button class="btn btn-secondary" id="nextBtn" onclick="playNext()" disabled>下一个 ⏭</button>
+        </div>
+        <div class="controls">
+            <button class="btn btn-warning" id="pauseBtn" onclick="togglePause()" disabled>⏸ 暂停</button>
+            <button class="btn btn-secondary" id="resumeBtn" onclick="resumeFromStart()" disabled style="display:none">↺ 重播当前</button>
+            <button class="btn btn-secondary" id="stopBtn" onclick="stopPlay()" disabled>⏹ 停止</button>
+        </div>
+
+        <div class="settings">
+            <div class="settings-title">停顿时间设置（秒）</div>
+            <div class="settings-row">
+                <label>普通模式（用户提问后等待AI回复）:</label>
+                <input type="number" id="pauseNormal" value="6" min="1" max="30"> 秒
+            </div>
+            <div class="settings-row">
+                <label>餐厅模式（翻译对话）:</label>
+                <input type="number" id="pauseRestaurant" value="3" min="1" max="30"> 秒
+            </div>
+            <div class="settings-row">
+                <label>命令模式（进入/退出命令）:</label>
+                <input type="number" id="pauseCommand" value="2" min="1" max="30"> 秒
+            </div>
+        </div>
+
+        <div class="now-playing" id="nowPlaying" style="display: none;">
+            <div class="segment-id" id="currentId"></div>
+            <div class="segment-name" id="currentName"></div>
+            <div class="speaker" id="currentSpeaker"></div>
+            <div class="text text-zh" id="currentTextZh"></div>
+            <div class="text text-en" id="currentTextEn"></div>
+            <div class="text text-th" id="currentTextTh"></div>
+            <div class="timer" id="timer"></div>
+            <div class="total-time" id="totalTimer">总时间: 00:00:00</div>
+            <div class="now-playing-controls" id="nowPlayingControls" style="margin-top: 15px; display: none;">
+                <button class="btn btn-warning btn-sm" onclick="togglePause()" id="pauseBtn2">⏸ 暂停</button>
+                <button class="btn btn-secondary btn-sm" onclick="resumeFromStart()" id="resumeBtn2" style="display:none">↺ 重播</button>
+                <button class="btn btn-secondary btn-sm" onclick="playPrev()" id="prevBtn2">⏮ 上一个</button>
+                <button class="btn btn-secondary btn-sm" onclick="playNext()" id="nextBtn2">下一个 ⏭</button>
+            </div>
+        </div>
+
+        <div class="playlist">
+            <div class="playlist-header">播放列表 (共 50 段)</div>
+            <div id="playlistContainer"></div>
+            <div class="progress"><div class="progress-bar" id="progressBar" style="width: 0%"></div></div>
+        </div>
+    </div>
+
+    <script>
+        const playlist = [{"id": "001", "name": "闲聊提问1", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "你好，今天天气真不错啊。", "text_en": "Hello, the weather is really nice today.", "text_th": "สวัสดีครับ อากาศดีมากวันนี้", "audio_file": "001_闲聊提问1.mp3", "pause_after": 6}, {"id": "002", "name": "闲聊提问2", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "你是谁？你能做什么？", "text_en": "Who are you? What can you do?", "text_th": "คุณเป็นใคร? คุณทำอะไรได้บ้าง?", "audio_file": "002_闲聊提问2.mp3", "pause_after": 6}, {"id": "003", "name": "闲聊提问3", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "现在几点了？", "text_en": "What time is it now?", "text_th": "กี่โมงแล้วครับ", "audio_file": "003_闲聊提问3.mp3", "pause_after": 6}, {"id": "004", "name": "闲聊提问4", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "我想了解一下泰国。", "text_en": "I want to know about Thailand.", "text_th": "ผมอยากรู้เกี่ยวกับประเทศไทย", "audio_file": "004_闲聊提问4.mp3", "pause_after": 6}, {"id": "005", "name": "进入餐厅模式命令", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "command", "text_zh": "进入餐厅模式。", "text_en": "Enter restaurant mode.", "text_th": "เข้าสู่โหมดร้านอาหาร", "audio_file": "005_进入餐厅模式命令.mp3", "pause_after": 2}, {"id": "006", "name": "中文用户点餐1", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "我想点一份冬阴功汤。", "text_en": "I'd like to order a Tom Yum soup.", "text_th": "ผมขอต้มยำกุ้งหนึ่งถ้วยครับ", "audio_file": "006_中文用户点餐1.mp3", "pause_after": 3}, {"id": "007", "name": "服务员回应1", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，一份冬阴功汤。还需要别的吗？", "text_en": "Okay, one Tom Yum soup. Anything else?", "text_th": "ครับ ต้มยำกุ้งหนึ่งถ้วย มีอะไรอื่นไหมครับ", "audio_file": "007_服务员回应1.mp3", "pause_after": 3}, {"id": "008", "name": "中文用户点餐2", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "再来一份泰式炒河粉。", "text_en": "One Pad Thai, please.", "text_th": "ขอผัดไทยหนึ่งจานครับ", "audio_file": "008_中文用户点餐2.mp3", "pause_after": 3}, {"id": "009", "name": "服务员回应2", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，泰式炒河粉。要喝点什么吗？", "text_en": "Okay, Pad Thai. Would you like something to drink?", "text_th": "ครับ ผัดไทยหนึ่งจาน คุณจะดื่มอะไรไหมครับ", "audio_file": "009_服务员回应2.mp3", "pause_after": 3}, {"id": "010", "name": "中文用户点餐3", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "一杯泰式奶茶，少糖。", "text_en": "One Thai milk tea, less sugar.", "text_th": "ขอชาไทยหนึ่งแก้ว หวานน้อยครับ", "audio_file": "010_中文用户点餐3.mp3", "pause_after": 3}, {"id": "011", "name": "服务员回应3", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，泰式奶茶少糖。请稍等。", "text_en": "Okay, Thai milk tea less sugar. Please wait.", "text_th": "ครับ ชาไทยหวานน้อย รอสักครู่นะครับ", "audio_file": "011_服务员回应3.mp3", "pause_after": 3}, {"id": "012", "name": "中文用户追问", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "请问你们有什么推荐的菜吗？", "text_en": "Do you have any recommended dishes?", "text_th": "มีอาหารแนะนำไหมครับ", "audio_file": "012_中文用户追问.mp3", "pause_after": 3}, {"id": "013", "name": "服务员推荐1", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "我们店的绿咖喱鸡很不错，很受欢迎。", "text_en": "Our green curry chicken is very good and popular.", "text_th": "แกงเขียวหวานไก่ของเราอร่อยมากครับ เป็นที่นิยม", "audio_file": "013_服务员推荐1.mp3", "pause_after": 3}, {"id": "014", "name": "中文用户点餐4", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "那我来一份绿咖喱鸡，配米饭。", "text_en": "I'll have the green curry chicken with rice.", "text_th": "งั้นขอแกงเขียวหวานไก่หนึ่งจาน กับข้าว", "audio_file": "014_中文用户点餐4.mp3", "pause_after": 3}, {"id": "015", "name": "服务员确认4", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，绿咖喱鸡配米饭。还需要别的吗？", "text_en": "Okay, green curry chicken with rice. Anything else?", "text_th": "ครับ แกงเขียวหวานไก่กับข้าว มีอะไรอื่นไหมครับ", "audio_file": "015_服务员确认4.mp3", "pause_after": 3}, {"id": "016", "name": "中文用户询问辣度", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "这个辣吗？我可以要不辣的吗？", "text_en": "Is this spicy? Can I have it not spicy?", "text_th": "อันนี้เผ็ดไหมครับ ขอไม่เผ็ดได้ไหม", "audio_file": "016_中文用户询问辣度.mp3", "pause_after": 3}, {"id": "017", "name": "服务员回应辣度", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "可以，我们有不辣的。", "text_en": "Yes, we can make it not spicy.", "text_th": "ได้ครับ เรามีแบบไม่เผ็ด", "audio_file": "017_服务员回应辣度.mp3", "pause_after": 3}, {"id": "018", "name": "中文用户确认", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "好的，那就要不辣的。", "text_en": "Okay, I'll have it not spicy.", "text_th": "ได้ครับ งั้นขอไม่เผ็ด", "audio_file": "018_中文用户确认.mp3", "pause_after": 3}, {"id": "019", "name": "英文客户入场", "speaker": "英文客户", "speaker_role": "user_en", "language": "en", "mode": "restaurant", "text_zh": "打扰一下，这里有空位吗？", "text_en": "Excuse me, is there a table available?", "text_th": "ขอโทษครับ มีที่นั่งว่างไหมครับ", "audio_file": "019_英文客户入场.mp3", "pause_after": 3}, {"id": "020", "name": "服务员回应入场", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "有的，请这边坐。这是英文菜单。", "text_en": "Yes, please sit here. Here's the English menu.", "text_th": "มีครับ ทางนี้ครับ นี่คือเมนูภาษาอังกฤษ", "audio_file": "020_服务员回应入场.mp3", "pause_after": 3}, {"id": "021", "name": "英文客户询问推荐", "speaker": "英文客户", "speaker_role": "user_en", "language": "en", "mode": "restaurant", "text_zh": "你推荐什么菜？", "text_en": "What do you recommend?", "text_th": "คุณแนะนำอาหารอะไรครับ", "audio_file": "021_英文客户询问推荐.mp3", "pause_after": 3}, {"id": "022", "name": "服务员推荐2", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "我推荐芒果糯米饭和椰子鸡汤。", "text_en": "I recommend mango sticky rice and coconut chicken soup.", "text_th": "แนะนำข้าวเหนียวมะม่วงและต้มข่าไก่ครับ", "audio_file": "022_服务员推荐2.mp3", "pause_after": 3}, {"id": "023", "name": "英文客户点餐1", "speaker": "英文客户", "speaker_role": "user_en", "language": "en", "mode": "restaurant", "text_zh": "我要芒果糯米饭和椰子鸡汤。", "text_en": "I'll have the mango sticky rice and coconut chicken soup.", "text_th": "ขอข้าวเหนียวมะม่วงและต้มข่าไก่ครับ", "audio_file": "023_英文客户点餐1.mp3", "pause_after": 3}, {"id": "024", "name": "服务员确认5", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，芒果糯米饭和椰子鸡汤。喝点什么？", "text_en": "Okay, mango sticky rice and coconut chicken soup. What would you like to drink?", "text_th": "ครับ ข้าวเหนียวมะม่วงและต้มข่าไก่ ดื่มอะไรครับ", "audio_file": "024_服务员确认5.mp3", "pause_after": 3}, {"id": "025", "name": "英文客户点饮品", "speaker": "英文客户", "speaker_role": "user_en", "language": "en", "mode": "restaurant", "text_zh": "我要一个新鲜椰子。", "text_en": "I'd like a fresh coconut.", "text_th": "ขอมะพร้าวน้ำหอยหนึ่งลูกครับ", "audio_file": "025_英文客户点饮品.mp3", "pause_after": 3}, {"id": "026", "name": "服务员确认饮品", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，一个新鲜椰子。请稍等。", "text_en": "Okay, one fresh coconut. Please wait a moment.", "text_th": "ครับ มะพร้าวน้ำหอยหนึ่งลูก รอสักครู่นะครับ", "audio_file": "026_服务员确认饮品.mp3", "pause_after": 3}, {"id": "027", "name": "中文用户加菜", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "服务员，我想再加一份春卷。", "text_en": "Waiter, I'd like to add a spring roll.", "text_th": "พนักงานครับ ขอเพิ่มปอเปี๊ยะทอดหนึ่งจาน", "audio_file": "027_中文用户加菜.mp3", "pause_after": 3}, {"id": "028", "name": "服务员确认加菜", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，一份春卷。", "text_en": "Okay, one spring roll.", "text_th": "ครับ ปอเปี๊ยะทอดหนึ่งจาน", "audio_file": "028_服务员确认加菜.mp3", "pause_after": 3}, {"id": "029", "name": "中文用户问辣度", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "春卷辣不辣？", "text_en": "Is the spring roll spicy?", "text_th": "ปอเปี๊ยะทอดเผ็ดไหมครับ", "audio_file": "029_中文用户问辣度.mp3", "pause_after": 3}, {"id": "030", "name": "服务员回应春卷", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "不辣，配甜辣酱。", "text_en": "Not spicy, served with sweet chili sauce.", "text_th": "ไม่เผ็ดครับ เสิร์ฟกับซอสหวานเผ็ด", "audio_file": "030_服务员回应春卷.mp3", "pause_after": 3}, {"id": "031", "name": "中文用户确认春卷", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "好的，那就要一份。", "text_en": "Okay, I'll have one.", "text_th": "ได้ครับ งั้นขอหนึ่งจาน", "audio_file": "031_中文用户确认春卷.mp3", "pause_after": 3}, {"id": "032", "name": "英文客户问过敏", "speaker": "英文客户", "speaker_role": "user_en", "language": "en", "mode": "restaurant", "text_zh": "这道菜里有花生吗？我对花生过敏。", "text_en": "Does this dish have peanuts? I'm allergic to peanuts.", "text_th": "ในอาหารจานนี้มีถั่วลิสงไหมครับ ผมแพ้ถั่วลิสง", "audio_file": "032_英文客户问过敏.mp3", "pause_after": 3}, {"id": "033", "name": "服务员回应过敏", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "芒果糯米饭没有花生，是安全的。", "text_en": "The mango sticky rice has no peanuts, it's safe.", "text_th": "ข้าวเหนียวมะม่วงไม่มีถั่วลิสงครับ ปลอดภัย", "audio_file": "033_服务员回应过敏.mp3", "pause_after": 3}, {"id": "034", "name": "英文客户感谢", "speaker": "英文客户", "speaker_role": "user_en", "language": "en", "mode": "restaurant", "text_zh": "谢谢你的提醒。", "text_en": "Thank you for letting me know.", "text_th": "ขอบคุณที่บอกครับ", "audio_file": "034_英文客户感谢.mp3", "pause_after": 3}, {"id": "035", "name": "中文用户结账", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "服务员，我要结账。", "text_en": "Waiter, I'd like to pay the bill.", "text_th": "พนักงานครับ ขอจ่ายเงิน", "audio_file": "035_中文用户结账.mp3", "pause_after": 3}, {"id": "036", "name": "服务员回应结账", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，一共三百五十泰铢。刷卡还是现金？", "text_en": "Okay, that's 350 baht total. Card or cash?", "text_th": "ครับ รวมสามร้อยห้าสิบบาท บัตรหรือเงินสดครับ", "audio_file": "036_服务员回应结账.mp3", "pause_after": 3}, {"id": "037", "name": "中文用户付款", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "我可以刷支付宝吗？", "text_en": "Can I pay with Alipay?", "text_th": "จ่ายด้วยอะลีเพย์ได้ไหมครับ", "audio_file": "037_中文用户付款.mp3", "pause_after": 3}, {"id": "038", "name": "服务员回应支付", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "可以的，请扫这里。", "text_en": "Yes, please scan here.", "text_th": "ได้ครับ สแกนที่นี่ครับ", "audio_file": "038_服务员回应支付.mp3", "pause_after": 3}, {"id": "039", "name": "中文用户感谢", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "restaurant", "text_zh": "谢谢，菜很好吃。", "text_en": "Thank you, the food was delicious.", "text_th": "ขอบคุณครับ อาหารอร่อยมาก", "audio_file": "039_中文用户感谢.mp3", "pause_after": 3}, {"id": "040", "name": "服务员感谢", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "谢谢，欢迎下次再来。", "text_en": "Thank you, please come again.", "text_th": "ขอบคุณครับ ยินดีต้อนรับใหม่ครับ", "audio_file": "040_服务员感谢.mp3", "pause_after": 3}, {"id": "041", "name": "英文客户结账", "speaker": "英文客户", "speaker_role": "user_en", "language": "en", "mode": "restaurant", "text_zh": "我也要结账。", "text_en": "I'd like to pay too.", "text_th": "ผมก็ขอจ่ายเงินครับ", "audio_file": "041_英文客户结账.mp3", "pause_after": 3}, {"id": "042", "name": "服务员回应英文结账", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，一共二百八十泰铢。", "text_en": "Okay, that's 280 baht total.", "text_th": "ครับ รวมสองร้อยแปดสิบบาท", "audio_file": "042_服务员回应英文结账.mp3", "pause_after": 3}, {"id": "043", "name": "英文客户付款", "speaker": "英文客户", "speaker_role": "user_en", "language": "en", "mode": "restaurant", "text_zh": "我付现金，给你三百。", "text_en": "I'll pay cash, here's 300 baht.", "text_th": "ผมจ่ายเงินสดครับ นี่สามร้อยบาท", "audio_file": "043_英文客户付款.mp3", "pause_after": 3}, {"id": "044", "name": "服务员找零", "speaker": "服务员", "speaker_role": "waiter", "language": "th", "mode": "restaurant", "text_zh": "好的，找您二十泰铢。谢谢光临。", "text_en": "Okay, here's 20 baht change. Thank you for visiting.", "text_th": "ครับ ทอนยี่สิบบาท ขอบคุณครับ", "audio_file": "044_服务员找零.mp3", "pause_after": 3}, {"id": "045", "name": "退出餐厅模式命令", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "command", "text_zh": "退出餐厅模式。", "text_en": "Exit restaurant mode.", "text_th": "ออกจากโหมดร้านอาหาร", "audio_file": "045_退出餐厅模式命令.mp3", "pause_after": 2}, {"id": "046", "name": "闲聊提问5", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "这附近有什么好玩的地方吗？", "text_en": "Is there anything fun nearby?", "text_th": "แถวนี้มีที่เที่ยวอะไรบ้างไหมครับ", "audio_file": "046_闲聊提问5.mp3", "pause_after": 6}, {"id": "047", "name": "闲聊提问6", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "大皇宫怎么走？远吗？", "text_en": "How do I get to the Grand Palace? Is it far?", "text_th": "ไปพระบรมมหาราชวังยังไงครับ ไกลไหม", "audio_file": "047_闲聊提问6.mp3", "pause_after": 6}, {"id": "048", "name": "闲聊提问7", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "明天天气怎么样？", "text_en": "What's the weather tomorrow?", "text_th": "พรุ่งนี้อากาศเป็นยังไงครับ", "audio_file": "048_闲聊提问7.mp3", "pause_after": 6}, {"id": "049", "name": "闲聊提问8", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "你能帮我订酒店吗？", "text_en": "Can you help me book a hotel?", "text_th": "คุณช่วยจองโรงแรมให้ผมได้ไหม", "audio_file": "049_闲聊提问8.mp3", "pause_after": 6}, {"id": "050", "name": "闲聊提问9", "speaker": "用户", "speaker_role": "user", "language": "zh", "mode": "normal", "text_zh": "附近有什么购物中心吗？", "text_en": "Are there any shopping malls nearby?", "text_th": "แถวนี้มีห้างสรรพสินค้าไหมครับ", "audio_file": "050_闲聊提问9.mp3", "pause_after": 6}];
+
+        let currentIndex = -1;
+        let isPlaying = false;
+        let isPaused = false;
+        let audio = null;
+        let timerInterval = null;
+        let pausedCallback = null;
+        let remainingTime = 0;
+
+        // 总计时器相关变量
+        let totalStartTime = null;
+        let totalPausedTime = 0;
+        let totalTimerInterval = null;
+
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function startTotalTimer() {
+            totalStartTime = Date.now();
+            totalPausedTime = 0;
+            totalTimerInterval = setInterval(updateTotalTimer, 1000);
+        }
+
+        function updateTotalTimer() {
+            if (isPaused) return;
+            const elapsed = Math.floor((Date.now() - totalStartTime - totalPausedTime) / 1000);
+            document.getElementById('totalTimer').textContent = '总时间: ' + formatTime(elapsed);
+        }
+
+        function pauseTotalTimer() {
+            if (totalTimerInterval) {
+                totalPausedTime = Date.now() - totalStartTime - totalPausedTime;
+            }
+        }
+
+        function resumeTotalTimer() {
+            if (totalStartTime) {
+                totalStartTime = Date.now() - totalPausedTime;
+            }
+        }
+
+        function stopTotalTimer() {
+            if (totalTimerInterval) {
+                clearInterval(totalTimerInterval);
+                totalTimerInterval = null;
+            }
+        }
+
+        function getPauseTime(mode) {
+            const pauseNormal = parseInt(document.getElementById('pauseNormal').value) || 6;
+            const pauseRestaurant = parseInt(document.getElementById('pauseRestaurant').value) || 3;
+            const pauseCommand = parseInt(document.getElementById('pauseCommand').value) || 2;
+
+            switch(mode) {
+                case 'normal':
+                    return pauseNormal;
+                case 'restaurant':
+                    return pauseRestaurant;
+                case 'command':
+                    return pauseCommand;
+                default:
+                    return 3;
+            }
+        }
+
+        function renderPlaylist() {
+            const container = document.getElementById('playlistContainer');
+            container.innerHTML = playlist.map((item, index) => `
+                <div class="playlist-item" id="item-${index}" onclick="playSegment(${index})">
+                    <div class="id">${item.id}</div>
+                    <div class="info">
+                        <div class="name">${item.name}</div>
+                        <div class="speaker">${item.speaker}</div>
+                    </div>
+                    <span class="lang lang-${item.language}">${item.language.toUpperCase()}</span>
+                    <span class="pause">${getPauseTime(item.mode)}s</span>
+                </div>
+            `).join('');
+        }
+
+        function updateNowPlaying(item) {
+            const panel = document.getElementById('nowPlaying');
+            if (!item) {
+                panel.style.display = 'none';
+                return;
+            }
+            panel.style.display = 'block';
+            document.getElementById('currentId').textContent = `Segment ${item.id}/${playlist.length}`;
+            document.getElementById('currentName').innerHTML = item.name + `<span class="mode-badge mode-${item.mode}">${item.mode === 'normal' ? '普通' : item.mode === 'restaurant' ? '餐厅' : '命令'}</span>`;
+            document.getElementById('currentSpeaker').textContent = `${item.speaker} (${item.language.toUpperCase()})`;
+            document.getElementById('currentTextZh').textContent = item.text_zh;
+            document.getElementById('currentTextEn').textContent = item.text_en;
+            document.getElementById('currentTextTh').textContent = item.text_th;
+        }
+
+        function updateProgress() {
+            const percent = ((currentIndex + 1) / playlist.length) * 100;
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        function updatePlaylistUI() {
+            document.querySelectorAll('.playlist-item').forEach((el, i) => {
+                el.classList.remove('active', 'playing');
+                if (i === currentIndex) {
+                    el.classList.add('playing');
+                } else if (i < currentIndex) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        function startTimer(seconds, callback) {
+            remainingTime = seconds;
+            pausedCallback = callback;
+            const timerEl = document.getElementById('timer');
+
+            timerInterval = setInterval(() => {
+                if (isPaused) return;
+                timerEl.textContent = `等待 ${remainingTime} 秒...（可点击暂停）`;
+                remainingTime--;
+                if (remainingTime < 0) {
+                    clearInterval(timerInterval);
+                    timerEl.textContent = '';
+                    pausedCallback = null;
+                    callback();
+                }
+            }, 1000);
+        }
+
+        function playSegment(index, fromStart = false) {
+            if (index < 0) index = 0;
+            if (index >= playlist.length) {
+                stopPlay();
+                alert('测试完成！');
+                return;
+            }
+
+            // 清理之前的音频和定时器
+            if (audio) {
+                audio.pause();
+                audio = null;
+            }
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            isPaused = false;
+            currentIndex = index;
+            const item = playlist[index];
+
+            updateNowPlaying(item);
+            updatePlaylistUI();
+            updateProgress();
+
+            audio = new Audio('audio/' + encodeURIComponent(item.audio_file));
+            audio.play();
+
+            // 更新顶部控制按钮
+            document.getElementById('playBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            document.getElementById('pauseBtn').textContent = '⏸ 暂停';
+            document.getElementById('resumeBtn').style.display = 'none';
+            document.getElementById('stopBtn').disabled = false;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = false;
+
+            // 更新播放框内的控制按钮
+            document.getElementById('nowPlayingControls').style.display = 'block';
+            document.getElementById('pauseBtn2').textContent = '⏸ 暂停';
+            document.getElementById('pauseBtn2').disabled = false;
+            document.getElementById('resumeBtn2').style.display = 'none';
+            document.getElementById('prevBtn2').disabled = index === 0;
+            document.getElementById('nextBtn2').disabled = false;
+
+            audio.onended = () => {
+                const pauseTime = getPauseTime(item.mode);
+                startTimer(pauseTime, () => {
+                    playSegment(index + 1);
+                });
+            };
+        }
+
+        function playPrev() {
+            if (currentIndex > 0) {
+                playSegment(currentIndex - 1);
+            }
+        }
+
+        function playNext() {
+            playSegment(currentIndex + 1);
+        }
+
+        function startAutoPlay() {
+            isPlaying = true;
+            isPaused = false;
+            document.getElementById('playBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            startTotalTimer();
+            playSegment(0);
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const pauseBtn = document.getElementById('pauseBtn');
+            const pauseBtn2 = document.getElementById('pauseBtn2');
+            const resumeBtn = document.getElementById('resumeBtn');
+            const resumeBtn2 = document.getElementById('resumeBtn2');
+            const timerEl = document.getElementById('timer');
+
+            if (isPaused) {
+                pauseBtn.textContent = '▶ 继续播放';
+                pauseBtn2.textContent = '▶ 继续';
+                resumeBtn.style.display = 'inline-block';
+                resumeBtn2.style.display = 'inline-block';
+                timerEl.textContent = `已暂停，剩余 ${remainingTime} 秒`;
+                if (audio) audio.pause();
+            } else {
+                pauseBtn.textContent = '⏸ 暂停';
+                pauseBtn2.textContent = '⏸ 暂停';
+                resumeBtn.style.display = 'none';
+                resumeBtn2.style.display = 'none';
+                if (audio && audio.paused) audio.play();
+            }
+        }
+
+        function resumeFromStart() {
+            // 从头播放当前段
+            playSegment(currentIndex, true);
+        }
+
+        function stopPlay() {
+            isPlaying = false;
+            isPaused = false;
+            if (audio) {
+                audio.pause();
+                audio = null;
+            }
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            stopTotalTimer();
+            document.getElementById('playBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('pauseBtn').textContent = '⏸ 暂停';
+            document.getElementById('resumeBtn').style.display = 'none';
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('prevBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('timer').textContent = '';
+            document.getElementById('nowPlayingControls').style.display = 'none';
+        }
+
+        function resetProgress() {
+            stopPlay();
+            currentIndex = -1;
+            updateProgress();
+            updatePlaylistUI();
+            document.getElementById('nowPlaying').style.display = 'none';
+            document.getElementById('totalTimer').textContent = '总时间: 00:00:00';
+        }
+
+        // 初始化
+        renderPlaylist();
+    </script>
+</body>
+</html>
