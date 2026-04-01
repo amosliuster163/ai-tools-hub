@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更多AI工具大全 - 老刘聊AI</title>
+    
+    <!-- 字体：Playfair Display + Source Serif Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #F5F1E8;
+            --bg-card: #FFFFFF;
+            --color-primary: #1E3A5F;
+            --color-accent: #C9A227;
+            --color-text: #2C3E50;
+            --color-muted: #6B7B8C;
+            --shadow-soft: 0 4px 20px rgba(30, 58, 95, 0.08);
+            --shadow-hover: 0 8px 40px rgba(30, 58, 95, 0.15);
+            --radius: 12px;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Source Serif 4', serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-main);
+            color: var(--color-text);
+            line-height: 1.7;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        header {
+            background: var(--color-primary);
+            padding: 30px 40px;
+        }
+        
+        .header-back {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: var(--color-accent);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #7F8C8D 0%, #6B7B8C 100%);
+            color: #fff;
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+        
+        .hero-desc {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 600px;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+        
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(201, 162, 39, 0.3);
+        }
+        
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .tool-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s;
+            border: 1px solid rgba(30, 58, 95, 0.1);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .tool-icon {
+            font-size: 2rem;
+        }
+        
+        .tool-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .tool-desc {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            margin-bottom: 12px;
+        }
+        
+        .tool-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .tool-tag {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: rgba(201, 162, 39, 0.15);
+            color: var(--color-accent);
+            border-radius: 4px;
+        }
+        
+        .tool-tag.free {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27AE60;
+        }
+        
+        .tool-tag.premium {
+            background: rgba(231, 76, 60, 0.15);
+            color: #E74C3C;
+        }
+        
+        .price-table {
+            background: #fff;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            margin-top: 24px;
+        }
+        
+        .price-row {
+            display: flex;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(30, 58, 95, 0.1);
+        }
+        
+        .price-row:last-child {
+            border-bottom: none;
+        }
+        
+        .price-label {
+            flex: 1;
+            font-weight: 600;
+        }
+        
+        .price-value {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+        
+        .other-tips {
+            background: rgba(201, 162, 39, 0.1);
+            padding: 24px;
+            border-radius: var(--radius);
+            margin-top: 24px;
+        }
+        
+        .other-tip {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .other-tip::before {
+            content: '📦';
+            position: absolute;
+            left: 0;
+        }
+        
+        .other-tip strong {
+            color: var(--color-primary);
+        }
+        
+        .official-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .official-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--color-primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .official-link:hover {
+            background: #2D4A6F;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .official-link.secondary {
+            background: #6B7B8C;
+        }
+        
+        footer {
+            background: var(--color-primary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            margin-top: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.2rem; }
+            .hero { padding: 50px 20px; }
+            main { padding: 40px 20px; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .official-links { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-back">
+            <a href="index.html" class="back-link">← 返回老刘聊AI</a>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">📦 更多AI工具</span>
+            <h1 class="hero-title">更多AI工具大全</h1>
+            <p class="hero-desc">AI编程、数据分析、自动化工具精选...Cursor、Copilot、Replit...一文掌握主流工具特点、价格、使用场景。</p>
+        </div>
+    </section>
+    
+    <main>
+        <section class="section">
+            <h2 class="section-title">AI编程工具</h2>
+            <p class="section-content">AI编程工具大幅提升开发效率：</p>
+            
+            <div class="tools-grid">
+                <!-- Cursor -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">⌨️</span>
+                        <span class="tool-name">Cursor</span>
+                    </div>
+                    <p class="tool-desc">AI编程IDE，ChatGPT内置编辑器。代码补全、重构、调试一站式解决。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费使用</span>
+                        <span class="tool-tag">AI IDE</span>
+                        <span class="tool-tag">代码补全</span>
+                    </div>
+                </div>
+                
+                <!-- GitHub Copilot -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🤖</span>
+                        <span class="tool-name">GitHub Copilot</span>
+                    </div>
+                    <p class="tool-desc">AI代码助手，VS Code插件。支持多种语言，自动补全代码片段。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag premium">$10/月</span>
+                        <span class="tool-tag">VS Code</span>
+                        <span class="tool-tag">代码补全</span>
+                    </div>
+                </div>
+                
+                <!-- Replit -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">☁️</span>
+                        <span class="tool-name">Replit</span>
+                    </div>
+                    <p class="tool-desc">云端IDE + AI助手，无需本地环境。支持50+语言，一键部署。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费使用</span>
+                        <span class="tool-tag">云端IDE</span>
+                        <span class="tool-tag">部署</span>
+                    </div>
+                </div>
+                
+                <!-- Codeium -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">⚡</span>
+                        <span class="tool-name">Codeium</span>
+                    </div>
+                    <p class="tool-desc">免费AI代码补全，Copilot替代品。支持70+语言，完全免费。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">完全免费</span>
+                        <span class="tool-tag">代码补全</span>
+                        <span class="tool-tag">多语言</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">数据分析工具</h2>
+            <p class="section-content">AI数据分析工具简化数据处理：</p>
+            
+            <div class="tools-grid">
+                <!-- Julius AI -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">📊</span>
+                        <span class="tool-name">Julius AI</span>
+                    </div>
+                    <p class="tool-desc">AI数据分析，上传Excel/CSV直接提问。自动生成图表和报告。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费额度</span>
+                        <span class="tool-tag">数据分析</span>
+                        <span class="tool-tag">可视化</span>
+                    </div>
+                </div>
+                
+                <!-- ChatGPT Data Analyst -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">📈</span>
+                        <span class="tool-name">ChatGPT数据分析</span>
+                    </div>
+                    <p class="tool-desc">ChatGPT内置数据分析功能，上传文件直接分析。Python代码自动执行。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag premium">ChatGPT Plus</span>
+                        <span class="tool-tag">数据分析</span>
+                        <span class="tool-tag">Python</span>
+                    </div>
+                </div>
+                
+                <!-- Tableau -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">📉</span>
+                        <span class="tool-name">Tableau</span>
+                    </div>
+                    <p class="tool-desc">可视化分析工具，企业级数据仪表盘。支持多种数据源。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag premium">企业定价</span>
+                        <span class="tool-tag">可视化</span>
+                        <span class="tool-tag">企业级</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">自动化工具</h2>
+            <p class="section-content">AI自动化工具提升工作效率：</p>
+            
+            <div class="tools-grid">
+                <!-- Zapier -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🔄</span>
+                        <span class="tool-name">Zapier</span>
+                    </div>
+                    <p class="tool-desc">自动化工作流，连接6000+应用。AI功能自动创建工作流。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费100次/月</span>
+                        <span class="tool-tag">自动化</span>
+                        <span class="tool-tag">集成</span>
+                    </div>
+                </div>
+                
+                <!-- Make -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🔧</span>
+                        <span class="tool-name">Make</span>
+                    </div>
+                    <p class="tool-desc">可视化自动化，比Zapier更灵活。适合复杂工作流。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">免费1000次/月</span>
+                        <span class="tool-tag">自动化</span>
+                        <span class="tool-tag">可视化</span>
+                    </div>
+                </div>
+                
+                <!-- n8n -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">⛓️</span>
+                        <span class="tool-name">n8n</span>
+                    </div>
+                    <p class="tool-desc">开源自动化工具，自托管免费。适合技术团队。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag free">开源免费</span>
+                        <span class="tool-tag">自动化</span>
+                        <span class="tool-tag">自托管</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">价格对比</h2>
+            <p class="section-content">工具定价差异较大：</p>
+            
+            <div class="price-table">
+                <div class="price-row">
+                    <span class="price-label">Cursor</span>
+                    <span class="price-value">免费 或 $20/月（Pro）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">GitHub Copilot</span>
+                    <span class="price-value">$10/月（个人）或 $19/月（企业）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Replit</span>
+                    <span class="price-value">免费 或 $7/月（Core）</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Codeium</span>
+                    <span class="price-value">完全免费</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Julius AI</span>
+                    <span class="price-value">免费额度 或 $20/月</span>
+                </div>
+                <div class="price-row">
+                    <span class="price-label">Zapier</span>
+                    <span class="price-value">免费100次/月 或 $19.99/月</span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">使用技巧</h2>
+            <p class="section-content">各类型工具使用建议：</p>
+            
+            <div class="other-tips">
+                <div class="other-tip">
+                    <strong>AI编程</strong>：Cursor适合个人开发者，Copilot适合团队协作<br>
+                    <em>Codeium免费替代Copilot，性价比最高</em>
+                </div>
+                <div class="other-tip">
+                    <strong>数据分析</strong>：Julius AI适合非技术用户<br>
+                    <em>ChatGPT数据分析适合已有Plus订阅的用户</em>
+                </div>
+                <div class="other-tip">
+                    <strong>自动化</strong>：Zapier最易用，Make更灵活<br>
+                    <em>n8n适合技术团队自托管，成本最低</em>
+                </div>
+                <div class="other-tip">
+                    <strong>云端IDE</strong>：Replit适合快速原型开发<br>
+                    <em>无需本地环境，一键部署</em>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">官方网站</h2>
+            <div class="official-links">
+                <a href="https://cursor.sh" target="_blank" class="official-link">
+                    <span>Cursor →</span>
+                </a>
+                <a href="https://github.com/features/copilot" target="_blank" class="official-link secondary">
+                    <span>Copilot →</span>
+                </a>
+                <a href="https://replit.com" target="_blank" class="official-link secondary">
+                    <span>Replit →</span>
+                </a>
+                <a href="https://codeium.com" target="_blank" class="official-link secondary">
+                    <span>Codeium →</span>
+                </a>
+                <a href="https://julius.ai" target="_blank" class="official-link secondary">
+                    <span>Julius AI →</span>
+                </a>
+                <a href="https://zapier.com" target="_blank" class="official-link secondary">
+                    <span>Zapier →</span>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>老刘聊AI · 2026</p>
+        <div class="footer-links">
+            <a href="https://amosliuster163.github.io/ai-tools-hub/">GitHub Pages</a>
+            <a href="https://ai-tools-hub-zeta.vercel.app/">Vercel</a>
+            <a href="https://github.com/amosliuster163">GitHub</a>
+        </div>
+    </footer>
+</body>
+</html>

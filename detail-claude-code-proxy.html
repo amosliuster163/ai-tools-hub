@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code API Proxy - AI工具集</title>
+    <link rel="icon" type="image/svg+xml" href="https://amosliuster163.github.io/ai-tools-hub/favicon.svg">
+    <link rel="stylesheet" href="https://amosliuster163.github.io/ai-tools-hub/styles.css">
+    <script src="https://amosliuster163.github.io/ai-tools-hub/script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="breadcrumb">
+            <a href="https://amosliuster163.github.io/ai-tools-hub/">🏠 首页</a>
+            <span class="separator">›</span>
+            <span>开发工具</span>
+            <span class="separator">›</span>
+            <span>Claude Code API Proxy</span>
+        </nav>
+
+        <header class="tool-header">
+            <div class="tool-icon-wrapper">
+                <div class="tool-icon">🔧</div>
+            </div>
+            <div class="tool-info">
+                <h1>Claude Code API Proxy</h1>
+                <p class="tool-subtitle">Anthropic API → OpenAI兼容格式转换器</p>
+                <div class="tool-meta">
+                    <span class="meta-tag">🆓 开源免费</span>
+                    <span class="meta-tag">⚡ TypeScript</span>
+                    <span class="meta-tag">🔌 API代理</span>
+                    <span class="meta-tag">🤖 Claude兼容</span>
+                </div>
+            </div>
+            <div class="tool-actions">
+                <a href="https://github.com/instructkr/claude-code" class="btn btn-primary" target="_blank">
+                    📦 GitHub仓库
+                </a>
+                <a href="https://amosliuster163.github.io/ai-tools-hub/downloads/claude-code-src.zip" class="btn btn-secondary" download>
+                    ⬇️ 下载源码
+                </a>
+            </div>
+        </header>
+
+        <main class="tool-content">
+            <section class="section">
+                <h2>📖 项目简介</h2>
+                <p>
+                    Claude Code API Proxy 是一个将 Anthropic Claude API 转换为 OpenAI 兼容格式的代理服务器。
+                    它允许你使用 OpenAI SDK 或任何兼容 OpenAI API 的工具来调用 Claude 模型，
+                    无需修改现有代码即可享受 Claude 的强大能力。
+                </p>
+                <div class="highlight-box">
+                    <h3>💡 核心功能</h3>
+                    <ul>
+                        <li><strong>API格式转换</strong>：将 Anthropic API 请求/响应转换为 OpenAI 格式</li>
+                        <li><strong>Claude Code支持</strong>：完整支持 Claude Code 工具调用功能</li>
+                        <li><strong>多端点代理</strong>：支持 Chat、Messages 等多个 API 端点</li>
+                        <li><strong>TypeScript实现</strong>：类型安全、易于扩展</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>🚀 快速开始</h2>
+                <div class="code-block">
+                    <pre><code># 克隆仓库
+git clone https://github.com/instructkr/claude-code.git
+
+# 安装依赖
+npm install
+
+# 配置 Anthropic API Key
+export ANTHROPIC_API_KEY=your_api_key
+
+# 启动代理服务器
+npm run start
+
+# 现在可以使用 OpenAI SDK 调用 Claude！</code></pre>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>📁 项目结构</h2>
+                <div class="file-tree">
+                    <div class="tree-item">📁 src/</div>
+                    <div class="tree-item indent">📁 bridge/</div>
+                    <div class="tree-item indent-2">📄 anthropic.ts - Anthropic API 客户端</div>
+                    <div class="tree-item indent-2">📄 claude-code.ts - Claude Code 工具转换</div>
+                    <div class="tree-item indent-2">📄 chat.ts - OpenAI Chat 格式转换</div>
+                    <div class="tree-item indent-2">📄 messages.ts - Messages API 处理</div>
+                    <div class="tree-item indent">📄 index.ts - 入口文件</div>
+                    <div class="tree-item">📁 vendor/ - 第三方依赖</div>
+                    <div class="tree-item">📄 tsconfig.json - TypeScript 配置</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>🔧 API端点</h2>
+                <table class="api-table">
+                    <thead>
+                        <tr>
+                            <th>端点</th>
+                            <th>功能</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/v1/chat/completions</code></td>
+                            <td>Chat API</td>
+                            <td>OpenAI Chat Completions 格式</td>
+                        </tr>
+                        <tr>
+                            <td><code>/v1/messages</code></td>
+                            <td>Messages API</td>
+                            <td>Anthropic Messages 格式</td>
+                        </tr>
+                        <tr>
+                            <td><code>/health</code></td>
+                            <td>健康检查</td>
+                            <td>服务状态监控</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="section">
+                <h2>🎯 使用场景</h2>
+                <div class="use-cases">
+                    <div class="use-case-card">
+                        <h3>🤖 Claude Code 集成</h3>
+                        <p>让 Claude Code 工具通过 OpenAI SDK 调用 Claude 模型</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3>🔄 无缝迁移</h3>
+                        <p>从 OpenAI 迁移到 Claude，无需修改现有代码</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3>🛠️ 自定义代理</h3>
+                        <p>构建自己的 API 代理服务，支持多种模型</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3>📊 学习研究</h3>
+                        <p>学习 API 转换机制，理解不同 LLM API 设计</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>📥 下载资源</h2>
+                <div class="download-box">
+                    <div class="download-option">
+                        <h3>🔒 私有版本（完整源码）</h3>
+                        <a href="https://amosliuster163.github.io/ai-tools-hub/downloads/claude-code-src.zip" class="btn btn-download" download>
+                            ⬇️ 下载 claude-code-src.zip
+                        </a>
+                        <p class="download-note">包含完整 TypeScript 源码和 vendor 依赖</p>
+                    </div>
+                    <div class="download-option">
+                        <h3>🌐 公开版本（GitHub）</h3>
+                        <a href="https://github.com/instructkr/claude-code" class="btn btn-github" target="_blank">
+                            📦 GitHub: instructkr/claude-code
+                        </a>
+                        <p class="download-note">官方公开仓库，持续更新</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>🔗 相关链接</h2>
+                <div class="links-grid">
+                    <a href="https://www.anthropic.com" class="link-card" target="_blank">
+                        <span class="link-icon">🧠</span>
+                        <span class="link-title">Anthropic 官网</span>
+                        <span class="link-desc">Claude 模型官方网站</span>
+                    </a>
+                    <a href="https://docs.anthropic.com" class="link-card" target="_blank">
+                        <span class="link-icon">📚</span>
+                        <span class="link-title">Anthropic API 文档</span>
+                        <span class="link-desc">Claude API 官方文档</span>
+                    </a>
+                    <a href="https://platform.openai.com/docs" class="link-card" target="_blank">
+                        <span class="link-icon">📖</span>
+                        <span class="link-title">OpenAI API 文档</span>
+                        <span class="link-desc">OpenAI 兼容格式参考</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="section tags-section">
+                <h2>🏷️ 标签</h2>
+                <div class="tags">
+                    <span class="tag">API代理</span>
+                    <span class="tag">Claude</span>
+                    <span class="tag">OpenAI兼容</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">Claude Code</span>
+                    <span class="tag">LLM工具</span>
+                    <span class="tag">开源</span>
+                    <span class="tag">开发工具</span>
+                </div>
+            </section>
+        </main>
+
+        <footer class="tool-footer">
+            <p>
+                <a href="https://amosliuster163.github.io/ai-tools-hub/">🏠 返回AI工具集首页</a>
+                | 
+                <a href="https://github.com/instructkr/claude-code" target="_blank">GitHub仓库</a>
+                |
+                更新时间：2026-04-01
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
