@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>与王阳明对话 | 心学智慧</title>
+  <meta name="description" content="与明代思想家王阳明对话，领悟心学智慧：心即理、知行合一、致良知。">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 导航栏 */
+    nav {
+      background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    nav .logo {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav .logo span {
+      color: #ffd700;
+    }
+
+    nav a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: white;
+    }
+
+    /* 头部介绍 */
+    .header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      background: white;
+      border-bottom: 1px solid #eee;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: #2c3e50;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .header .subtitle {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .header .quote {
+      margin-top: 20px;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
+      border-radius: 12px;
+      border-left: 4px solid #ffd700;
+      font-style: italic;
+      color: #8b7355;
+      font-size: 15px;
+    }
+
+    /* 对话区域 */
+    .chat-container {
+      flex: 1;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 16px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      background: white;
+      align-self: flex-end;
+      max-width: 70%;
+    }
+
+    .message.assistant {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+      align-self: flex-start;
+      max-width: 80%;
+      border-left: 3px solid #4caf50;
+    }
+
+    .message .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .message.user .avatar {
+      background: #2c3e50;
+      color: white;
+      order: 2;
+    }
+
+    .message.assistant .avatar {
+      background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+      color: white;
+    }
+
+    .message .content {
+      flex: 1;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .message.assistant .content {
+      color: #2c3e50;
+    }
+
+    .message.user .content {
+      color: #333;
+      text-align: right;
+    }
+
+    /* 欢迎消息 */
+    .welcome {
+      background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
+      padding: 24px;
+      border-radius: 16px;
+      border-left: 4px solid #ffd700;
+      margin-bottom: 20px;
+    }
+
+    .welcome h3 {
+      color: #8b7355;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .welcome p {
+      color: #666;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .welcome .topics {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .welcome .topics button {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .welcome .topics button:hover {
+      background: #ffd700;
+      border-color: #ffd700;
+      color: #2c3e50;
+    }
+
+    /* 输入区域 */
+    .input-container {
+      background: white;
+      padding: 20px;
+      border-top: 1px solid #eee;
+      position: sticky;
+      bottom: 0;
+    }
+
+    .input-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+    }
+
+    .input-wrapper textarea {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      font-size: 15px;
+      resize: none;
+      height: 48px;
+      line-height: 1.5;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .input-wrapper textarea:focus {
+      outline: none;
+      border-color: #4caf50;
+    }
+
+    .input-wrapper button {
+      background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+
+    .input-wrapper button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* 加载状态 */
+    .loading {
+      display: flex;
+      gap: 4px;
+      padding: 8px 0;
+    }
+
+    .loading span {
+      width: 8px;
+      height: 8px;
+      background: #4caf50;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    .loading span:nth-child(1) { animation-delay: 0s; }
+    .loading span:nth-child(2) { animation-delay: 0.2s; }
+    .loading span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    /* 底部信息 */
+    .footer {
+      text-align: center;
+      padding: 16px;
+      background: #f8f9fa;
+      color: #999;
+      font-size: 13px;
+    }
+
+    .footer a {
+      color: #4caf50;
+      text-decoration: none;
+    }
+
+    /* 响应式 */
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .message {
+        max-width: 90%;
+      }
+
+      .input-wrapper {
+        flex-direction: column;
+      }
+
+      .input-wrapper button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <a href="index.html">← 返回首页</a>
+    </div>
+    <a href="stories.html">名人故事</a>
+  </nav>
+
+  <div class="header">
+    <h1>与王阳明对话</h1>
+    <p class="subtitle">明代思想家、心学集大成者。领悟"心即理"、"知行合一"、"致良知"的智慧。</p>
+    <div class="quote">
+      "尔等只要时时存养此心，如养树木，根深枝茂，自然生发。"
+    </div>
+  </div>
+
+  <div class="chat-container" id="chatContainer">
+    <div class="welcome">
+      <h3>阳明先生已至，请畅所欲言 🌿</h3>
+      <p>你可以向阳明先生请教人生困惑、职场难题、心境调适，或探讨心学义理。阳明将以师长之风，循循善诱。</p>
+      <div class="topics">
+        <button onclick="sendQuickMessage('先生，我心中常有焦虑，该如何安顿？')">如何安顿焦虑</button>
+        <button onclick="sendQuickMessage('知行合一该如何实践？')">知行合一实践</button>
+        <button onclick="sendQuickMessage('请讲讲龙场悟道的经历')">龙场悟道</button>
+        <button onclick="sendQuickMessage('工作中遇到小人，如何应对？')">职场小人</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-container">
+    <div class="input-wrapper">
+      <textarea 
+        id="userInput" 
+        placeholder="向阳明先生请教..."
+        onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"
+      ></textarea>
+      <button id="sendBtn" onclick="sendMessage()">发送</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Powered by <a href="https://open.bigmodel.cn/" target="_blank">智谱AI</a> | 
+    <a href="https://amosliuster163.github.io/ai-tools-hub/" target="_blank">AI Tools Hub</a>
+  </div>
+
+  <script>
+    let chatHistory = [];
+    let isLoading = false;
+
+    // API地址（Vercel部署后自动生效）
+    const API_URL = '/api/chat';
+
+    function addMessage(role, content) {
+      const container = document.getElementById('chatContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${role}`;
+      
+      const avatarDiv = document.createElement('div');
+      avatarDiv.className = 'avatar';
+      avatarDiv.textContent = role === 'user' ? '我' : '阳';
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'content';
+      contentDiv.textContent = content;
+      
+      messageDiv.appendChild(avatarDiv);
+      messageDiv.appendChild(contentDiv);
+      container.appendChild(messageDiv);
+      
+      // 滚动到底部
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function addLoadingMessage() {
+      const container = document.getElementById('chatContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message assistant';
+      messageDiv.id = 'loadingMessage';
+      
+      const avatarDiv = document.createElement('div');
+      avatarDiv.className = 'avatar';
+      avatarDiv.textContent = '阳';
+      
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'loading';
+      loadingDiv.innerHTML = '<span></span><span></span><span></span>';
+      
+      messageDiv.appendChild(avatarDiv);
+      messageDiv.appendChild(loadingDiv);
+      container.appendChild(messageDiv);
+      
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function removeLoadingMessage() {
+      const loadingMessage = document.getElementById('loadingMessage');
+      if (loadingMessage) {
+        loadingMessage.remove();
+      }
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const message = input.value.trim();
+
+      if (!message || isLoading) return;
+
+      // 显示用户消息
+      addMessage('user', message);
+      input.value = '';
+      
+      // 禁用按钮，显示加载
+      isLoading = true;
+      sendBtn.disabled = true;
+      sendBtn.textContent = '思考中...';
+      addLoadingMessage();
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message,
+            history: chatHistory,
+          }),
+        });
+
+        const data = await response.json();
+
+        removeLoadingMessage();
+
+        if (data.error) {
+          addMessage('assistant', '抱歉，阳明一时思绪纷乱，请稍后再问。');
+        } else {
+          addMessage('assistant', data.reply);
+          chatHistory = data.history;
+        }
+      } catch (error) {
+        removeLoadingMessage();
+        addMessage('assistant', '网络不畅，请稍后再试。');
+      }
+
+      // 恢复按钮
+      isLoading = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = '发送';
+    }
+
+    function sendQuickMessage(msg) {
+      document.getElementById('userInput').value = msg;
+      sendMessage();
+    }
+  </script>
+</body>
+</html>
