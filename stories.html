@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名人成长故事合集 - AI Tools Hub</title>
+    <meta name="description" content="10位名人的真实成长故事：范仲淹、曾国藩、王阳明、任正非、俞敏洪、董明珠、曹德旺、刘强东、苏东坡、诸葛亮。给孩子成长的启发。">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .stories-hero {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .stories-hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        .stories-hero p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .story-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .story-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .story-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+        }
+        .story-title-group {
+            flex: 1;
+        }
+        .story-title {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .story-era {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .story-content {
+            padding: 0 20px 20px;
+        }
+        .story-highlight {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            color: #555;
+        }
+        .story-quote {
+            padding: 15px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            font-style: italic;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .story-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
+            color: #666;
+        }
+        .story-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .story-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .story-link {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+        .story-link:hover {
+            background: #764ba2;
+        }
+        .story-link.secondary {
+            background: #6c757d;
+        }
+        .story-link.secondary:hover {
+            background: #5a6268;
+        }
+        .score-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .score-badge.high {
+            background: #28a745;
+        }
+        .score-badge.medium {
+            background: #ffc107;
+            color: #333;
+        }
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 20px;
+            transition: background 0.3s ease;
+        }
+        .nav-back:hover {
+            background: #f8f9fa;
+        }
+        .assessment-section {
+            background: #f8f9fa;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+        .assessment-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .assessment-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .metric-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .metric-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .metric-desc {
+            font-size: 0.85em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="index.html" class="nav-back">← 返回首页</a>
+    </nav>
+
+    <header class="stories-hero">
+        <h1>📖 名人成长故事合集</h1>
+        <p>10位名人的真实成长故事，给孩子成长的启发</p>
+        <p style="font-size: 0.9em; margin-top: 10px;">来源：公众号「爱默如深」 | 评分标准：情感共鸣(30分)+悬念张力(25分)+价值感(20分)+传播便利(15分)+完成率(10分)</p>
+    </header>
+
+    <main class="stories-grid">
+        <!-- 范仲淹 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">范</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">范仲淹：划粥断薤的苦读少年</h2>
+                    <span class="story-era">北宋（989-1052）</span>
+                </div>
+                <span class="score-badge medium">75分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>两岁丧父，随母改嫁，生活清贫。在寺庙读书时，将粥划成四块，分两餐吃。
+                </div>
+                <div class="story-quote">
+                    "先天下之忧而忧，后天下之乐而乐"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：75分</span>
+                    <span class="story-stat">✅ 真实史料：《宋史·范仲淹传》</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/fan-zhongyan.html" class="story-link" target="_blank">阅读故事 →</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 任正非 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">任</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">任正非：43岁负债200万的逆袭</h2>
+                    <span class="story-era">现代（1944-）</span>
+                </div>
+                <span class="score-badge high">84分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>43岁被骗200万，被国企开除，背负巨债，妻子离婚。在深圳棚屋创办华为。
+                </div>
+                <div class="story-quote">
+                    "没有伤痕累累，哪来皮糙肉厚，英雄自古多磨难"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：84分</span>
+                    <span class="story-stat">✅ 信息源：《任正非传》、华为官方</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/ren-zhengfei.html" class="story-link" target="_blank">阅读故事 →</a>
+                    <a href="https://amosliu.github.io/growth-figures/scripts/ren-zhengfei-script.html" class="story-link secondary" target="_blank">视频脚本</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 曾国藩 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">曾</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">曾国藩：笨小孩的大智慧</h2>
+                    <span class="story-era">清朝（1811-1872）</span>
+                </div>
+                <span class="score-badge high">82分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>考秀才考了7次才考上，被老师骂"笨小孩"。但坚持日课13条，终成一代名臣。
+                </div>
+                <div class="story-quote">
+                    "天下之至拙，能胜天下之至巧"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：82分</span>
+                    <span class="story-stat">✅ 真实史料：《曾国藩日记》、《清史稿》</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/zeng-guofan.html" class="story-link" target="_blank">阅读故事 →</a>
+                    <a href="https://amosliu.github.io/growth-figures/scripts/zeng-guofan-script.html" class="story-link secondary" target="_blank">视频脚本</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 王阳明 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">王</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">王阳明：龙场悟道的绝境重生</h2>
+                    <span class="story-era">明朝（1472-1529）</span>
+                </div>
+                <span class="score-badge high">85分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>得罪权贵被贬贵州龙场，住在山洞里，面临生死考验。在绝境中悟出"心即理"。
+                </div>
+                <div class="story-quote">
+                    "此心光明，亦复何言"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：85分</span>
+                    <span class="story-stat">✅ 真实史料：《王阳明全集》、《明史》</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/wang-yangming.html" class="story-link" target="_blank">阅读故事 →</a>
+                    <a href="https://amosliu.github.io/growth-figures/scripts/wang-yangming-script.html" class="story-link secondary" target="_blank">视频脚本</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 俞敏洪 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">俞</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">俞敏洪：高考三次落榜的逆袭</h2>
+                    <span class="story-era">现代（1962-）</span>
+                </div>
+                <span class="score-badge high">86分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>高考三次落榜，第一次英语33分。农村娃，没有背景，没有资源。
+                </div>
+                <div class="story-quote">
+                    "在绝望中寻找希望，人生终将辉煌"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：86分</span>
+                    <span class="story-stat">✅ 信息源：《俞敏洪自述》、新东方官方</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/yu-minhong.html" class="story-link" target="_blank">阅读故事 →</a>
+                    <a href="https://amosliu.github.io/growth-figures/scripts/yu-minhong-script.html" class="story-link secondary" target="_blank">视频脚本</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 董明珠 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">董</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">董明珠：单亲妈妈的销售传奇</h2>
+                    <span class="story-era">现代（1954-）</span>
+                </div>
+                <span class="score-badge high">88分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>30岁丈夫去世，留下2岁儿子。南下打工，从销售员做起，追债42天追回42万。
+                </div>
+                <div class="story-quote">
+                    "对自己狠一点，才能活得精彩"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：88分（最高）</span>
+                    <span class="story-stat">✅ 信息源：《董明珠传》、格力官方</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/dong-mingzhu.html" class="story-link" target="_blank">阅读故事 →</a>
+                    <a href="https://amosliu.github.io/growth-figures/scripts/dong-mingzhu-script.html" class="story-link secondary" target="_blank">视频脚本</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 曹德旺 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">曹</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">曹德旺：辍学少年的玻璃王国</h2>
+                    <span class="story-era">现代（1946-）</span>
+                </div>
+                <span class="score-badge medium">80分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>9岁才上学，14岁辍学打工。卖水果、修自行车，从底层做起。
+                </div>
+                <div class="story-quote">
+                    "我没有文化，但我有智慧"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：80分</span>
+                    <span class="story-stat">✅ 信息源：《曹德旺自传》、福耀官方</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/cao-dewang.html" class="story-link" target="_blank">阅读故事 →</a>
+                    <a href="https://amosliu.github.io/growth-figures/scripts/cao-dewang-script.html" class="story-link secondary" target="_blank">视频脚本</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 刘强东 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">刘</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">刘强东：全村凑500元的农村娃</h2>
+                    <span class="story-era">现代（1974-）</span>
+                </div>
+                <span class="score-badge high">82分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>农村娃，全村凑500元上大学。开餐馆失败负债20万，从中关村小柜台做起。
+                </div>
+                <div class="story-quote">
+                    "我永远不会忘记那500元钱"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：82分</span>
+                    <span class="story-stat">✅ 信息源：《刘强东自述》、京东官方</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/liu-qiangdong.html" class="story-link" target="_blank">阅读故事 →</a>
+                    <a href="https://amosliu.github.io/growth-figures/scripts/liu-qiangdong-script.html" class="story-link secondary" target="_blank">视频脚本</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 苏东坡 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">苏</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">苏东坡：三次贬谪的豁达人生</h2>
+                    <span class="story-era">北宋（1037-1101）</span>
+                </div>
+                <span class="score-badge high">85分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>三次被贬，越贬越远。从杭州到黄州到惠州到海南，却写下"一蓑烟雨任平生"。
+                </div>
+                <div class="story-quote">
+                    "回首向来萧瑟处，归去，也无风雨也无晴"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：85分</span>
+                    <span class="story-stat">✅ 真实史料：《宋史·苏轼传》、苏轼诗词</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/su-dongpo.html" class="story-link" target="_blank">阅读故事 →</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- 诸葛亮 -->
+        <article class="story-card">
+            <div class="story-header">
+                <div class="story-avatar">诸葛</div>
+                <div class="story-title-group">
+                    <h2 class="story-title">诸葛亮：鞠躬尽瘁的忠臣典范</h2>
+                    <span class="story-era">三国（181-234）</span>
+                </div>
+                <span class="score-badge medium">81分</span>
+            </div>
+            <div class="story-content">
+                <div class="story-highlight">
+                    <strong>困境：</strong>三顾茅庐后的选择，北伐路上的艰难，五丈原的最后一刻。
+                </div>
+                <div class="story-quote">
+                    "鞠躬尽瘁，死而后已"
+                </div>
+                <div class="story-stats">
+                    <span class="story-stat">📊 评分：81分</span>
+                    <span class="story-stat">✅ 真实史料：《三国志·诸葛亮传》、《出师表》</span>
+                </div>
+                <div class="story-links">
+                    <a href="https://amosliu.github.io/growth-figures/zhuge-liang.html" class="story-link" target="_blank">阅读故事 →</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- 评估效果说明 -->
+    <section class="assessment-section">
+        <h2>📊 效果评估指标</h2>
+        <div class="assessment-metrics">
+            <div class="metric-card">
+                <div class="metric-icon">👁️</div>
+                <div class="metric-name">页面访问量</div>
+                <div class="metric-desc">Google Analytics统计访问次数</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">👆</div>
+                <div class="metric-name">点击率</div>
+                <div class="metric-desc">故事卡片点击次数 / 页面访问量</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📱</div>
+                <div class="metric-name">公众号引流</div>
+                <div class="metric-desc">点击"阅读故事"后关注公众号的比例</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">⭐</div>
+                <div class="metric-name">爆款评分</div>
+                <div class="metric-desc">情感共鸣+悬念张力+价值感+传播便利+完成率</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📈</div>
+                <div class="metric-name">SEO排名</div>
+                <div class="metric-desc">Google搜索"名人成长故事"关键词排名</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">🔄</div>
+                <div class="metric-name">优化迭代</div>
+                <div class="metric-desc">根据数据调整标题、内容、布局</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>来源：公众号「爱默如深」 | <a href="https://mp.weixin.qq.com/s/kdJHWQi9d_MVoN1XujLz5Q" target="_blank">关注公众号</a></p>
+        <p><a href="index.html">返回 AI Tools Hub 首页</a></p>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXX');
+        
+        // 点击追踪
+        document.querySelectorAll('.story-link').forEach(link => {
+            link.addEventListener('click', function() {
+                const storyName = this.closest('.story-card').querySelector('.story-title').textContent;
+                gtag('event', 'click', {
+                    'event_category': 'Story',
+                    'event_label': storyName
+                });
+            });
+        });
+    </script>
+</body>
+</html>
