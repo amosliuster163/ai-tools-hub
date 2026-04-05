@@ -1,0 +1,34 @@
+【标题】SkillBoss深度评测：一个API搞定687个服务
+
+【核心内容】
+在开发AI应用时，对接各种API是最头疼的问题。SkillBoss通过一个API Key、OpenAI兼容格式，提供687个API端点，覆盖62个供应商。这篇文章深度评测它的功能、定价、适用场景。
+
+【主要内容】
+✅ 核心数据：687 API端点 + 62供应商 + 1个Key
+✅ 覆盖12类服务：
+   Chat、Image、Video、Audio、Search
+   Documents、Email、SMS、Social、UI生成、部署、数据
+✅ 技术特点：
+   1. OpenAI兼容格式（改base_url即可）
+   2. 一个Key搞定所有
+   3. 智能路由自动选择供应商
+✅ 实际测试结果：
+   Chat响应~2秒
+   绘图响应~10秒
+   搜索响应~1秒
+✅ 定价方案：与原厂相当，搜索API更低
+✅ 优势与局限分析
+✅ 适用场景推荐
+
+【适合人群】
+AI应用开发者、原型验证者、需要对接多种API的团队
+
+【关键词】
+SkillBoss、API聚合、OpenAI兼容、687个服务、智能路由
+
+【特别说明】
+实测响应时间与直接调用原厂相当，方便但不是极致性能场景的选择。
+
+【相关链接】
+AI工具导航站：https://amosliuster163.github.io/ai-tools-hub/
+SkillBoss官网：https://skillboss.ai

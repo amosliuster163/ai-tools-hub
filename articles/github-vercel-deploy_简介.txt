@@ -1,0 +1,31 @@
+【标题】GitHub Pages + Vercel双平台部署指南
+
+【核心内容】
+想让你的项目同时跑在GitHub Pages和Vercel上？这篇文章教你如何实现双平台部署，让网站更稳定、访问更快速，而且完全免费！
+
+【主要内容】
+✅ 双平台部署优势（互为备份、访问加速）
+✅ GitHub Pages完整部署流程：
+   1. 创建仓库并推送
+   2. Settings > Pages开启部署
+   3. 获取访问地址
+✅ Vercel自动部署：
+   1. 导入GitHub仓库
+   2. 自动检测项目类型
+   3. 一键完成部署
+✅ 自动化同步机制（一次push，两处更新）
+✅ 自定义域名配置（CNAME文件 + DNS设置）
+✅ 实战案例：AI Tools Hub导航站
+
+【适合人群】
+想要部署静态网站的开发者、自媒体创作者
+
+【关键词】
+GitHub Pages、Vercel、双平台部署、免费托管、自动同步
+
+【特别说明】
+实测对比：Vercel国内访问约0.5秒，GitHub Pages约2秒。
+
+【相关链接】
+GitHub Pages演示：https://amosliuster163.github.io/ai-tools-hub/
+Vercel镜像：https://ai-tools-hub-zeta.vercel.app/
