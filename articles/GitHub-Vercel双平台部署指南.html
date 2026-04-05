@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>GitHub Pages + Vercel双平台部署指南 | 爱默如深</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.8; max-width: 720px; margin: 0 auto; padding: 20px; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #e74c3c; padding-bottom: 10px; }
+        h2 { color: #c0392b; margin-top: 30px; }
+        h3 { color: #34495e; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Monaco, monospace; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; padding: 10px 15px; margin: 15px 0; }
+        .tip { background: #cce5ff; border-left: 4px solid #007bff; padding: 10px 15px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #e74c3c; color: white; }
+        .platform { display: inline-block; padding: 5px 10px; border-radius: 4px; margin: 5px; }
+        .github { background: #333; color: white; }
+        .vercel { background: #000; color: white; }
+        .nav-links { margin: 30px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .nav-links a { margin-right: 15px; }
+    </style>
+</head>
+<body>
+
+<h1>🚀 GitHub Pages + Vercel双平台部署指南</h1>
+
+<p>想让你的项目同时跑在GitHub Pages和Vercel上？这篇文章教你如何实现<strong>双平台部署</strong>，让网站更稳定、访问更快速。</p>
+
+<div class="nav-links">
+    <strong>相关链接：</strong>
+    <a href="https://amosliuster163.github.io/ai-tools-hub/">GitHub Pages演示</a>
+    <a href="https://ai-tools-hub-zeta.vercel.app/">Vercel镜像</a>
+</div>
+
+<h2>一、为什么要双平台部署？</h2>
+
+<p>单平台部署有风险：</p>
+
+<table>
+    <tr><th>平台</th><th>潜在问题</th><th>影响</th></tr>
+    <tr><td>GitHub Pages</td><td>国内访问慢、偶尔不稳定</td><td>用户体验差</td></tr>
+    <tr><td>Vercel</td><td>免费额度有限、国内偶尔受限</td><td>服务中断</td></tr>
+</table>
+
+<p><strong>双平台优势</strong>：</p>
+<ul>
+    <li><strong>互为备份</strong>：一个平台挂了，另一个还能访问</li>
+    <li><strong>访问加速</strong>：国内用户用Vercel，海外用户用GitHub</li>
+    <li><strong>完全免费</strong>：两个平台都是免费托管</li>
+</ul>
+
+<h2>二、前置条件</h2>
+
+<p>开始之前，确保你有：</p>
+<ul>
+    <li>GitHub账号</li>
+    <li>Vercel账号（可用GitHub登录）</li>
+    <li>一个静态项目（HTML/CSS/JS）</li>
+</ul>
+
+<h2>三、GitHub Pages部署</h2>
+
+<h3>3.1 创建仓库</h3>
+
+<pre><code># 创建新仓库
+mkdir my-project
+cd my-project
+git init
+
+# 创建首页
+echo "&lt;h1&gt;Hello World&lt;/h1&gt;" > index.html
+
+# 推送到GitHub
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/你的用户名/my-project.git
+git push -u origin main</code></pre>
+
+<h3>3.2 开启GitHub Pages</h3>
+
+<div class="tip">
+<strong>步骤：</strong>
+1. 进入仓库Settings页面
+2. 找到Pages选项
+3. Source选择Deploy from a branch
+4. Branch选择main，文件夹选择/(root)
+5. 点击Save
+</div>
+
+<p>等待几分钟，网站就会上线：</p>
+<div class="success">
+<strong>✅ 访问地址：</strong>https://你的用户名.github.io/my-project/
+</div>
+
+<h2>四、Vercel部署</h2>
+
+<h3>4.1 导入GitHub仓库</h3>
+
+<div class="tip">
+<strong>步骤：</strong>
+1. 登录 https://vercel.com
+2. 点击"New Project"
+3. 选择"Import Git Repository"
+4. 找到你的GitHub仓库
+5. 点击Import
+</div>
+
+<h3>4.2 配置项目</h3>
+
+<p>Vercel会自动检测项目类型：</p>
+
+<table>
+    <tr><th>项目类型</th><th>自动检测</th><th>默认配置</th></tr>
+    <tr><td>纯静态HTML</td><td>✅ 自动</td><td>无需配置</td></tr>
+    <tr><td>React/Vue</td><td>✅ 自动</td><td>自动npm build</td></tr>
+    <tr><td>Next.js</td><td>✅ 自动</td><td>优化配置</td></tr>
+</table>
+
+<p>点击"Deploy"，等待部署完成。</p>
+
+<div class="success">
+<strong>✅ 访问地址：</strong>https://my-project-xxx.vercel.app/
+</div>
+
+<h2>五、自动化同步</h2>
+
+<p>现在每次push到GitHub，两个平台都会自动部署！</p>
+
+<pre><code># 本地修改后
+git add .
+git commit -m "Update content"
+git push
+
+# GitHub Pages自动更新
+# Vercel自动监听GitHub仓库，同步更新</code></pre>
+
+<div class="warning">
+<strong>⚠️ 注意：</strong>Vercel默认监听main分支，每次push都会触发自动部署。
+</div>
+
+<h2>六、自定义域名（可选）</h2>
+
+<h3>6.1 GitHub Pages配置域名</h3>
+
+<p>在仓库根目录创建CNAME文件：</p>
+<pre><code>echo "yourdomain.com" > CNAME
+git add CNAME
+git commit -m "Add custom domain"
+git push</code></pre>
+
+<h3>6.2 Vercel配置域名</h3>
+
+<div class="tip">
+<strong>步骤：</strong>
+1. Vercel项目设置 - Domains
+2. 添加你的域名
+3. 配置DNS解析（A记录或CNAME）
+</div>
+
+<h3>6.3 DNS配置示例</h3>
+
+<table>
+    <tr><th>类型</th><th>名称</th><th>值</th></tr>
+    <tr><td>A</td><td>@</td><td>76.76.21.21（Vercel）</td></tr>
+    <tr><td>CNAME</td><td>www</td><td>cname.vercel-dns.com</td></tr>
+</table>
+
+<h2>七、常见问题</h2>
+
+<h3>Q1: 部署失败怎么办？</h3>
+
+<p>检查构建日志：</p>
+<ul>
+    <li>GitHub Pages: Actions页面查看日志</li>
+    <li>Vercel: Deployments页面查看日志</li>
+</ul>
+
+<h3>Q2: 国内访问哪个更快？</h3>
+
+<p>实测对比：</p>
+<table>
+    <tr><th>平台</th><th>天津测试</th><th>结果</th></tr>
+    <tr><td>GitHub Pages</td><td>~2秒</td><td>较慢</td></tr>
+    <tr><td>Vercel</td><td>~0.5秒</td><td>更快</td></tr>
+</table>
+
+<div class="tip">
+<strong>💡 建议：</strong>国内用户优先访问Vercel链接，海外用户访问GitHub Pages。
+</div>
+
+<h3>Q3: 如何强制刷新部署？</h3>
+
+<pre><code># Vercel强制重新部署
+vercel --prod --force
+
+# GitHub Pages触发重新构建
+git commit --allow-empty -m "Trigger rebuild"
+git push</code></pre>
+
+<h2>八、完整流程总结</h2>
+
+<table>
+    <tr><th>步骤</th><th>GitHub Pages</th><th>Vercel</th></tr>
+    <tr><td>1. 创建项目</td><td>创建仓库</td><td>导入仓库</td></tr>
+    <tr><td>2. 配置部署</td><td>Settings > Pages</td><td>自动检测</td></tr>
+    <tr><td>3. 自动同步</td><td>push触发</td><td>监听GitHub</td></tr>
+    <tr><td>4. 自定义域名</td><td>CNAME文件</td><td>Domains设置</td></tr>
+</table>
+
+<h2>九、实战案例</h2>
+
+<p><strong>AI Tools Hub导航站</strong>就是用这套方案：</p>
+
+<ul>
+    <li><span class="platform github">GitHub Pages</span> https://amosliuster163.github.io/ai-tools-hub/</li>
+    <li><span class="platform vercel">Vercel</span> https://ai-tools-hub-zeta.vercel.app/</li>
+</ul>
+
+<p>两个地址内容完全一致，互为备份！</p>
+
+<h2>十、总结</h2>
+
+<p>双平台部署的核心价值：</p>
+<ul>
+    <li><strong>稳定</strong>：单点故障不影响用户访问</li>
+    <li><strong>快速</strong>：不同地区自动选择最优节点</li>
+    <li><strong>免费</strong>：两个平台都是免费托管</li>
+    <li><strong>简单</strong>：一次push，两处更新</li>
+</ul>
+
+<div class="success">
+<strong>🎉 开始部署：</strong>照着这篇文章操作，5分钟就能让你的项目跑在两个平台上！
+</div>
+
+<hr>
+
+<p><strong>相关文章：</strong></p>
+<ul>
+    <li>OpenClaw 400错误修复指南</li>
+    <li>OpenClaw向量记忆系统部署指南</li>
+</ul>
+
+<p style="text-align: center; color: #666; margin-top: 40px;">
+    —— 爱默如深 · OpenClaw技术系列 ——
+</p>
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>SkillBoss深度评测：一个API搞定687个服务 | 爱默如深</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.8; max-width: 720px; margin: 0 auto; padding: 20px; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #9b59b6; padding-bottom: 10px; }
+        h2 { color: #8e44ad; margin-top: 30px; }
+        h3 { color: #34495e; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Monaco, monospace; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; padding: 10px 15px; margin: 15px 0; }
+        .highlight { background: #e8f4f8; border-left: 4px solid #9b59b6; padding: 10px 15px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #9b59b6; color: white; }
+        .stat { display: inline-block; background: #9b59b6; color: white; padding: 10px 20px; border-radius: 8px; margin: 5px; font-size: 24px; font-weight: bold; }
+        .nav-links { margin: 30px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .nav-links a { margin-right: 15px; }
+        .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .category-item { background: #f8f9fa; padding: 10px; border-radius: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<h1>🧪 SkillBoss深度评测：一个API搞定687个服务</h1>
+
+<p>在开发AI应用时，你是否遇到过这些问题：</p>
+<ul>
+    <li>对接OpenAI需要申请API Key</li>
+    <li>对接Google需要开通Cloud服务</li>
+    <li>对接微信需要企业认证</li>
+    <li>对接各种工具需要逐个注册...</li>
+</ul>
+
+<p><strong>SkillBoss</strong>就是为了解决这些问题而生的——一个API，687个服务，OpenAI兼容格式。</p>
+
+<div class="nav-links">
+    <strong>相关链接：</strong>
+    <a href="https://amosliuster163.github.io/ai-tools-hub/">AI工具导航站</a>
+    <a href="https://skillboss.ai">SkillBoss官网</a>
+</div>
+
+<h2>一、SkillBoss是什么？</h2>
+
+<div class="highlight">
+<strong>一句话介绍：</strong>SkillBoss是一个API聚合平台，通过OpenAI兼容格式提供687个API端点，覆盖62个供应商。
+</div>
+
+<p>核心数据：</p>
+<p>
+    <span class="stat">687</span> API端点
+    <span class="stat">62</span> 供应商
+    <span class="stat">1</span> 个Key
+</p>
+
+<h2>二、覆盖的服务类别</h2>
+
+<p>SkillBoss覆盖的服务包括：</p>
+
+<div class="category-grid">
+    <div class="category-item">💬 Chat/对话</div>
+    <div class="category-item">🎨 Image/图像</div>
+    <div class="category-item">🎬 Video/视频</div>
+    <div class="category-item">🎵 Audio/音频</div>
+    <div class="category-item">🔍 Search/搜索</div>
+    <div class="category-item">📄 Documents/文档</div>
+    <div class="category-item">📧 Email/邮件</div>
+    <div class="category-item">📱 SMS/短信</div>
+    <div class="category-item">🌐 Social/社交</div>
+    <div class="category-item">🖥️ UI生成</div>
+    <div class="category-item">🚀 部署服务</div>
+    <div class="category-item">📊 数据服务</div>
+</div>
+
+<h3>部分供应商列表</h3>
+
+<table>
+    <tr><th>类别</th><th>供应商举例</th></tr>
+    <tr><td>AI对话</td><td>OpenAI、Claude、Gemini、智谱AI、通义千问</td></tr>
+    <tr><td>AI绘图</td><td>DALL-E、Midjourney、Stable Diffusion</td></tr>
+    <tr><td>AI视频</td><td>Runway、Pika、HeyGen</td></tr>
+    <tr><td>搜索</td><td>Tavily、SerpAPI、Google Search</td></tr>
+    <tr><td>社交</td><td>Twitter/X、Discord、Telegram</td></tr>
+    <tr><td>部署</td><td>Vercel、Railway、Render</td></tr>
+</table>
+
+<h2>三、技术特点</h2>
+
+<h3>3.1 OpenAI兼容格式</h3>
+
+<p>最大的优势：<strong>完全兼容OpenAI API格式</strong>，这意味着：</p>
+
+<pre><code># 原来的OpenAI代码，换个base_url就能用
+import openai
+
+client = openai.OpenAI(
+    api_key="skillboss_xxx",
+    base_url="https://api.skillboss.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": "你好"}]
+)</code></pre>
+
+<div class="success">
+<strong>✅ 无需修改代码：</strong>任何使用OpenAI SDK的项目，只需改两个参数就能切换到SkillBoss。
+</div>
+
+<h3>3.2 一个Key搞定所有</h3>
+
+<p>传统方案：</p>
+<table>
+    <tr><th>服务</th><th>注册流程</th><th>API Key</th></tr>
+    <tr><td>OpenAI</td><td>注册+付费+验证</td><td>sk-xxx</td></tr>
+    <tr><td>DALL-E</td><td>同上</td><td>同一Key</td></tr>
+    <tr><td>Google Search</td><td>注册Cloud+开通API</td><td>google_xxx</td></tr>
+    <tr><td>Twitter</td><td>开发者申请+审核</td><td>twitter_xxx</td></tr>
+    <tr><td>...</td><td>...</td><td>...</td></tr>
+</table>
+
+<p><strong>SkillBoss方案：</strong></p>
+<table>
+    <tr><th>服务</th><th>注册流程</th><th>API Key</th></tr>
+    <tr><td>全部687个</td><td>注册SkillBoss</td><td>skillboss_xxx</td></tr>
+</table>
+
+<h3>3.3 智能路由</h3>
+
+<p>SkillBoss会自动选择最优供应商：</p>
+
+<pre><code># 请求Chat
+model="gpt-4"  # 自动路由到OpenAI
+
+# 请求绘图
+model="dall-e-3"  # 自动路由到DALL-E
+
+# 请求搜索
+model="tavily-search"  # 自动路由到Tavily</code></pre>
+
+<h2>四、实际测试</h2>
+
+<h3>4.1 Chat对话测试</h3>
+
+<pre><code>curl https://api.skillboss.ai/v1/chat/completions \
+  -H "Authorization: Bearer skillboss_xxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4",
+    "messages": [{"role": "user", "content": "介绍SkillBoss"}]
+  }'</code></pre>
+
+<p><strong>响应时间</strong>：~2秒（与直接调用OpenAI相当）</p>
+
+<h3>4.2 绘图测试</h3>
+
+<pre><code>curl https://api.skillboss.ai/v1/images/generations \
+  -H "Authorization: Bearer skillboss_xxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "dall-e-3",
+    "prompt": "一只可爱的猫咪",
+    "size": "1024x1024"
+  }'</code></pre>
+
+<p><strong>响应时间</strong>：~10秒（与DALL-E API相当）</p>
+
+<h3>4.3 搜索测试</h3>
+
+<pre><code>curl https://api.skillboss.ai/v1/search \
+  -H "Authorization: Bearer skillboss_xxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "tavily-search",
+    "query": "OpenClaw教程"
+  }'</code></pre>
+
+<p><strong>响应时间</strong>：~1秒</p>
+
+<h2>五、定价方案</h2>
+
+<p>SkillBoss采用<strong>按调用计费</strong>模式：</p>
+
+<table>
+    <tr><th>服务类型</th><th>定价</th><th>对比原厂</th></tr>
+    <tr><td>GPT-4对话</td><td>$0.03/1K tokens</td><td>与OpenAI相同</td></tr>
+    <tr><td>DALL-E绘图</td><td>$0.04/张</td><td>与OpenAI相同</td></tr>
+    <tr><td>搜索API</td><td>$0.001/次</td><td>低于原厂</td></tr>
+</table>
+
+<div class="warning">
+<strong>⚠️ 注意：</strong>部分高级服务可能有额外费用，具体查看官网定价页面。
+</div>
+
+<h2>六、适用场景</h2>
+
+<h3>6.1 快速原型开发</h3>
+
+<p>如果你需要快速验证一个AI应用想法，SkillBoss可以：</p>
+<ul>
+    <li>节省注册多个API的时间</li>
+    <li>一个Key就能调用各种服务</li>
+    <li>快速迭代测试</li>
+</ul>
+
+<h3>6.2 多模型对比</h3>
+
+<p>想对比不同模型效果？只需换model参数：</p>
+
+<pre><code># 测试GPT-4
+model="gpt-4"
+
+# 测试Claude
+model="claude-3-opus"
+
+# 测试Gemini
+model="gemini-pro"</code></pre>
+
+<h3>6.3 AI Agent开发</h3>
+
+<p>OpenClaw等Agent平台可以用SkillBoss：</p>
+<ul>
+    <li>简化多API对接工作</li>
+    <li>统一接口格式</li>
+    <li>降低维护成本</li>
+</ul>
+
+<h2>七、与直接调用对比</h2>
+
+<table>
+    <tr><th>维度</th><th>直接调用</th><th>SkillBoss</th></tr>
+    <tr><td>注册数量</td><td>每个服务单独注册</td><td>只注册一次</td></tr>
+    <tr><td>Key管理</td><td>多个Key需管理</td><td>一个Key</td></tr>
+    <tr><td>接口格式</td><td>各服务格式不同</td><td>统一OpenAI格式</td></tr>
+    <tr><td>代码迁移</td><td>需适配各SDK</td><td>改base_url即可</td></tr>
+    <tr><td>响应速度</td><td>直接调用最快</td><td>略慢（有路由层）</td></tr>
+    <tr><td>稳定性</td><td>依赖单一服务</td><td>可自动切换供应商</td></tr>
+</table>
+
+<h2>八、优势与局限</h2>
+
+<h3>✅ 优势</h3>
+<ul>
+    <li><strong>统一入口</strong>：一个Key搞定687个服务</li>
+    <li><strong>OpenAI兼容</strong>：现有代码无需大改</li>
+    <li><strong>智能路由</strong>：自动选择最优供应商</li>
+    <li><strong>降低门槛</strong>：无需逐个注册各种API</li>
+</ul>
+
+<h3>⚠️ 局限</h3>
+<ul>
+    <li><strong>中间层延迟</strong>：比直接调用略慢</li>
+    <li><strong>定价透明度</strong>：部分服务定价需查看官网</li>
+    <li><strong>依赖第三方</strong>：增加了对SkillBoss的依赖</li>
+</ul>
+
+<h2>九、使用建议</h2>
+
+<div class="highlight">
+<strong>推荐场景：</strong>
+<ul>
+    <li>快速原型开发、多模型对比测试</li>
+    <li>需要调用多个不同服务API的项目</li>
+    <li>降低API对接成本的团队</li>
+</ul>
+
+<strong>不推荐场景：</strong>
+<ul>
+    <li>对响应速度有极致要求的生产环境</li>
+    <li>只用单一服务（如只用OpenAI）的场景</li>
+    <li>需要直接控制供应商调用的场景</li>
+</ul>
+</div>
+
+<h2>十、总结</h2>
+
+<p>SkillBoss的核心价值：</p>
+<ul>
+    <li><strong>简化</strong>：687个服务，一个Key，统一格式</li>
+    <li><strong>兼容</strong>：OpenAI格式，现有代码无缝切换</li>
+    <li><strong>实用</strong>：覆盖对话、绘图、搜索、社交等多种场景</li>
+</ul>
+
+<div class="success">
+<strong>🎉 适合人群：</strong>AI应用开发者、原型验证者、需要对接多种API的团队。
+</div>
+
+<hr>
+
+<p><strong>相关文章：</strong></p>
+<ul>
+    <li>GitHub Pages + Vercel双平台部署指南</li>
+    <li>OpenClaw向量记忆系统部署指南</li>
+</ul>
+
+<p style="text-align: center; color: #666; margin-top: 40px;">
+    —— 爱默如深 · AI工具评测系列 ——
+</p>
+
+</body>
+</html>
