@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="OpenClaw,向量记忆,memory-core,插件报错,版本兼容,技术教程">
+    <meta name="description" content="memory-core插件报错'unavailable'？本文诊断API不兼容问题，提供替代方案和预防措施。">
+    <title>OpenClaw向量记忆插件报错排查指南 | 爱默如深</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.8; max-width: 720px; margin: auto; padding: 20px; color: #333; }
+        h1 { border-bottom: 3px solid #c9a227; padding-bottom: 10px; font-size: 24px; }
+        h2 { color: #c9a227; margin-top: 30px; font-size: 20px; }
+        h3 { color: #555; margin-top: 20px; font-size: 16px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: 'Monaco', 'Consolas', monospace; font-size: 14px; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
+        pre code { background: none; padding: 0; color: inherit; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; padding: 10px 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .info { background: #e7f3ff; border-left: 4px solid #2196F3; padding: 10px 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .error { background: #f8d7da; border-left: 4px solid #dc3545; padding: 10px 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #c9a227; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .nav-links { margin: 30px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .nav-links a { margin-right: 15px; color: #c9a227; text-decoration: none; }
+        ul, ol { padding-left: 20px; }
+        li { margin: 8px 0; }
+        hr { border: none; border-top: 1px solid #eee; margin: 30px 0; }
+        .cover { text-align: center; margin: 20px 0; }
+        .summary { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #c9a227; }
+        .tags { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .tags code { background: #e0e0e0; margin: 2px 4px; }
+        .version-table { font-size: 13px; }
+        .version-table th { background: #34495e; }
+    </style>
+</head>
+<body>
+
+<!-- 封面图片占位 -->
+<div class="cover">
+    <p style="color: #999; font-size: 14px;">📷 封面图片：建议使用OpenClaw Logo或向量记忆相关配图（800x400px）</p>
+</div>
+
+<h1>OpenClaw向量记忆插件报错排查指南</h1>
+
+<!-- 文章简介 -->
+<div class="summary">
+    <p><strong>📝 文章简介</strong></p>
+    <p>配置了Ollama向量模型，但memory-core插件显示"unavailable"？本文诊断API版本不兼容问题，提供替代方案和预防措施。</p>
+    <p style="margin-top: 10px; font-size: 13px;"><strong>关键词</strong>：OpenClaw、向量记忆、memory-core、插件报错、版本兼容</p>
+</div>
+
+<div class="nav-links">
+    <strong>🔗 相关链接：</strong>
+    <a href="https://amosliuster163.github.io/ai-tools-hub/">AI工具导航站</a>
+    <a href="https://ai-tools-hub-zeta.vercel.app/">Vercel镜像</a>
+</div>
+
+<h2>一、问题现象</h2>
+
+<p>Gateway报错：</p>
+
+<pre><code>⚠️ 🔌 Gateway: memorySearch failed</code></pre>
+
+<p>检查系统状态：</p>
+
+<pre><code>│ Memory │ enabled (plugin memory-core) · unavailable │</code></pre>
+
+<p class="warning"><strong>⚠️ 困惑点</strong>：配置了Ollama向量模型，本地运行正常，为什么插件显示"unavailable"？</p>
+
+<h2>二、症状识别</h2>
+
+<table>
+    <tr><th>症状</th><th>检查方法</th></tr>
+    <tr><td>Gateway报错 memorySearch failed</td><td>查看Gateway日志</td></tr>
+    <tr><td>插件状态显示 unavailable</td><td><code>openclaw status</code></td></tr>
+    <tr><td>插件列表显示 error</td><td><code>openclaw plugins list</code></td></tr>
+    <tr><td>配置正确但服务不可用</td><td>检查memorySearch配置</td></tr>
+</table>
+
+<h2>三、诊断思路</h2>
+
+<h3>第一步：排除配置问题</h3>
+
+<p>检查memorySearch配置：</p>
+
+<pre><code># 查看配置文件
+cat ~/.openclaw/openclaw.json | grep -A10 memorySearch</code></pre>
+
+<p>配置正常：</p>
+
+<pre><code>"memorySearch": {
+  "provider": "ollama",
+  "model": "nomic-embed-text",
+  "baseUrl": "http://localhost:11434"
+}</code></pre>
+
+<p>测试Ollama向量服务：</p>
+
+<pre><code># 测试embedding接口
+curl http://localhost:11434/api/embed \
+  -d '{"model":"nomic-embed-text","input":"test"}'
+
+# 如果返回向量，说明服务正常</code></pre>
+
+<p class="info"><strong>💡 结论</strong>：配置正确，向量服务正常，问题在插件层面。</p>
+
+<h3>第二步：检查插件状态</h3>
+
+<pre><code>openclaw plugins list | grep memory</code></pre>
+
+<pre><code>│ Memory │ memory-core │ openclaw │ error │ 2026.4.1-beta.1 │</code></pre>
+
+<p class="error"><strong>❌ 关键发现</strong>：插件状态是 <code>error</code>，不是 <code>enabled</code>。</p>
+
+<h3>第三步：运行doctor诊断</h3>
+
+<pre><code>openclaw doctor --non-interactive</code></pre>
+
+<p>找到根因：</p>
+
+<pre><code>ERROR memory-core: plugin failed during register: TypeError:
+register.registerMemoryEmbeddingProvider is not a function.
+register.registerMemoryEmbeddingProvider is undefined</code></pre>
+
+<h2>四、根因分析</h2>
+
+<h3>版本兼容性问题</h3>
+
+<table class="version-table">
+    <tr><th>组件</th><th>版本</th><th>状态</th></tr>
+    <tr><td>OpenClaw</td><td>2026.4.2（正式版）</td><td>当前运行版本</td></tr>
+    <tr><td>memory-core插件</td><td>2026.4.1-beta.1（beta版）</td><td>❌ API不兼容</td></tr>
+</table>
+
+<h3>API缺失原因</h3>
+
+<p>插件期望的API：</p>
+
+<pre><code>register.registerMemoryEmbeddingProvider(adapter)</code></pre>
+
+<p>但在OpenClaw 2026.4.2中，这个方法不存在：</p>
+
+<pre><code>register.registerMemoryEmbeddingProvider is undefined</code></pre>
+
+<p class="warning"><strong>⚠️ 原因</strong>：beta版插件使用了新API，正式版OpenClaw还没实现。</p>
+
+<h2>五、影响范围</h2>
+
+<table>
+    <tr><th>功能</th><th>状态</th><th>影响</th></tr>
+    <tr><td>memorySearch向量搜索</td><td>❌ 不可用</td><td>无法自动索引memory文件</td></tr>
+    <tr><td>LanceDB向量索引</td><td>❌ 不工作</td><td>向量搜索功能失效</td></tr>
+    <tr><td>Ollama embedding</td><td>✅ 正常</td><td>可手动调用API</td></tr>
+    <tr><td>文件记忆系统</td><td>✅ 正常</td><td>MEMORY.md + daily/不受影响</td></tr>
+</table>
+
+<h2>六、解决方案</h2>
+
+<h3>方案一：等待更新（推荐）</h3>
+
+<p>等待OpenClaw和memory-core插件版本同步更新。</p>
+
+<h3>方案二：使用替代方案</h3>
+
+<p>在插件修复前，使用文件形式记忆系统：</p>
+
+<h4>1. SESSION-STATE.md（Hot RAM）</h4>
+
+<ul>
+    <li>不受上下文压缩影响</li>
+    <li>每次session启动自动读取</li>
+    <li>WAL协议：先写状态再回复</li>
+</ul>
+
+<h4>2. MEMORY.md + memory/（Curated Archive）</h4>
+
+<ul>
+    <li>人类可读的长期记忆</li>
+    <li>每日日志记录</li>
+    <li>手动维护索引</li>
+</ul>
+
+<h4>3. 手动向量搜索</h4>
+
+<pre><code># 需要时手动调用Ollama
+curl http://localhost:11434/api/embed \
+  -d '{"model":"nomic-embed-text","input":"查询文本"}'</code></pre>
+
+<h2>七、预防措施</h2>
+
+<h3>检查版本兼容性</h3>
+
+<pre><code># 查看OpenClaw版本
+cat ~/.openclaw/openclaw.json | grep lastTouchedVersion
+
+# 查看插件版本
+openclaw plugins list | grep memory</code></pre>
+
+<h3>使用stable版本插件</h3>
+
+<p>避免使用beta版插件，除非确认与OpenClaw版本兼容。</p>
+
+<h3>配置检查清单</h3>
+
+<ul>
+    <li>☐ 检查插件版本是否与OpenClaw匹配</li>
+    <li>☐ 避免使用beta版插件</li>
+    <li>☐ 准备替代方案（SESSION-STATE.md）</li>
+    <li>☐ 定期检查插件状态</li>
+</ul>
+
+<h2>八、诊断命令汇总</h2>
+
+<pre><code># 1. 检查memory状态
+openclaw status | grep Memory
+
+# 2. 检查插件列表
+openclaw plugins list | grep memory
+
+# 3. 深度诊断
+openclaw doctor --non-interactive
+
+# 4. 测试向量服务
+curl http://localhost:11434/api/embed \
+  -d '{"model":"nomic-embed-text","input":"test"}'
+
+# 5. 查看插件错误日志
+grep -i "memory-core\|memory.*error" ~/.openclaw/logs/gateway.log</code></pre>
+
+<h2>九、总结</h2>
+
+<div class="success">
+<strong>🎯 一句话结论</strong><br>
+向量记忆插件报错时，先检查版本兼容性——beta版插件可能与正式版OpenClaw API不匹配。
+</div>
+
+<p><strong>诊断要点</strong>：</p>
+<ul>
+    <li>检查配置 → 排除配置问题</li>
+    <li>检查插件状态 → 找到error状态</li>
+    <li>运行doctor → 定位API缺失</li>
+</ul>
+
+<p><strong>解决要点</strong>：</p>
+<ul>
+    <li>等待版本同步更新</li>
+    <li>使用SESSION-STATE.md + MEMORY.md替代</li>
+</ul>
+
+<hr>
+
+<!-- 文章标签 -->
+<div class="tags">
+    <strong>🏷️ 文章标签</strong><br>
+    <code>#OpenClaw</code>
+    <code>#向量记忆</code>
+    <code>#memory-core</code>
+    <code>#插件报错</code>
+    <code>#版本兼容</code>
+</div>
+
+<div class="nav-links">
+    <strong>🔗 相关链接：</strong>
+    <a href="https://amosliuster163.github.io/ai-tools-hub/">AI工具导航站</a>
+</div>
+
+<p><strong>相关文章：</strong></p>
+<ul>
+    <li>OpenClaw定时任务推送失败排查指南</li>
+    <li>OpenClaw配置第二个飞书BOT踩坑指南</li>
+</ul>
+
+<p style="text-align: center; color: #666; margin-top: 40px;">
+    —— 爱默如深 · OpenClaw技术系列 ——
+</p>
+
+</body>
+</html>
