@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="OpenClaw,定时任务,Cron,Channel配置,踩坑指南,技术教程">
+    <meta name="description" content="多Channel配置时，isolated任务必须明确指定delivery.channel，否则系统可能选错channel导致推送失败。本文提供完整的诊断思路和解决方案。">
+    <title>OpenClaw定时任务推送失败排查指南 | 爱默如深</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.8; max-width: 720px; margin: auto; padding: 20px; color: #333; }
+        h1 { border-bottom: 3px solid #c9a227; padding-bottom: 10px; font-size: 24px; }
+        h2 { color: #c9a227; margin-top: 30px; font-size: 20px; }
+        h3 { color: #555; margin-top: 20px; font-size: 16px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: 'Monaco', 'Consolas', monospace; font-size: 14px; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
+        pre code { background: none; padding: 0; color: inherit; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; padding: 10px 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .info { background: #e7f3ff; border-left: 4px solid #2196F3; padding: 10px 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #c9a227; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .nav-links { margin: 30px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .nav-links a { margin-right: 15px; color: #c9a227; text-decoration: none; }
+        .nav-links a:hover { text-decoration: underline; }
+        ul, ol { padding-left: 20px; }
+        li { margin: 8px 0; }
+        hr { border: none; border-top: 1px solid #eee; margin: 30px 0; }
+        .flow { background: #fafafa; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: monospace; white-space: pre-line; }
+        .cover { text-align: center; margin: 20px 0; }
+        .summary { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #c9a227; }
+        .summary p { margin: 0; color: #666; }
+        .tags { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .tags code { background: #e0e0e0; margin: 2px 4px; }
+    </style>
+</head>
+<body>
+
+<!-- 封面图片占位 -->
+<div class="cover">
+    <p style="color: #999; font-size: 14px;">📷 封面图片：建议使用OpenClaw Logo或定时任务相关配图（800x400px）</p>
+</div>
+
+<h1>OpenClaw定时任务推送失败排查指南</h1>
+
+<!-- 文章简介 -->
+<div class="summary">
+    <p><strong>📝 文章简介</strong></p>
+    <p>配置了多个Channel的OpenClaw用户，可能会遇到定时任务突然报错"channel not configured"的问题。本文提供完整的诊断思路和解决方案，帮助你快速定位问题根因并修复。</p>
+    <p style="margin-top: 10px; font-size: 13px;"><strong>关键词</strong>：OpenClaw、定时任务、Cron、Channel配置、推送失败</p>
+</div>
+
+<div class="nav-links">
+    <strong>🔗 相关链接：</strong>
+    <a href="https://amosliuster163.github.io/ai-tools-hub/">AI工具导航站</a>
+    <a href="https://ai-tools-hub-zeta.vercel.app/">Vercel镜像</a>
+</div>
+
+<h2>一、问题现象</h2>
+
+<p>某天早上，你发现每天准时推送的简报没收到了。</p>
+
+<p>查后台，一堆定时任务状态显示 <code>error</code>，错误信息却很奇怪：</p>
+
+<pre><code>Error: weixin not configured: please run `openclaw channels login --channel openclaw-weixin`</code></pre>
+
+<p class="warning"><strong>⚠️ 困惑点</strong>：你用的是飞书，从来没配过微信，为什么会报"微信未配置"？</p>
+
+<h2>二、症状识别</h2>
+
+<p>如果遇到以下症状，本文可能对你有帮助：</p>
+
+<table>
+    <tr><th>症状</th><th>检查方法</th></tr>
+    <tr><td>任务状态显示 <code>error</code></td><td><code>openclaw cron list</code></td></tr>
+    <tr><td>错误信息提到未配置的channel</td><td>查看日志或任务详情</td></tr>
+    <tr><td>部分任务正常，部分报错</td><td>对比正常/报错任务的配置</td></tr>
+    <tr><td>报错集中在 <code>isolated</code> 任务</td><td>检查 <code>sessionTarget</code> 字段</td></tr>
+</table>
+
+<h2>三、诊断思路</h2>
+
+<h3>第一步：看历史，找转折点</h3>
+
+<p>查看任务运行历史，找出从正常变异常的时间点：</p>
+
+<pre><code># 查看任务运行历史
+openclaw cron runs [jobId]</code></pre>
+
+<table>
+    <tr><th>日期</th><th>状态</th><th>说明</th></tr>
+    <tr><td>4月1日-4月5日</td><td>✅ ok</td><td>正常</td></tr>
+    <tr><td><strong>4月6日</strong></td><td>❌ error</td><td>← 转折点</td></tr>
+    <tr><td>4月7日-4月8日</td><td>❌ error</td><td>持续报错</td></tr>
+</table>
+
+<h3>第二步：看配置，找空账号</h3>
+
+<p>检查 channels 配置，看是否有账号为空的channel：</p>
+
+<pre><code># 查看配置文件中的channels
+cat ~/.openclaw/openclaw.json | jq '.channels'</code></pre>
+
+<p>发现问题：</p>
+
+<pre><code>{
+  "channels": {
+    "feishu": { "accounts": { "main": {...} } },
+    "openclaw-weixin": { "accounts": {} }  // ← 空的！
+  }
+}</code></pre>
+
+<h3>第三步：看 sessionTarget，找差异</h3>
+
+<table>
+    <tr><th>任务</th><th>sessionTarget</th><th>状态</th></tr>
+    <tr><td>AI导航站每日提醒</td><td><code>session:agent:main:main</code></td><td>✅ 正常</td></tr>
+    <tr><td>每日简报推送</td><td><code>isolated</code></td><td>❌ 报错</td></tr>
+</table>
+
+<h2>四、问题机制</h2>
+
+<div class="flow">
+📌 报错机制：
+
+Cron任务在 isolated session 运行 → 没有channel上下文 → 系统检测到多个channel → delivery模块默认选择 → 选到空账号channel → 💥报错
+</div>
+
+<h2>五、解决方案</h2>
+
+<h3>方案一：明确指定 delivery.channel（推荐）</h3>
+
+<pre><code>openclaw cron update [jobId] --patch '{"delivery":{"channel":"feishu"}}'</code></pre>
+
+<h3>方案二：禁用未使用的 channel</h3>
+
+<p>编辑配置文件，将 <code>plugins.entries.openclaw-weixin.enabled</code> 设为 <code>false</code>。</p>
+
+<h2>六、验证修复</h2>
+
+<table>
+    <tr><th>检查项</th><th>预期结果</th><th>命令</th></tr>
+    <tr><td>任务状态</td><td><code>enabled</code></td><td><code>openclaw cron list</code></td></tr>
+    <tr><td>运行记录</td><td><code>delivered</code></td><td><code>openclaw cron runs [jobId]</code></td></tr>
+</table>
+
+<h2>七、最佳实践</h2>
+
+<ul>
+    <li>明确指定 <code>delivery.channel</code></li>
+    <li>禁用不用的 channel 插件</li>
+    <li>定期检查任务状态</li>
+</ul>
+
+<h2>八、总结</h2>
+
+<div class="success">
+<strong>🎯 一句话结论</strong><br>
+多 channel 配置时，isolated 任务必须明确指定 <code>delivery.channel</code>。
+</div>
+
+<hr>
+
+<!-- 文章标签 -->
+<div class="tags">
+    <strong>🏷️ 文章标签</strong><br>
+    <code>#OpenClaw</code>
+    <code>#技术教程</code>
+    <code>#定时任务</code>
+    <code>#踩坑指南</code>
+    <code>#Cron</code>
+</div>
+
+<div class="nav-links">
+    <strong>🔗 相关链接：</strong>
+    <a href="https://amosliuster163.github.io/ai-tools-hub/">AI工具导航站</a>
+</div>
+
+<p style="text-align: center; color: #666; margin-top: 40px;">
+    —— 爱默如深 · OpenClaw技术系列 ——
+</p>
+
+</body>
+</html>
