@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>阿里百炼免费额度使用全攻略：剩几千tokens怎么办？</title>
+  <meta name="description" content="阿里百炼免费额度剩几千tokens不够用又不想浪费？实测脚本清空+18个模型额度管理策略，基于真实消耗记录。">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+    h2 { color: #3498db; margin-top: 30px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+    th { background: #3498db; color: #fff; }
+    .highlight { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin: 15px 0; }
+    .author { text-align: center; color: #666; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <h1>阿里百炼免费额度使用全攻略</h1>
+  <p style="font-size: 18px; color: #666;">剩几千tokens怎么办？实测脚本清空+18个模型额度管理</p>
+
+  <p>今天看到一个模型的免费额度只剩<strong>3039tokens</strong>。</p>
+  <p>100万tokens，两个复杂对话就用掉了99.7万。剩的几千tokens怎么办？<strong>不够一次正常对话，又必须用完才能开付费。</strong></p>
+
+  <h2>什么是"免费额度用完即停"</h2>
+  <p>阿里百炼控制台的一个开关。免费额度耗尽后API自动停止，不会意外扣费。</p>
+  <p><strong>隐藏陷阱</strong>：必须把所有免费额度用完，才能手动开启付费。按模型独立计算，不是全局开关。</p>
+
+  <h2>免费额度全景</h2>
+  <table>
+    <tr><th>模型</th><th>总额度</th><th>剩余</th><th>过期时间</th><th>状态</th></tr>
+    <tr><td>qwen3.6-plus</td><td>100万</td><td>3039</td><td>80天后</td><td>即将耗尽</td></tr>
+    <tr><td>qwen3-max</td><td>100万</td><td>45万</td><td>14天后</td><td>紧急</td></tr>
+    <tr><td>glm-5</td><td>100万</td><td>62万</td><td>18天后</td><td>近期</td></tr>
+    <tr><td>qwen-turbo</td><td>100万</td><td>80万</td><td>35天后</td><td>中期</td></tr>
+  </table>
+  <p><strong>核心发现</strong>：总额度约1700万tokens，但每个模型都有过期时间。</p>
+
+  <h2>三种解决方案</h2>
+  <h3>方案一：脚本精准清空（推荐）</h3>
+  <p>每次短请求消耗约280-380tokens。清空3039tokens用了10次调用，累计消耗3239tokens。API返回 <code>AllocationQuota.FreeTierOnly</code> 即说明额度耗尽。</p>
+  <div class="highlight"><strong>关键发现</strong>：不需要精确匹配，API拒绝即说明额度没了。</div>
+
+  <h3>方案二：跳过低额度模型</h3>
+  <p>剩余低于10,000tokens直接跳过。适合有多个有额度模型时。缺点是额度浪费。</p>
+
+  <h3>方案三：控制台单独关闭</h3>
+  <p>在百炼控制台单独关闭某个模型的"用完即停"开关。不影响其他模型。</p>
+
+  <h2>实战案例</h2>
+  <p>清空qwen3.6-plus剩余额度（3039tokens，80天后过期）：</p>
+  <ul>
+    <li>10次调用，每次280-385tokens，累计3239tokens</li>
+    <li>控制台显示还剩849tokens（缓存延迟），但API实际已拒绝</li>
+    <li><strong>结论</strong>：以API返回为准，控制台有延迟</li>
+  </ul>
+
+  <h2>高效消耗策略</h2>
+  <table>
+    <tr><th>策略</th><th>说明</th></tr>
+    <tr><td>日常开发切换</td><td>用/model命令切换到有免费额度的模型</td></tr>
+    <tr><td>按过期时间优先</td><td>先用14天后过期的，再用35天、42天的</td></tr>
+    <tr><td>批量消耗脚本</td><td>配套工具自动化清空小额度</td></tr>
+  </table>
+
+  <h2>常见问题</h2>
+  <div class="success">
+    <strong>Q: 额度用不完会怎样？</strong> A: 自动清零，无法转移。<br>
+    <strong>Q: 控制台显示有额度但API拒绝？</strong> A: 缓存延迟，以API为准。<br>
+    <strong>Q: 剩几百tokens怎么办？</strong> A: 尝试一次，API拒绝即确认耗尽。<br>
+    <strong>Q: 如何切换付费？</strong> A: 关闭"用完即停"，确保额度已用完。
+  </div>
+
+  <div class="author">
+    <p><strong>关于我</strong>：老刘，公众号「爱默如深」主理人，AI Tools Hub站长。</p>
+  </div>
+</body>
+</html>

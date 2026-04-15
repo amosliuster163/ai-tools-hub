@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw配置阿里百炼API全攻略：Coding Plan额度用完怎么办？</title>
+  <meta name="description" content="配置阿里百炼备用API完整过程，意外发现Coding Plan的GLM-5是免费推理模型！实测对比GLM-5和qwen3.6-plus推理能力。">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { color: #2c3e50; border-bottom: 3px solid #ff6b35; padding-bottom: 10px; }
+    h2 { color: #ff6b35; margin-top: 30px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+    th { background: #ff6b35; color: #fff; }
+    .highlight { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin: 15px 0; }
+    code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+    .author { text-align: center; color: #666; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <h1>OpenClaw配置阿里百炼API全攻略</h1>
+  <p style="font-size: 18px; color: #666;">Coding Plan额度用完怎么办？意外发现免费推理模型！</p>
+
+  <p>你用OpenClaw的Coding Plan套餐，突然收到提示<strong>"额度快用完了"</strong>。怎么办？</p>
+  <p>今天记录完整的备用API配置过程，还有一个意外发现：<strong>Coding Plan其实也有推理模型，免费使用！</strong></p>
+
+  <h2>配置备用API</h2>
+  <p>在models.providers里新增aliyun-payg：</p>
+  <pre>
+"aliyun-payg": {
+  "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "apiKey": "sk-你的API密钥",
+  "api": "openai-completions",
+  "models": [...]
+}</pre>
+  <div class="highlight"><strong>踩坑点</strong>：API Key必须带 <code>sk-</code> 前缀！缺少前缀会认证失败。</div>
+
+  <h2>两个API的区别</h2>
+  <table>
+    <tr><th>对比项</th><th>Coding Plan</th><th>按量付费API</th></tr>
+    <tr><td>baseUrl</td><td>coding.dashscope.aliyuncs.com</td><td>dashscope.aliyuncs.com</td></tr>
+    <tr><td>费用</td><td>套餐免费（额度有限）</td><td>按量付费（无上限）</td></tr>
+    <tr><td>模型</td><td>qwen3-max, glm-5等</td><td>qwen3.6-plus, qwen-max等</td></tr>
+  </table>
+
+  <h2>意外发现：Coding Plan也有推理模型！</h2>
+  <p>测试"解释WAL协议"，观察API返回的 <code>reasoning_tokens</code>：</p>
+  <table>
+    <tr><th>模型</th><th>API来源</th><th>推理tokens</th><th>推理能力</th></tr>
+    <tr><td><strong>GLM-5</strong></td><td>Coding Plan</td><td><strong>786</strong></td><td><strong>带推理</strong></td></tr>
+    <tr><td><strong>qwen3.6-plus</strong></td><td>备用API</td><td><strong>157</strong></td><td><strong>带推理</strong></td></tr>
+    <tr><td>Qwen3-Max</td><td>Coding Plan</td><td>无</td><td>无推理</td></tr>
+  </table>
+  <div class="success"><strong>GLM-5的推理tokens是786，比qwen3.6-plus的157还多！</strong>Coding Plan的GLM-5是智谱最新推理模型，免费使用！</div>
+
+  <h2>使用策略</h2>
+  <table>
+    <tr><th>场景</th><th>推荐模型</th><th>原因</th></tr>
+    <tr><td>复杂推理</td><td>GLM-5</td><td>免费+推理</td></tr>
+    <tr><td>快速响应</td><td>Qwen3-Max</td><td>直接输出</td></tr>
+    <tr><td>GLM-5额度用完</td><td>qwen3.6-plus</td><td>备用保障</td></tr>
+    <tr><td>代码编写</td><td>qwen3-coder-plus</td><td>专门优化</td></tr>
+  </table>
+  <p><strong>切换方法：</strong><code>/model bailian/glm-5</code> 或 <code>/model aliyun-payg/qwen3.6-plus</code></p>
+
+  <div class="author">
+    <p><strong>关于我</strong>：老刘，公众号「爱默如深」主理人，AI Tools Hub站长。</p>
+  </div>
+</body>
+</html>

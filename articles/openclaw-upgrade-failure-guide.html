@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw升级翻车实录：一个npm包更新让我系统瘫痪3小时</title>
+  <meta name="description" content="OpenClaw从v2026.4.2升级到v2026.4.11，遭遇插件SDK构建破坏，19个插件加载失败。完整故障排查过程+根因分析+修复方案。">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { color: #2c3e50; border-bottom: 3px solid #e74c3c; padding-bottom: 10px; }
+    h2 { color: #e74c3c; margin-top: 30px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+    th { background: #e74c3c; color: #fff; }
+    .highlight { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; }
+    .warning { background: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 15px 0; }
+    .success { background: #e8f5e9; border-left: 4px solid #28a745; padding: 15px; margin: 15px 0; }
+    code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+    pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    .author { text-align: center; color: #666; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <h1>OpenClaw升级翻车实录</h1>
+  <p style="font-size: 18px; color: #666;">一个npm包更新，让我AI助手瘫痪了3小时</p>
+
+  <p>周日早上给OpenClaw升了个级，从v2026.4.2到v2026.4.11。心想升个级而已，能有多难？</p>
+  <p>结果：升级完，AI助手完全不回复消息了。飞书、微信全部沉默。</p>
+  <p>排查了3小时，最后发现——<strong>一个上游npm包移除了一行代码，导致19个插件全部加载失败。</strong></p>
+
+  <h2>升级开始</h2>
+  <p>执行 <code>openclaw update</code>，报错：<code>working directory not clean</code>。</p>
+  <p>解决：<code>git stash -u</code> 后再次升级，跑通。</p>
+
+  <h2>第一层故障：config验证失败</h2>
+  <p>执行 <code>openclaw gateway restart</code>，报错：config验证失败。</p>
+  <p>原因：<code>free-quota-chain</code> 的 <code>fallback</code> key不被新版本schema支持。</p>
+  <div class="highlight"><strong>教训1</strong>：旧配置不一定兼容新版本。升级前先检查config。</div>
+
+  <h2>第二层故障：插件全部加载失败</h2>
+  <p>重启后报错：<code>plugin manifest not found</code>。我手动创建了假的manifest文件——这是第一个大错。</p>
+  <p>再次重启，报错更严重：<code>normalizeLowercaseStringOrEmpty is not a function</code>。整个系统瘫痪。</p>
+  <div class="warning"><strong>教训2</strong>：不要伪造manifest文件。直接 <code>git clean -fd</code> 更干净。</div>
+
+  <h2>根因分析</h2>
+  <div class="success">
+    <strong>错误传播链：</strong><br>
+    1. 上游包 <code>@mariozechner/pi-coding-agent</code> 移除 <code>SourceInfo</code> 类型<br>
+    2. TypeScript 编译失败<br>
+    3. <code>pnpm build</code> 中断，dist/ 目录未更新<br>
+    4. 插件运行时导入缺失的 <code>normalizeLowercaseStringOrEmpty</code> 函数<br>
+    5. 19个插件全部加载失败<br>
+    6. Agent无法回复任何消息
+  </div>
+
+  <p><strong>受影响的插件：</strong>memory-core、openai/anthropic/google、amazon-bedrock、ollama、browser/codex等19个。</p>
+  <p><strong>未受影响的插件：</strong>飞书文档、飞书聊天、飞书知识库、飞书云盘、微信。所以渠道能收消息，但agent框架挂了。</p>
+
+  <h2>临时修复</h2>
+  <p><code>kill -HUP &lt;PID&gt;</code>：给Gateway进程发送SIGHUP信号，重载配置但不重新构建dist。飞书和微信恢复回复。</p>
+
+  <h2>最终修复</h2>
+  <pre>
+rm extensions/openclaw.plugin.json
+git checkout -- .
+git clean -fd
+openclaw gateway start</pre>
+  <div class="warning"><strong>注意</strong>：<code>git clean -fd</code> 会删除不在git追踪中的文件（自定义skills等），操作前一定要先备份！</div>
+
+  <h2>诊断命令大全</h2>
+  <pre>
+# 查看实时日志
+openclaw logs --follow
+
+# 检查Gateway状态
+openclaw gateway status
+
+# 检查插件状态
+openclaw plugins list
+
+# 备份配置（升级前必做！）
+cp ~/.openclaw/openclaw.json ~/.openclaw/openclaw.json.bak.$(date +%Y%m%d)</pre>
+
+  <h2>经验教训</h2>
+  <table>
+    <tr><th>教训</th><th>说明</th></tr>
+    <tr><td>升级前必做</td><td>备份config + git stash -u</td></tr>
+    <tr><td>不要伪造manifest</td><td>直接git clean -fd更干净</td></tr>
+    <tr><td>插件配置定期清理</td><td>失效条目要及时删除</td></tr>
+    <tr><td>升级命令优先用git</td><td>git pull origin main比openclaw update更可靠</td></tr>
+    <tr><td>遇到问题看日志</td><td>openclaw logs --follow是第一步</td></tr>
+  </table>
+
+  <div class="author">
+    <p><strong>关于我</strong>：老刘，公众号「爱默如深」主理人，AI Tools Hub站长。OpenClaw深度用户。</p>
+  </div>
+</body>
+</html>
