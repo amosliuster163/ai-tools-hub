@@ -180,6 +180,30 @@
       "description": "天津本地AI产业交流，关注具体时间",
       "status": "upcoming",
       "tags": ["天津", "本地", "产业"]
+    },
+    {
+      "name": "天津家博会（春季）",
+      "date": "2026-04-17",
+      "endDate": "2026-04-19",
+      "location": "天津·梅江会展中心",
+      "type": "消费电子展",
+      "priority": "high",
+      "link": "",
+      "description": "家博会可能有AI家电展区（智能音箱、扫地机器人、智能安防等），老刘实地探访确认",
+      "status": "ongoing",
+      "tags": ["天津", "本地", "智能家居", "AI家电"]
+    },
+    {
+      "name": "天津宠物展（春季）",
+      "date": "2026-05-15",
+      "endDate": "2026-05-18",
+      "location": "天津·梅江会展中心（待确认）",
+      "type": "宠物用品展",
+      "priority": "medium",
+      "link": "",
+      "description": "可能展出AI宠物用品：智能喂食器、陪玩机器人、宠物监控、健康追踪等，待确认具体AI展品",
+      "status": "upcoming",
+      "tags": ["天津", "本地", "宠物", "AI硬件"]
     }
   ]
 }

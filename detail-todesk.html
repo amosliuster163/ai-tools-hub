@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDesk 远程控制 - 免费流畅的远程桌面 | 老刘聊AI</title>
+    <meta name="description" content="ToDesk是一款免费远程桌面软件，支持Windows/Mac/iOS/Android，微信扫码登录，2.3亿+用户首选。免费版支持1个主控远程访问多台设备，5G异地流畅连接。">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F5F1E8;
+            --bg-card: #FFFFFF;
+            --color-primary: #1E3A5F;
+            --color-accent: #C9A227;
+            --color-text: #2C3E50;
+            --color-muted: #6B7B8C;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Source Serif 4', serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--bg-main); color: var(--color-text); line-height: 1.7; }
+        
+        .back-btn { display: inline-block; margin: 30px 40px 0; color: var(--color-primary); text-decoration: none; font-weight: 600; }
+        .back-btn:hover { color: var(--color-accent); }
+        
+        .detail-container { max-width: 800px; margin: 20px auto 60px; padding: 0 40px; }
+        
+        .detail-header {
+            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+            color: #fff;
+            padding: 50px 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .detail-header h1 { font-family: var(--font-display); font-size: 32px; margin-bottom: 10px; }
+        .detail-header p { font-size: 16px; opacity: 0.9; }
+        .price-badge { display: inline-block; background: #10B981; color: #fff; padding: 8px 20px; border-radius: 20px; font-weight: 700; margin-top: 15px; }
+        
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 30px 0; }
+        .feature-card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(30,58,95,0.08);
+            text-align: center;
+        }
+        .feature-card .icon { font-size: 36px; margin-bottom: 10px; }
+        .feature-card h3 { font-size: 16px; margin-bottom: 8px; color: var(--color-primary); }
+        .feature-card p { font-size: 14px; color: var(--color-muted); }
+        
+        .cta-btn {
+            display: inline-block;
+            background: #2563EB;
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,99,235,0.3); }
+        
+        .steps { margin: 30px 0; }
+        .step { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; }
+        .step-num { background: var(--color-primary); color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+        .step-content h4 { margin-bottom: 5px; }
+        
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--bg-card); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(30,58,95,0.08); }
+        .comparison-table th { background: var(--color-primary); color: #fff; padding: 12px; text-align: left; }
+        .comparison-table td { padding: 12px; border-bottom: 1px solid #eee; }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table .highlight { background: #f0f7ff; }
+        
+        .warning-box { background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 15px 20px; border-radius: 8px; margin: 20px 0; }
+        .warning-box strong { color: #B45309; }
+    </style>
+</head>
+<body>
+
+<a href="../index.html" class="back-btn">← 返回导航站</a>
+
+<div class="detail-container">
+    <div class="detail-header">
+        <h1>🖥️ ToDesk 远程控制</h1>
+        <p>免费流畅的远程桌面软件，微信扫码即用</p>
+        <div class="price-badge">免费版可用 · 付费版 ¥128/年起</div>
+    </div>
+
+    <div style="text-align:center;">
+        <a href="https://www.todesk.com/download.html" class="cta-btn" target="_blank">👉 免费下载 ToDesk</a>
+    </div>
+
+    <h2 style="font-family:var(--font-display);margin:30px 0 15px;">✨ 核心优势</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">📱</div>
+            <h3>微信扫码登录</h3>
+            <p>微信账号一键登录，无需注册新账号</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🌐</div>
+            <h3>5G异地流畅</h3>
+            <p>非同一网络也能秒连，速度快延迟低</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🔄</div>
+            <h3>多设备切换</h3>
+            <p>免费版1个主控，断开后可切换其他设备</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">💻</div>
+            <h3>全平台支持</h3>
+            <p>Windows/Mac/iOS/Android 全覆盖</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">👥</div>
+            <h3>2.3亿+用户</h3>
+            <p>40万+企业信赖，国内远程桌面首选</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🎮</div>
+            <h3>4K高清画质</h3>
+            <p>付费版支持4K画质，设计/游戏无压力</p>
+        </div>
+    </div>
+
+    <h2 style="font-family:var(--font-display);margin:30px 0 15px;">📋 使用步骤</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h4>下载并安装</h4>
+                <p>访问官网下载安装包，支持 Windows/Mac/iOS/Android</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h4>微信扫码登录</h4>
+                <p>打开App，用微信扫码登录，设置主控设备</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h4>一键连接</h4>
+                <p>在主控设备上选择要远程的设备，点击即可连接</p>
+            </div>
+        </div>
+    </div>
+
+    <h2 style="font-family:var(--font-display);margin:30px 0 15px;">📊 免费版 vs 付费版</h2>
+    <table class="comparison-table">
+        <tr>
+            <th>功能</th>
+            <th>免费版</th>
+            <th>付费版</th>
+        </tr>
+        <tr class="highlight">
+            <td>主控设备</td>
+            <td><strong>1个</strong></td>
+            <td>多个</td>
+        </tr>
+        <tr>
+            <td>画质</td>
+            <td>标准</td>
+            <td>4K高清</td>
+        </tr>
+        <tr class="highlight">
+            <td>刷新率</td>
+            <td>60fps</td>
+            <td>更高</td>
+        </tr>
+        <tr>
+            <td>文件传输</td>
+            <td>基础</td>
+            <td>高级</td>
+        </tr>
+        <tr class="highlight">
+            <td>广告</td>
+            <td>有</td>
+            <td>无</td>
+        </tr>
+        <tr>
+            <td>价格</td>
+            <td><strong>免费</strong></td>
+            <td>¥128/年起</td>
+        </tr>
+    </table>
+
+    <div class="warning-box">
+        <strong>⚠️ 使用提醒：</strong>
+        远程桌面工具涉及敏感权限，建议仅用于可信设备。不要将设备共享给陌生人，敏感操作慎用远程控制。
+    </div>
+
+    <h2 style="font-family:var(--font-display);margin:30px 0 15px;">💡 使用场景</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">💼</div>
+            <h3>远程办公</h3>
+            <p>在家访问公司电脑，随时处理工作</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🔧</div>
+            <h3>技术支持</h3>
+            <p>远程帮助家人/客户解决电脑问题</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🎮</div>
+            <h3>游戏串流</h3>
+            <p>用手机/平板玩电脑游戏</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📊</div>
+            <h3>运维巡检</h3>
+            <p>远程服务器监控和排障</p>
+        </div>
+    </div>
+
+    <div style="text-align:center;margin:40px 0;">
+        <a href="https://www.todesk.com/download.html" class="cta-btn" target="_blank">🖥️ 免费下载 ToDesk</a>
+        <p style="color:var(--color-muted);font-size:14px;margin-top:10px;">2.3亿+用户 · 全平台支持 · 免费可用</p>
+    </div>
+</div>
+
+</body>
+</html>

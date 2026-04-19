@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>OpenClaw多Agent协作指南 | 爱默如深</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.8; max-width: 720px; margin: 0 auto; padding: 20px; color: #333; }
+        .cover { width: 100%; height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 26px; font-weight: 700; margin-bottom: 30px; border-radius: 8px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        h1 { color: #2c3e50; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        h2 { color: #667eea; margin-top: 30px; }
+        h3 { color: #555; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Monaco, monospace; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        pre code { background: none; color: inherit; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; padding: 10px 15px; margin: 15px 0; }
+        .tip { background: #cce5ff; border-left: 4px solid #007bff; padding: 10px 15px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #667eea; color: white; }
+        .nav-links { margin: 30px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .nav-links a { margin-right: 15px; }
+    </style>
+</head>
+<body>
+
+<!-- 封面图 -->
+<div class="cover">OpenClaw多Agent协作实战<br><span style="font-size:18px;font-weight:400;">Mac + Windows 双实例协作指南</span></div>
+
+<h1>OpenClaw多Agent协作：小金+小窗实战指南</h1>
+
+<p>一台Mac + 一台Windows，两个OpenClaw实例，怎么协作？我花了2小时跑通了全流程，踩过的坑、配置细节、协作方式，一次讲清楚。</p>
+
+<h2>一、为什么需要第二个OpenClaw？</h2>
+
+<p>我的主Agent<strong>小金</strong>跑在Mac mini上，负责协调任务、内容创作、用户交互和Git提交。</p>
+
+<p>但有些工作单独跑更合适：</p>
+<ul>
+<li><strong>Windows兼容性测试</strong> — Mac上跑不了</li>
+<li><strong>独立巡检</strong> — 不占用主实例资源</li>
+<li><strong>备份节点</strong> — 主实例挂掉时能顶上</li>
+</ul>
+
+<p>所以，我在Windows 10上装了第二个OpenClaw，取名<strong>小窗</strong>。</p>
+
+<h2>二、创建飞书BOT（小窗专用）</h2>
+
+<h3>核心步骤</h3>
+<ol>
+<li>打开 <code>https://open.feishu.cn/</code> 创建企业自建应用</li>
+<li>应用名称：小窗，描述：Windows OpenClaw助手</li>
+<li>获取 App ID（cli_xxxxxxxx格式）和 App Secret</li>
+<li>开启机器人能力</li>
+<li>配置4个权限：im:message、im:message.receive_v1、im:chat:readonly、contact:user.base:readonly</li>
+<li><strong>事件与回调：选择 Long Polling（长轮询）模式</strong> — 最容易踩坑！</li>
+<li>订阅事件：接收消息 v2.0（im.message.receive_v1）</li>
+<li>发布应用：创建版本 1.0.0 → 保存 → 申请发布</li>
+</ol>
+
+<div class="warning">
+<strong>⚠️ 踩坑提醒</strong>
+<ul>
+<li>API Key格式错误：阿里云Key必须带 <code>sk-</code> 前缀</li>
+<li>baseUrl不同：Coding Plan用 <code>coding.dashscope.aliyuncs.com</code>，按量付费用 <code>dashscope.aliyuncs.com</code></li>
+<li>事件未订阅：必须选Long Polling + <code>im.message.receive_v1</code></li>
+<li>权限未开启：4个权限必须全开，否则收不到消息</li>
+</ul>
+</div>
+
+<h2>三、Windows OpenClaw配置</h2>
+
+<p>配置文件核心部分：</p>
+
+<pre><code>{
+  "models": {
+    "providers": {
+      "bailian": {
+        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
+        "apiKey": "sk-你的CodingPlanKey",
+        "api": "openai-completions",
+        "models": [
+          {"id": "qwen3.6-plus", "name": "qwen3.6-plus", "reasoning": true, "contextWindow": 262144, "maxTokens": 65536}
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {"primary": "bailian/qwen3.6-plus"},
+      "workspace": "C:\\Users\\你的用户名\\.openclaw\\workspace"
+    },
+    "list": [{"id": "main"}]
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "accounts": {
+        "main": {
+          "appId": "cli_小窗的AppID",
+          "appSecret": "小窗的AppSecret",
+          "name": "小窗"
+        }
+      }
+    }
+  },
+  "bindings": [
+    {"type": "route", "agentId": "main", "match": {"channel": "feishu", "accountId": "main"}}
+  ]
+}</code></pre>
+
+<h2>四、多Agent协作架构</h2>
+
+<h3>当前架构</h3>
+<pre><code>老刘 ←→ 小金（主Agent，Mac mini）
+         ↓ 派任务（老刘中转）
+       小窗（Worker，Windows）
+         ↓ 报告结果（老刘转发）
+       小金 ← 汇总给老刘</code></pre>
+
+<h3>协作流程</h3>
+<table>
+<tr><th>步骤</th><th>操作</th><th>负责方</th></tr>
+<tr><td>1</td><td>小金写好任务内容</td><td>小金</td></tr>
+<tr><td>2</td><td>老刘复制粘贴发给小窗</td><td>老刘</td></tr>
+<tr><td>3</td><td>小窗执行任务</td><td>小窗</td></tr>
+<tr><td>4</td><td>小窗回复结果</td><td>小窗</td></tr>
+<tr><td>5</td><td>老刘转发给小金</td><td>老刘</td></tr>
+<tr><td>6</td><td>小金验收并汇总</td><td>小金</td></tr>
+</table>
+
+<h2>五、实测验证</h2>
+
+<h3>任务1：环境检查 ✅</h3>
+<table>
+<tr><th>检查项</th><th>结果</th></tr>
+<tr><td>Node.js</td><td>v22.20.0</td></tr>
+<tr><td>Git</td><td>2.51.0.windows.2</td></tr>
+<tr><td>OpenClaw</td><td>2026.4.14</td></tr>
+<tr><td>操作系统</td><td>Windows 10 家庭中文版</td></tr>
+</table>
+
+<h3>任务2：中文文件创建 ✅</h3>
+<p>30秒创建125个文件，116期内容+8个人物故事，完整的文件夹结构。</p>
+
+<div class="warning">
+<strong>⚠️ 发现问题</strong>
+<p>Windows控制台GBK编码导致中文显示乱码（实际文件UTF-8编码正确）</p>
+<p><strong>解决</strong>：用PowerShell的 <code>Get-Content</code> 替代 <code>type</code> 命令</p>
+</div>
+
+<h3>任务3：Git操作 ✅</h3>
+<p>Git仓库初始化，126个文件提交。</p>
+
+<div class="warning">
+<strong>⚠️ 发现问题：CRLF换行符冲突</strong>
+<p>Windows下Git默认core.autocrlf=true，提交时把LF转成CRLF</p>
+<p><strong>小窗自主解决</strong>：</p>
+<ol>
+<li>设置 <code>git config core.autocrlf=input</code></li>
+<li>重命名分支 <code>master → main</code></li>
+<li>创建 <code>.gitattributes</code> 强制统一换行符</li>
+</ol>
+</div>
+
+<h2>六、协作升级实战</h2>
+
+<h3>第一阶段：人工中转（已完成 ✅）</h3>
+<p>飞书BOT配置、环境验证、基础协作流程跑通。</p>
+
+<h3>第二阶段：Git协作（已完成 ✅）</h3>
+<p>创建Gitee共享仓库 <code>https://gitee.com/wepot/clawworkgroup</code>，双方配置Cron定时任务：</p>
+
+<table>
+<tr><th>Agent</th><th>频率</th><th>操作</th></tr>
+<tr><td>小金（Mac）</td><td>每10分钟</td><td>git pull → 验收结果 → git push</td></tr>
+<tr><td>小窗（Windows）</td><td>每5分钟</td><td>git pull → 执行新任务 → git push</td></tr>
+</table>
+
+<h3>控制与打断机制</h3>
+
+<div class="warning">
+<strong>⚠️ 重启安全规则</strong>
+<p>任何涉及Gateway重启的操作，必须在群里@老刘确认，等待回复"确认"后才能执行，10分钟未回复必须暂停，绝对禁止自动静默重启！</p>
+</div>
+
+<p>老刘随时可以打断：</p>
+<ul>
+<li>说<strong>"小金，让小窗暂停"</strong>→ 修改CONTROL.md为PAUSED</li>
+<li>说<strong>"小金，让小窗继续"</strong>→ 改回AUTO</li>
+<li>紧急时直接 <code>openclaw gateway stop</code></li>
+</ul>
+
+<h3>跨平台编码规范</h3>
+<table>
+<tr><th>文件类型</th><th>编码</th><th>换行符</th></tr>
+<tr><td>脚本(.ps1, .bat)</td><td>UTF-8 with BOM</td><td>CRLF</td></tr>
+<tr><td>文档(.md, .txt)</td><td>UTF-8</td><td>LF</td></tr>
+<tr><td>配置(.json)</td><td>UTF-8</td><td>LF</td></tr>
+</table>
+
+<h3>最新工作流：零人工中转</h3>
+<pre><code>老刘：在群里说"做个XX"
+    ↓
+小金：拆解任务 → 写到Gitee
+    ↓
+小窗：每5分钟自动拉取 → 执行
+    ↓
+小窗：提交结果到Gitee
+    ↓
+小金：验收 → 在群里汇报给老刘</code></pre>
+
+<p>老刘只需要：<strong>发指令 + 看结果</strong>，中间环节全自动！</p>
+
+<h2>七、总结</h2>
+
+<h3>配置清单速查</h3>
+<table>
+<tr><th>项目</th><th>小金（Mac）</th><th>小窗（Windows）</th></tr>
+<tr><td>飞书App ID</td><td>cli_a92774787278dcbb</td><td>cli_a955c1188db51bcd</td></tr>
+<tr><td>baseUrl</td><td colspan="2">coding.dashscope.aliyuncs.com</td></tr>
+<tr><td>主模型</td><td colspan="2">qwen3.6-plus</td></tr>
+<tr><td>角色</td><td>协调中心</td><td>Worker</td></tr>
+</table>
+
+<h3>核心经验</h3>
+<ol>
+<li><strong>飞书BOT配置</strong>：Long Polling模式 + 4个权限 + 事件订阅，缺一不可</li>
+<li><strong>Windows中文编码</strong>：控制台GBK与文件UTF-8的差异，用PowerShell命令解决</li>
+<li><strong>Git跨平台</strong>：core.autocrlf=input + .gitattributes，避免换行符冲突</li>
+<li><strong>Git协作工作流</strong>：Gitee仓库 + Cron定时同步，零人工中转</li>
+<li><strong>安全控制机制</strong>：CONTROL.md全局暂停 + 重启前必须人工确认</li>
+<li><strong>跨平台编码规范</strong>：.ps1用UTF-8 with BOM，.md/.json用UTF-8</li>
+</ol>
+
+<h3>效率提升对比</h3>
+<table>
+<tr><th>指标</th><th>第一阶段（人工中转）</th><th>最终阶段（自动协作）</th></tr>
+<tr><td>任务分配</td><td>老刘复制粘贴</td><td>小金写Gitee+群通知</td></tr>
+<tr><td>任务拉取</td><td>手动</td><td>每5分钟自动</td></tr>
+<tr><td>进度检查</td><td>老刘查看</td><td>每10分钟自动</td></tr>
+<tr><td>内容产出</td><td>等用户触发</td><td>每小时自动</td></tr>
+<tr><td>故障恢复</td><td>物理操作</td><td>ToDesk远程秒连</td></tr>
+</table>
+
+<div class="tip">
+<strong>📌 下一期预告</strong>
+<p>实战演示：小窗如何自动完成批量文件整理工具（T005任务）</p>
+</div>
+
+<div class="nav-links">
+<a href="/">← 返回首页</a>
+<a href="/articles/openclaw-tutorials/github-vercel-deploy.html">上一篇：GitHub Pages + Vercel部署</a>
+</div>
+
+</body>
+</html>
