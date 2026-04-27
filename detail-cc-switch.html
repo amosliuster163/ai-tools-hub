@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CC Switch - Claude Code模型切换工具 - 老刘聊AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F1E8; color: #2C3E50; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .back-link { display: inline-block; margin: 20px 0; color: #1E3A5F; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tool-header { background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%); color: #fff; padding: 60px 40px; border-radius: 12px; margin-bottom: 40px; }
+        .tool-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .tool-header p { font-size: 1.2rem; opacity: 0.9; }
+        .tool-body { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 40px; }
+        .tool-body h2 { color: #1E3A5F; margin: 30px 0 15px; border-bottom: 2px solid #C9A227; padding-bottom: 8px; }
+        .tool-body h2:first-child { margin-top: 0; }
+        pre { background: #f8f9fa; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+        code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9rem; }
+        .badge { display: inline-block; background: #1E3A5F; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; margin-right: 8px; }
+        .badge.free { background: #27ae60; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .feature-card { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #6366F1; }
+        .feature-card h3 { font-size: 1rem; margin-bottom: 5px; }
+        .feature-card p { font-size: 0.9rem; color: #6B7B8C; }
+        .download-btn { display: inline-block; background: #1E3A5F; color: #fff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.1rem; margin-top: 20px; }
+        .download-btn:hover { background: #2C4A6F; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back-link">← 返回首页</a>
+    
+    <div class="tool-header">
+        <h1>🔄 CC Switch</h1>
+        <p>Claude Code 模型切换工具 · 一键切换AI编程模型</p>
+        <div style="margin-top:15px;">
+            <span class="badge free">🆓 免费开源</span>
+            <span class="badge">🖥️ 跨平台</span>
+            <span class="badge">🤖 AI编程</span>
+        </div>
+    </div>
+    
+    <div class="tool-body">
+        <h2>CC Switch 是什么？</h2>
+        <p>CC Switch 是一个开源桌面工具，让你在 Claude Code、Codex、OpenCode 等 AI 编程工具中一键切换不同的模型提供商。</p>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>🎯 一键切换</h3>
+                <p>点击界面按钮即可切换模型提供商</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔌 多提供商支持</h3>
+                <p>百炼、MiniMax、DeepSeek 等</p>
+            </div>
+            <div class="feature-card">
+                <h3>💻 跨平台</h3>
+                <p>Windows / macOS / Linux</p>
+            </div>
+            <div class="feature-card">
+                <h3>📦 支持多种CLI</h3>
+                <p>Claude Code、Codex、OpenCode、Gemini CLI</p>
+            </div>
+        </div>
+        
+        <h2>支持的模型提供商</h2>
+        <table>
+            <tr><th>提供商</th><th>兼容Endpoint</th><th>推荐模型</th><th>备注</th></tr>
+            <tr><td>阿里云百炼</td><td>coding.dashscope.aliyuncs.com</td><td>qwen3.5-plus / qwen3.6-plus</td><td>需开通百炼Coding Plan</td></tr>
+            <tr><td>MiniMax</td><td>api.minimaxi.com/anthropic</td><td>MiniMax-M2.7</td><td>需申请API Key</td></tr>
+            <tr><td>DeepSeek</td><td>api.deepseek.com/anthropic</td><td>deepseek-v4-pro</td><td>需账户有余额</td></tr>
+        </table>
+        
+        <h2>安装方法</h2>
+        
+        <h3>Windows 安装</h3>
+        <pre><code># 方法1：MSI安装包（推荐）
+# 访问 https://github.com/farion1231/cc-switch/releases/latest
+# 下载 CC-Switch-版本号-Windows.msi
+
+# 方法2：Portable便携版
+# 下载 zip 包，解压后直接运行 cc-switch.exe</code></pre>
+        
+        <h3>macOS 安装</h3>
+        <pre><code># 使用 Homebrew 安装
+brew tap farion1231/ccswitch
+brew install --cask cc-switch</code></pre>
+        
+        <h3>Linux 安装</h3>
+        <p>访问 <a href="https://github.com/farion1231/cc-switch/releases/latest">GitHub Releases</a> 下载对应Linux发行版的安装包</p>
+        
+        <h2>快速上手</h2>
+        <ol>
+            <li><strong>启动 CC Switch</strong>（Windows在开始菜单，macOS在应用程序）</li>
+            <li><strong>添加提供商</strong>：点击右上角 + 按钮，填写API Key和Endpoint</li>
+            <li><strong>切换模型</strong>：点击提供商的「启用」按钮</li>
+            <li><strong>重启 Claude Code</strong>：关闭所有Claude Code窗口，打开新终端</li>
+            <li><strong>验证</strong>：在Claude Code中输入 <code>/status</code> 确认配置</li>
+        </ol>
+        
+        <h2>使用场景</h2>
+        <ul>
+            <li><strong>多账号管理</strong>：有多个API Key，需要快速切换</li>
+            <li><strong>成本优化</strong>：便宜模型做日常任务，贵模型做复杂任务</li>
+            <li><strong>测试对比</strong>：同一提示词在不同模型上的表现对比</li>
+            <li><strong>故障切换</strong>：某个提供商挂了，快速切换到备用</li>
+        </ul>
+        
+        <h2>常见问题</h2>
+        <p><strong>Q: 切换后Claude Code还是旧模型？</strong></p>
+        <p>A: 环境变量在终端启动时加载，切换后需要关闭所有Claude Code窗口，打开全新终端。</p>
+        
+        <p><strong>Q: 提示环境变量冲突？</strong></p>
+        <p>A: 检查并清理系统中的 ANTHROPIC_API_KEY、ANTHROPIC_BASE_URL 等环境变量，它们会覆盖CC Switch的设置。</p>
+        
+        <p><strong>Q: API 报 401 错误？</strong></p>
+        <p>A: 检查API Key是否正确，Endpoint地址是否以 <code>/anthropic</code> 结尾（不是 <code>/v1</code>）。</p>
+        
+        <a href="https://github.com/farion1231/cc-switch" class="download-btn" target="_blank">📥 GitHub 下载</a>
+        <p style="margin-top:10px;color:#6B7B8C;font-size:0.9rem;">开源项目，完全免费</p>
+    </div>
+    
+    <p style="text-align:center;color:#6B7B8C;margin-bottom:40px;">老刘聊AI · 2026</p>
+</div>
+</body>
+</html>
