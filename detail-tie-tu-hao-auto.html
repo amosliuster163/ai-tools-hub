@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贴图号自动化工具（独立版）- 老刘聊AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F1E8; color: #2C3E50; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .back-link { display: inline-block; margin: 20px 0; color: #1E3A5F; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tool-header { background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%); color: #fff; padding: 60px 40px; border-radius: 12px; margin-bottom: 40px; }
+        .tool-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .tool-header p { font-size: 1.2rem; opacity: 0.9; }
+        .tool-body { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 40px; }
+        .tool-body h2 { color: #1E3A5F; margin: 30px 0 15px; border-bottom: 2px solid #C9A227; padding-bottom: 8px; }
+        .tool-body h2:first-child { margin-top: 0; }
+        pre { background: #f8f9fa; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+        code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9rem; }
+        .badge { display: inline-block; background: #1E3A5F; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; margin-right: 8px; }
+        .badge.free { background: #27ae60; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .feature-card { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #6C5CE7; }
+        .feature-card h3 { font-size: 1rem; margin-bottom: 5px; }
+        .feature-card p { font-size: 0.9rem; color: #6B7B8C; }
+        .download-btn { display: inline-block; background: #1E3A5F; color: #fff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.1rem; margin-top: 20px; }
+        .download-btn:hover { background: #2C4A6F; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back-link">← 返回首页</a>
+    
+    <div class="tool-header">
+        <h1>🤖 贴图号自动化工具</h1>
+        <p>独立版 · AI自动选题，一键生成微信贴图号卡片</p>
+        <div style="margin-top:15px;">
+            <span class="badge free">🆓 免费</span>
+            <span class="badge">🐍 Python CLI</span>
+            <span class="badge">🔌 百炼/DeepSeek/MiniMax</span>
+        </div>
+    </div>
+    
+    <div class="tool-body">
+        <h2>功能特点</h2>
+        <div class="features">
+            <div class="feature-card">
+                <h3>🧠 AI自动选题</h3>
+                <p>调用大模型API生成认知偏误主题文案</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔌 多API支持</h3>
+                <p>百炼、DeepSeek、MiniMax，随时切换</p>
+            </div>
+            <div class="feature-card">
+                <h3>💰 零成本</h3>
+                <p>用自有API，不额外花钱</p>
+            </div>
+            <div class="feature-card">
+                <h3>📦 可移植</h3>
+                <p>任何Python环境都能跑，打包即走</p>
+            </div>
+        </div>
+        
+        <h2>安装</h2>
+        <pre><code># 1. 下载并解压项目
+unzip tie-tu-hao-automation.zip
+cd tie-tu-hao-automation
+
+# 2. 安装依赖
+pip3 install -r requirements.txt</code></pre>
+        
+        <h2>第一步：申请API Key</h2>
+        <h3>选项1：百炼（推荐，性价比高）</h3>
+        <ol>
+            <li>访问 <a href="https://bailian.console.aliyun.com/">阿里云百炼平台</a></li>
+            <li>用阿里云账号登录（没有就注册一个）</li>
+            <li>进入"API-KEY管理"页面</li>
+            <li>点击"创建新的API-KEY"</li>
+            <li>复制生成的Key（格式：`sk-xxxxxxxx`）</li>
+        </ol>
+        <p><strong>免费额度</strong>：新用户有免费额度，用完后按量计费（很便宜）</p>
+        
+        <h3>选项2：DeepSeek</h3>
+        <ol>
+            <li>访问 <a href="https://platform.deepseek.com/">DeepSeek开放平台</a></li>
+            <li>注册并登录，创建API Key</li>
+        </ol>
+        
+        <h3>选项3：MiniMax</h3>
+        <ol>
+            <li>访问 <a href="https://api.minimax.chat/">MiniMax开放平台</a></li>
+            <li>注册并登录，创建API Key</li>
+        </ol>
+        
+        <h2>第二步：配置API Key</h2>
+        <p>编辑 <code>config.yaml</code> 文件：</p>
+        <pre><code>api:
+  provider: "bailian"  # 改成你用的平台
+  keys:
+    bailian:
+      api_key: "sk-你的百炼API密钥"  # ← 替换成你申请的Key
+      base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+      model: "qwen3.6-plus"</code></pre>
+        <p><strong>只需要改两个地方</strong>：</p>
+        <ul>
+            <li><code>provider</code> 改成你用的平台</li>
+            <li>对应的 <code>api_key</code> 填进去</li>
+        </ul>
+        
+        <h2>使用</h2>
+        <pre><code># AI自动选题生成
+python3 main.py --start 41 --end 50 --theme "认知偏误"
+
+# 跳过AI，用本地JSON
+python3 main.py --start 41 --end 50 --json cards.json</code></pre>
+        
+        <h2>支持的API</h2>
+        <table>
+            <tr><th>API</th><th>Base URL</th><th>模型</th></tr>
+            <tr><td>百炼</td><td>dashscope.aliyuncs.com</td><td>qwen3.6-plus</td></tr>
+            <tr><td>DeepSeek</td><td>api.deepseek.com</td><td>deepseek-chat</td></tr>
+            <tr><td>MiniMax</td><td>api.minimax.chat</td><td>MiniMax-Text-01</td></tr>
+        </table>
+        
+        <h2>输出文件</h2>
+        <pre><code>output/
+├── images/
+│   ├── card-41.png
+│   ├── card-42.png
+│   └── ...（共10张）
+├── cards-41-50.html
+└── cards-41-50-publish-text.html</code></pre>
+        
+        <h2>依赖</h2>
+        <ul>
+            <li>Python 3.9+</li>
+            <li>Pillow, openai SDK, PyYAML</li>
+        </ul>
+        
+        <a href="#" class="download-btn">📥 下载工具包</a>
+        <p style="margin-top:10px;color:#6B7B8C;font-size:0.9rem;">联系老刘获取下载链接</p>
+    </div>
+    
+    <p style="text-align:center;color:#6B7B8C;margin-bottom:40px;">老刘聊AI · 2026</p>
+</div>
+</body>
+</html>
