@@ -10,103 +10,101 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      background: #0a0a0a; min-height: 100vh; display: flex; flex-direction: column; color: #e0e0e0;
+      background: #0d1117; min-height: 100vh; display: flex; flex-direction: column; color: #e6edf3;
     }
     nav {
-      background: linear-gradient(135deg, #1a0a2e 0%, #0d1117 100%); padding: 16px 24px;
-      display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363d;
+      background: #161b22; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #30363d;
     }
     nav .logo a { color: #58a6ff; text-decoration: none; font-size: 14px; font-weight: 600; }
     nav .logo a:hover { color: #79c0ff; }
+    nav .nav-title { color: #8b949e; font-size: 13px; }
     .header {
-      text-align: center; padding: 40px 20px 20px;
-      background: linear-gradient(180deg, #1a0a2e 0%, #0a0a0a 100%);
+      text-align: center; padding: 32px 20px 16px; background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
     }
     .header h1 {
-      font-size: 32px; background: linear-gradient(135deg, #f0883e 0%, #a371f7 100%);
+      font-size: 28px;
+      background: linear-gradient(135deg, #f0883e 0%, #a371f7 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 12px; font-weight: 700;
+      margin-bottom: 8px; font-weight: 700;
     }
-    .header .subtitle { color: #8b949e; font-size: 15px; line-height: 1.6; max-width: 550px; margin: 0 auto; }
+    .header .subtitle { color: #8b949e; font-size: 14px; line-height: 1.6; max-width: 500px; margin: 0 auto; }
     .header .quote {
-      margin-top: 16px; padding: 14px 20px;
-      background: linear-gradient(135deg, rgba(240,136,62,0.1) 0%, rgba(163,113,247,0.1) 100%);
-      border-radius: 12px; border-left: 4px solid #f0883e; font-style: italic; color: #f0883e;
-      font-size: 14px; max-width: 500px; margin-left: auto; margin-right: auto;
+      margin-top: 16px; padding: 12px 20px;
+      background: rgba(240,136,62,0.08); border-radius: 10px; border-left: 3px solid #f0883e;
+      font-style: italic; color: #f0883e; font-size: 14px; max-width: 500px; margin-left: auto; margin-right: auto;
     }
     /* 分身切换 */
     .twin-switch {
-      display: flex; justify-content: center; gap: 12px; margin: 20px auto 0;
-      padding: 6px; background: #161b22; border-radius: 16px; width: fit-content; border: 1px solid #30363d;
+      display: flex; justify-content: center; gap: 8px; margin: 16px auto 0; padding: 4px;
+      background: #161b22; border-radius: 14px; width: fit-content; border: 1px solid #30363d;
     }
     .twin-switch button {
-      padding: 10px 24px; border: none; border-radius: 12px; font-size: 14px;
-      cursor: pointer; transition: all 0.3s; font-weight: 600; background: transparent; color: #8b949e;
+      padding: 8px 18px; border: none; border-radius: 10px; font-size: 13px;
+      cursor: pointer; transition: all 0.2s; font-weight: 500; background: transparent; color: #8b949e;
     }
     .twin-switch button.active {
-      background: linear-gradient(135deg, #f0883e 0%, #a371f7 100%); color: white;
+      background: linear-gradient(135deg, #f0883e 0%, #a371f7 100%); color: #fff;
     }
-    .twin-switch button:not(.active):hover { background: #21262d; color: #c9d1d9; }
     .chat-container {
-      flex: 1; max-width: 800px; width: 100%; margin: 0 auto; padding: 20px;
-      display: flex; flex-direction: column; gap: 16px; overflow-y: auto;
+      flex: 1; max-width: 720px; width: 100%; margin: 0 auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px; overflow-y: auto;
     }
     .message {
-      display: flex; gap: 12px; padding: 16px; border-radius: 16px; animation: fadeIn 0.3s ease;
+      display: flex; gap: 10px; padding: 12px 16px; border-radius: 14px; animation: fadeIn 0.3s ease;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .message.user { background: #161b22; align-self: flex-end; max-width: 70%; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .message.user { background: #21262d; align-self: flex-end; max-width: 75%; }
     .message.assistant {
-      background: linear-gradient(135deg, rgba(240,136,62,0.08) 0%, rgba(163,113,247,0.08) 100%);
-      align-self: flex-start; max-width: 80%; border-left: 3px solid #a371f7;
+      background: linear-gradient(135deg, rgba(240,136,62,0.06) 0%, rgba(163,113,247,0.06) 100%);
+      align-self: flex-start; max-width: 85%; border-left: 2px solid #a371f7;
     }
     .message .avatar {
-      width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
-      justify-content: center; font-size: 16px; font-weight: 600; flex-shrink: 0;
+      width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 600; flex-shrink: 0;
     }
-    .message.user .avatar { background: #21262d; color: #fff; order: 2; }
-    .message.assistant .avatar { background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%); color: white; }
-    .message .content { flex: 1; line-height: 1.7; font-size: 15px; }
-    .message.user .content { color: #e0e0e0; text-align: right; }
+    .message.user .avatar { background: #30363d; color: #fff; order: 2; }
+    .message.assistant .avatar { background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%); color: #fff; }
+    .message .content { flex: 1; line-height: 1.7; font-size: 14px; }
+    .message.user .content { color: #e6edf3; text-align: right; }
     .message.assistant .content { color: #c9d1d9; }
-    .loading { display: flex; gap: 6px; padding: 8px 0; }
-    .loading span { width: 8px; height: 8px; background: #a371f7; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
-    .loading span:nth-child(1) { animation-delay: -0.32s; }
-    .loading span:nth-child(2) { animation-delay: -0.16s; }
+    .loading { display: flex; gap: 5px; padding: 6px 0; }
+    .loading span { width: 7px; height: 7px; background: #a371f7; border-radius: 50%; animation: bounce 1.2s infinite ease-in-out; }
+    .loading span:nth-child(1) { animation-delay: -0.3s; }
+    .loading span:nth-child(2) { animation-delay: -0.15s; }
     @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     .welcome {
-      background: linear-gradient(135deg, rgba(240,136,62,0.08) 0%, rgba(163,113,247,0.08) 100%);
-      padding: 24px; border-radius: 16px; border-left: 4px solid #f0883e; margin-bottom: 20px;
+      background: rgba(163,113,247,0.08); padding: 20px; border-radius: 14px; border-left: 3px solid #a371f7; margin-bottom: 16px;
     }
-    .welcome h3 { color: #f0883e; margin-bottom: 12px; font-size: 18px; }
-    .welcome p { color: #8b949e; line-height: 1.8; font-size: 14px; }
-    .welcome .topics { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .welcome h3 { color: #a371f7; margin-bottom: 8px; font-size: 16px; }
+    .welcome p { color: #8b949e; line-height: 1.7; font-size: 13px; }
+    .welcome .topics { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
     .welcome .topics button {
-      background: rgba(255,255,255,0.05); border: 1px solid #30363d; padding: 8px 16px;
-      border-radius: 20px; font-size: 13px; color: #8b949e; cursor: pointer; transition: all 0.2s;
+      background: rgba(255,255,255,0.06); border: 1px solid #30363d; padding: 6px 14px;
+      border-radius: 18px; font-size: 12px; color: #8b949e; cursor: pointer; transition: all 0.2s;
     }
-    .welcome .topics button:hover { background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%); border-color: transparent; color: white; }
-    .input-container { background: #0d1117; padding: 20px; border-top: 1px solid #30363d; position: sticky; bottom: 0; }
-    .input-wrapper { max-width: 800px; margin: 0 auto; display: flex; gap: 12px; }
+    .welcome .topics button:hover { background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%); border-color: transparent; color: #fff; }
+    .input-container { background: #161b22; padding: 16px; border-top: 1px solid #30363d; position: sticky; bottom: 0; }
+    .input-wrapper { max-width: 720px; margin: 0 auto; display: flex; gap: 10px; }
     .input-wrapper textarea {
-      flex: 1; padding: 12px 16px; background: #161b22; border: 2px solid #30363d; border-radius: 12px;
-      color: #e0e0e0; font-size: 15px; font-family: inherit; resize: none; min-height: 48px; max-height: 120px;
+      flex: 1; padding: 10px 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 10px;
+      color: #e6edf3; font-size: 14px; font-family: inherit; resize: none; min-height: 42px; max-height: 100px;
     }
     .input-wrapper textarea:focus { outline: none; border-color: #a371f7; }
     .input-wrapper button {
-      padding: 12px 24px; background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%);
-      color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+      padding: 10px 20px; background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%);
+      color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
     }
     .input-wrapper button:disabled { opacity: 0.5; cursor: not-allowed; }
     .footer {
-      text-align: center; padding: 20px; color: #484f58; font-size: 13px; background: #0d1117; border-top: 1px solid #21262d;
+      text-align: center; padding: 16px; color: #484f58; font-size: 12px; background: #0d1117; border-top: 1px solid #21262d;
     }
     .footer a { color: #58a6ff; text-decoration: none; }
     .footer a:hover { text-decoration: underline; }
-    .feedback-bar { display: flex; gap: 8px; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); }
-    .feedback-bar button { background: rgba(255,255,255,0.08); border: 1px solid #484f58; padding: 4px 14px; border-radius: 16px; font-size: 13px; cursor: pointer; color: #8b949e; transition: all 0.2s; }
-    .feedback-bar button:hover { background: rgba(163,113,247,0.3); border-color: #a371f7; }
-    .feedback-msg { margin-top: 8px; font-size: 13px; font-style: italic; }
+    .feedback-bar { display: flex; gap: 6px; margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .feedback-bar button { background: rgba(255,255,255,0.06); border: 1px solid #30363d; padding: 3px 12px; border-radius: 14px; font-size: 12px; cursor: pointer; color: #8b949e; transition: all 0.2s; }
+    .feedback-bar button:hover { background: rgba(163,113,247,0.2); border-color: #a371f7; }
+    .feedback-msg { margin-top: 6px; font-size: 12px; font-style: italic; }
     .feedback-msg.up { color: #3fb950; }
     .feedback-msg.down { color: #d29922; }
   </style>
@@ -114,7 +112,7 @@
 <body>
   <nav>
     <div class="logo"><a href="index.html">🏠 AI Tools Hub</a></div>
-    <div style="color: #484f58; font-size: 13px;">AI一人公司导师</div>
+    <span class="nav-title">AI一人公司导师</span>
   </nav>
 
   <div class="header">
@@ -123,8 +121,8 @@
     <div class="quote">"核心逻辑很简单：先跑通MVP，再谈扩大。"</div>
     <!-- 分身切换 -->
     <div class="twin-switch">
-      <button id="btnMentor" class="active" onclick="switchMode('mentor')">AI导师（合体版）</button>
-      <button id="btnYizhou" onclick="switchMode('yizhou')">纯·一舟</button>
+      <button id="btnMentor" class="active" onclick="switchMode('mentor')">🧠 AI导师（合体版）</button>
+      <button id="btnYizhou" onclick="switchMode('yizhou')">🚀 纯·一舟</button>
     </div>
   </div>
 
@@ -150,7 +148,7 @@
   </div>
 
   <div class="footer">
-    AI一人公司导师 | AI数字分身 | <a href="https://amosliuster163.github.io/ai-tools-hub/" target="_blank">AI Tools Hub</a>
+    AI一人公司导师 v1.0 | AI数字分身 | <a href="https://amosliuster163.github.io/ai-tools-hub/" target="_blank">AI Tools Hub</a>
   </div>
 
   <script>
@@ -164,14 +162,14 @@
     const MODE_CONFIG = {
       mentor: {
         avatar: '导',
-        title: '导师已就位，请提问 🎯',
-        desc: '融合李一舟理论框架与洋哥实战案例，为你提供从理论到行动的完整指导。先给框架，再给案例，最后给行动步骤。',
+        welcomeTitle: '导师已就位，请提问 🎯',
+        welcomeDesc: '融合李一舟理论框架与洋哥实战案例，为你提供从理论到行动的完整指导。先给框架，再给案例，最后给行动步骤。',
         topics: ['AI副业起步','一人电商','社群运营','AI出海','创业机会']
       },
       yizhou: {
         avatar: '舟',
-        title: '一舟已至，请畅所欲言 🚀',
-        desc: '基于一舟公开课程内容的AI思维模型。直接、果断、金句化。学习他的双引擎模型、四阶段进化观、流量打法。',
+        welcomeTitle: '一舟已至，请畅所欲言 🚀',
+        welcomeDesc: '基于一舟公开课程内容的AI思维模型。直接、果断、金句化。学习他的双引擎模型、四阶段进化观、流量打法。',
         topics: ['一人公司起步','提示词技巧','流量打法','AI焦虑']
       }
     };
@@ -182,13 +180,13 @@
       document.getElementById('btnYizhou').classList.toggle('active', mode === 'yizhou');
       chatHistory = [];
       const cfg = MODE_CONFIG[mode];
-      const welcome = document.getElementById('welcomeBlock');
-      document.getElementById('welcomeTitle').textContent = cfg.title;
-      document.getElementById('welcomeDesc').textContent = cfg.desc;
+      document.getElementById('welcomeTitle').textContent = cfg.welcomeTitle;
+      document.getElementById('welcomeDesc').textContent = cfg.welcomeDesc;
       document.getElementById('quickTopics').innerHTML = cfg.topics.map(t => `<button onclick="sendQuickMessage('${t}')">${t}</button>`).join('');
       // 清空对话
-      document.getElementById('chatContainer').innerHTML = '';
-      document.getElementById('chatContainer').appendChild(welcome);
+      const chatContainer = document.getElementById('chatContainer');
+      chatContainer.innerHTML = '';
+      chatContainer.appendChild(document.getElementById('welcomeBlock'));
     }
 
     function formatContent(text) {
@@ -197,9 +195,9 @@
 
     function addMessage(role, content) {
       const container = document.getElementById('chatContainer');
+      const cfg = MODE_CONFIG[currentMode];
       const msg = document.createElement('div');
       msg.className = `message ${role}`;
-      const cfg = MODE_CONFIG[currentMode];
       msg.innerHTML = `
         <div class="avatar">${role === 'user' ? '我' : cfg.avatar}</div>
         <div class="content">${formatContent(content)}</div>
@@ -225,6 +223,8 @@
       bar.dataset.submitted = '1';
       btn.style.background = 'rgba(63,185,80,0.25)';
       btn.style.borderColor = '#3fb950';
+      btn.style.color = '#3fb950';
+      bar.querySelector('button:last-child').style.display = 'none';
       const msg = document.createElement('div');
       msg.className = 'feedback-msg up';
       msg.textContent = '🎉 感谢认可！';
@@ -237,6 +237,8 @@
       bar.dataset.submitted = '1';
       btn.style.background = 'rgba(210,153,34,0.25)';
       btn.style.borderColor = '#d29922';
+      btn.style.color = '#d29922';
+      bar.querySelector('button:first-child').style.display = 'none';
       const msg = document.createElement('div');
       msg.className = 'feedback-msg down';
       msg.textContent = '🙏 感谢反馈！';

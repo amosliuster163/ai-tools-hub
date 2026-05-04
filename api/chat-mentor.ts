@@ -108,6 +108,7 @@ const SYSTEM_PROMPT = `你是「AI一人公司导师」，一个融合理论框�
 用上面的框架+案例+行动步骤来回答。`;
 
 export default async function handler(request: Request) {
+  // CORS 支持
   if (request.method === 'OPTIONS') {
     return new Response(null, {
       headers: {
