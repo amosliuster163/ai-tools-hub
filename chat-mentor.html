@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI一人公司导师 | AI Tools Hub</title>
+  <meta name="description" content="AI一人公司导师，融合李一舟理论框架与洋哥实战案例的AI创业顾问。">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: #0d1117; min-height: 100vh; display: flex; flex-direction: column; color: #e6edf3;
+    }
+    nav {
+      background: #161b22; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #30363d;
+    }
+    nav .logo a { color: #58a6ff; text-decoration: none; font-size: 14px; font-weight: 600; }
+    nav .logo a:hover { color: #79c0ff; }
+    nav .back-btn { color: #8b949e; text-decoration: none; font-size: 14px; }
+    nav .back-btn:hover { color: #58a6ff; }
+    .header {
+      text-align: center; padding: 32px 20px 16px; background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+    }
+    .header h1 {
+      font-size: 28px;
+      background: linear-gradient(135deg, #f0883e 0%, #a371f7 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 8px; font-weight: 700;
+    }
+    .header .subtitle { color: #8b949e; font-size: 14px; line-height: 1.6; max-width: 500px; margin: 0 auto; }
+    .header .quote {
+      margin-top: 16px; padding: 12px 20px;
+      background: rgba(240,136,62,0.08); border-radius: 10px; border-left: 3px solid #f0883e;
+      font-style: italic; color: #f0883e; font-size: 14px; max-width: 500px; margin-left: auto; margin-right: auto;
+    }
+    /* 分身切换器 */
+    .twin-switch {
+      display: flex; justify-content: center; gap: 8px; margin: 16px auto 0; padding: 4px;
+      background: #161b22; border-radius: 14px; width: fit-content; border: 1px solid #30363d;
+    }
+    .twin-switch button {
+      padding: 8px 18px; border: none; border-radius: 10px; font-size: 13px;
+      cursor: pointer; transition: all 0.2s; font-weight: 500; background: transparent; color: #8b949e;
+    }
+    .twin-switch button.active {
+      background: linear-gradient(135deg, #f0883e 0%, #a371f7 100%); color: #fff;
+    }
+    .chat-container {
+      flex: 1; max-width: 720px; width: 100%; margin: 0 auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px; overflow-y: auto;
+    }
+    .message {
+      display: flex; gap: 10px; padding: 12px 16px; border-radius: 14px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .message.user { background: #21262d; align-self: flex-end; max-width: 75%; }
+    .message.assistant {
+      background: linear-gradient(135deg, rgba(240,136,62,0.06) 0%, rgba(163,113,247,0.06) 100%);
+      align-self: flex-start; max-width: 85%; border-left: 2px solid #a371f7;
+    }
+    .message .avatar {
+      width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 600; flex-shrink: 0;
+    }
+    .message.user .avatar { background: #30363d; color: #fff; order: 2; }
+    .message.assistant .avatar { background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%); color: #fff; }
+    .message .content { flex: 1; line-height: 1.7; font-size: 14px; }
+    .message.user .content { color: #e6edf3; text-align: right; }
+    .message.assistant .content { color: #c9d1d9; }
+    .loading { display: flex; gap: 5px; padding: 6px 0; }
+    .loading span { width: 7px; height: 7px; background: #a371f7; border-radius: 50%; animation: bounce 1.2s infinite ease-in-out; }
+    .loading span:nth-child(1) { animation-delay: -0.3s; }
+    .loading span:nth-child(2) { animation-delay: -0.15s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+    .welcome {
+      background: rgba(163,113,247,0.08); padding: 20px; border-radius: 14px; border-left: 3px solid #a371f7; margin-bottom: 16px;
+    }
+    .welcome h3 { color: #a371f7; margin-bottom: 8px; font-size: 16px; }
+    .welcome p { color: #8b949e; line-height: 1.7; font-size: 13px; }
+    .welcome .topics { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .welcome .topics button {
+      background: rgba(255,255,255,0.06); border: 1px solid #30363d; padding: 6px 14px;
+      border-radius: 18px; font-size: 12px; color: #8b949e; cursor: pointer; transition: all 0.2s;
+    }
+    .welcome .topics button:hover { background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%); border-color: transparent; color: #fff; }
+    .input-container { background: #161b22; padding: 16px; border-top: 1px solid #30363d; position: sticky; bottom: 0; }
+    .input-wrapper { max-width: 720px; margin: 0 auto; display: flex; gap: 10px; }
+    .input-wrapper textarea {
+      flex: 1; padding: 10px 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 10px;
+      color: #e6edf3; font-size: 14px; font-family: inherit; resize: none; min-height: 42px; max-height: 100px;
+    }
+    .input-wrapper textarea:focus { outline: none; border-color: #a371f7; }
+    .input-wrapper button {
+      padding: 10px 20px; background: linear-gradient(135deg, #a371f7 0%, #f0883e 100%);
+      color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+    }
+    .input-wrapper button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .footer {
+      text-align: center; padding: 16px; color: #484f58; font-size: 12px; background: #0d1117; border-top: 1px solid #21262d;
+    }
+    .footer a { color: #58a6ff; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .feedback-bar { display: flex; gap: 6px; margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .feedback-bar button { background: rgba(255,255,255,0.06); border: 1px solid #30363d; padding: 3px 12px; border-radius: 14px; font-size: 12px; cursor: pointer; color: #8b949e; transition: all 0.2s; }
+    .feedback-bar button:hover { background: rgba(163,113,247,0.2); border-color: #a371f7; }
+    .feedback-msg { margin-top: 6px; font-size: 12px; font-style: italic; }
+    .feedback-msg.up { color: #3fb950; }
+    .feedback-msg.down { color: #d29922; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo"><a href="index.html">🏠 AI Tools Hub</a></div>
+    <a href="index.html" class="back-btn">← 返回首页</a>
+  </nav>
+
+  <div class="header">
+    <h1>🧠 AI一人公司导师</h1>
+    <p class="subtitle">理论骨架（李一舟）+ 实战血肉（洋哥）= 完整知识链</p>
+    <div class="quote">"核心逻辑很简单：先跑通MVP，再谈扩大。"</div>
+    <!-- 分身切换 -->
+    <div class="twin-switch">
+      <button id="btnMentor" class="active" onclick="switchMode('mentor')">🧠 AI导师（合体版）</button>
+      <button id="btnYizhou" onclick="switchMode('yizhou')">🚀 纯·一舟</button>
+    </div>
+  </div>
+
+  <div class="chat-container" id="chatContainer">
+    <div class="welcome" id="welcomeBlock">
+      <h3>导师已就位，请提问 🎯</h3>
+      <p id="welcomeDesc">融合李一舟理论框架与洋哥实战案例，为你提供从理论到行动的完整指导。先给框架，再给案例，最后给行动步骤。</p>
+      <div class="topics" id="quickTopics">
+        <button onclick="sendQuickMessage('我想做AI副业，怎么开始？')">AI副业起步</button>
+        <button onclick="sendQuickMessage('一个人怎么做电商？')">一人电商</button>
+        <button onclick="sendQuickMessage('社群怎么定价和运营？')">社群运营</button>
+        <button onclick="sendQuickMessage('AI编程出海怎么做？')">AI出海</button>
+        <button onclick="sendQuickMessage('2026年AI创业还有机会吗？')">创业机会</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-container">
+    <div class="input-wrapper">
+      <textarea id="userInput" placeholder="向导师请教..." onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
+      <button id="sendBtn" onclick="sendMessage()">发送</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    AI一人公司导师 v1.0 | AI数字分身 | <a href="https://amosliuster163.github.io/ai-tools-hub/" target="_blank">AI Tools Hub</a>
+  </div>
+
+  <script>
+    let chatHistory = [];
+    let isLoading = false;
+    let currentMode = 'mentor';
+    const API_URLS = { mentor: '/api/chat-mentor', yizhou: '/api/chat-yizhou' };
+    const MODE_CONFIG = {
+      mentor: {
+        avatar: '导',
+        welcomeTitle: '导师已就位，请提问 🎯',
+        welcomeDesc: '融合李一舟理论框架与洋哥实战案例，为你提供从理论到行动的完整指导。先给框架，再给案例，最后给行动步骤。',
+        topics: ['AI副业起步','一人电商','社群运营','AI出海','创业机会']
+      },
+      yizhou: {
+        avatar: '舟',
+        welcomeTitle: '一舟已至，请畅所欲言 🚀',
+        welcomeDesc: '基于一舟公开课程内容的AI思维模型。直接、果断、金句化。学习他的双引擎模型、四阶段进化观、流量打法。',
+        topics: ['一人公司起步','提示词技巧','流量打法','AI焦虑']
+      }
+    };
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.getElementById('btnMentor').classList.toggle('active', mode === 'mentor');
+      document.getElementById('btnYizhou').classList.toggle('active', mode === 'yizhou');
+      chatHistory = [];
+      const cfg = MODE_CONFIG[mode];
+      document.getElementById('chatContainer').innerHTML = `
+        <div class="welcome">
+          <h3>${cfg.welcomeTitle}</h3>
+          <p id="welcomeDesc">${cfg.welcomeDesc}</p>
+          <div class="topics">${cfg.topics.map(t => `<button onclick="sendQuickMessage('${t}')">${t}</button>`).join('')}</div>
+        </div>`;
+    }
+
+    function formatContent(text) {
+      return text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    }
+
+    function addMessage(role, content) {
+      const container = document.getElementById('chatContainer');
+      const msg = document.createElement('div');
+      msg.className = `message ${role}`;
+      const cfg = MODE_CONFIG[currentMode];
+      msg.innerHTML = `
+        <div class="avatar">${role === 'user' ? '我' : cfg.avatar}</div>
+        <div class="content">${formatContent(content)}</div>`;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+      return msg;
+    }
+
+    function addFeedbackBar(assistantDiv) {
+      const bar = document.createElement('div');
+      bar.className = 'feedback-bar';
+      bar.innerHTML = `<button onclick="this.parentElement.innerHTML='<div class=\\'feedback-msg up\\'>🎉 感谢认可！</div>'">👍 有用</button><button onclick="this.parentElement.innerHTML='<div class=\\'feedback-msg down\\'>🙏 感谢反馈！</div>'">👎 改进</button>`;
+      assistantDiv.appendChild(bar);
+    }
+
+    function addLoadingMessage() {
+      const container = document.getElementById('chatContainer');
+      const cfg = MODE_CONFIG[currentMode];
+      const msg = document.createElement('div');
+      msg.className = 'message assistant';
+      msg.id = 'loadingMessage';
+      msg.innerHTML = `<div class="avatar">${cfg.avatar}</div><div class="loading"><span></span><span></span><span></span></div>`;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function removeLoadingMessage() {
+      const el = document.getElementById('loadingMessage');
+      if (el) el.remove();
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const message = input.value.trim();
+      if (!message || isLoading) return;
+
+      addMessage('user', message);
+      input.value = '';
+      isLoading = true;
+      sendBtn.disabled = true;
+      sendBtn.textContent = '思考中...';
+      addLoadingMessage();
+
+      try {
+        const response = await fetch(API_URLS[currentMode], {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, history: chatHistory }),
+        });
+        const data = await response.json();
+        removeLoadingMessage();
+
+        if (data.error) {
+          addMessage('assistant', '抱歉，AI现在思绪纷乱，请稍后再问。');
+        } else {
+          const assistantDiv = addMessage('assistant', data.reply);
+          addFeedbackBar(assistantDiv);
+          chatHistory = data.history || [];
+        }
+      } catch (error) {
+        removeLoadingMessage();
+        addMessage('assistant', '网络不畅，请稍后再试。');
+      }
+
+      isLoading = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = '发送';
+    }
+
+    function sendQuickMessage(msg) {
+      document.getElementById('userInput').value = msg;
+      sendMessage();
+    }
+  </script>
+</body>
+</html>
