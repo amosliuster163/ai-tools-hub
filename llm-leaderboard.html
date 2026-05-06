@@ -280,6 +280,43 @@
         .trend-item h4 { font-size: 1rem; color: var(--color-primary); margin-bottom: 6px; }
         .trend-item p { font-size: 0.85rem; color: var(--color-muted); }
         
+        /* ===== LINKS ===== */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .link-card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            padding: 20px;
+            transition: all 0.3s;
+            border-left: 4px solid var(--color-accent);
+        }
+        .link-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .link-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+        }
+        .link-card .link-btn {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--color-primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin: 3px 6px 3px 0;
+            transition: background 0.2s;
+        }
+        .link-card .link-btn:hover { background: var(--color-accent); }
+        .link-card .link-btn.secondary { background: #e8e8e8; color: var(--color-text); }
+        .link-card .link-btn.secondary:hover { background: #d0d0d0; }
+        
         /* ===== FOOTER ===== */
         footer { background: var(--color-primary); color: rgba(255,255,255,0.7); padding: 30px 40px; text-align: center; font-size: 0.85rem; }
         footer a { color: var(--color-accent); text-decoration: none; }
@@ -692,6 +729,58 @@
                         <span><strong>GPT-5.5</strong></span>
                         <span>闭源旗舰（未公布具体分数）</span>
                     </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== 模型直达链接 ===== -->
+        <section class="section">
+            <h2 class="section-title">🔗 模型直达链接</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <h4>🥇 DeepSeek V4</h4>
+                    <a href="https://www.deepseek.com/" target="_blank" rel="noopener" class="link-btn">前往使用</a>
+                    <a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener" class="link-btn secondary">API文档</a>
+                    <a href="https://platform.deepseek.com/" target="_blank" rel="noopener" class="link-btn secondary">开发者平台</a>
+                </div>
+                <div class="link-card">
+                    <h4>🥈 智谱AI GLM-5.1</h4>
+                    <a href="https://open.bigmodel.cn/" target="_blank" rel="noopener" class="link-btn">前往使用</a>
+                    <a href="https://open.bigmodel.cn/dev/api" target="_blank" rel="noopener" class="link-btn secondary">开放平台</a>
+                    <a href="https://www.bigmodel.cn/" target="_blank" rel="noopener" class="link-btn secondary">智谱官网</a>
+                </div>
+                <div class="link-card">
+                    <h4>🥉 MiniMax M2.7</h4>
+                    <a href="https://hailuoai.com/" target="_blank" rel="noopener" class="link-btn">前往使用</a>
+                    <a href="https://platform.minimaxi.com/" target="_blank" rel="noopener" class="link-btn secondary">开发者平台</a>
+                    <a href="https://www.minimaxi.com/" target="_blank" rel="noopener" class="link-btn secondary">MiniMax官网</a>
+                </div>
+                <div class="link-card">
+                    <h4>🏆 通义千问 Qwen3.6</h4>
+                    <a href="https://tongyi.aliyun.com/" target="_blank" rel="noopener" class="link-btn">前往使用</a>
+                    <a href="https://help.aliyun.com/zh/model-studio/" target="_blank" rel="noopener" class="link-btn secondary">百炼平台</a>
+                    <a href="https://qwenlm.github.io/" target="_blank" rel="noopener" class="link-btn secondary">技术博客</a>
+                </div>
+                <div class="link-card">
+                    <h4>📚 Kimi K2.6</h4>
+                    <a href="https://kimi.moonshot.cn/" target="_blank" rel="noopener" class="link-btn">前往使用</a>
+                    <a href="https://platform.moonshot.cn/" target="_blank" rel="noopener" class="link-btn secondary">开发者平台</a>
+                    <a href="https://www.moonshot.cn/" target="_blank" rel="noopener" class="link-btn secondary">月之暗面</a>
+                </div>
+                <div class="link-card">
+                    <h4>💬 豆包1.5</h4>
+                    <a href="https://www.doubao.com/" target="_blank" rel="noopener" class="link-btn">前往使用</a>
+                    <a href="https://www.volcengine.com/product/doubao" target="_blank" rel="noopener" class="link-btn secondary">火山引擎</a>
+                </div>
+                <div class="link-card">
+                    <h4>🧠 文心一言5.5</h4>
+                    <a href="https://yiyan.baidu.com/" target="_blank" rel="noopener" class="link-btn">前往使用</a>
+                    <a href="https://cloud.baidu.com/product/wenxinworkshop" target="_blank" rel="noopener" class="link-btn secondary">千帆平台</a>
+                </div>
+                <div class="link-card">
+                    <h4>🎤 讯飞星火4.0</h4>
+                    <a href="https://xinghuo.xfyun.cn/" target="_blank" rel="noopener" class="link-btn">前往使用</a>
+                    <a href="https://www.xfyun.cn/" target="_blank" rel="noopener" class="link-btn secondary">讯飞开放平台</a>
                 </div>
             </div>
         </section>
