@@ -6,8 +6,8 @@
     <title>国内大模型排行榜 - 老刘聊AI · AI工具集</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="2026年5月国内大模型能力排行榜，涵盖DeepSeek、通义千问、智谱GLM、文心一言等主流大模型的综合排名、API价格对比和选型指南。每半个月更新。">
-    <meta name="keywords" content="大模型排行榜,国产大模型,DeepSeek,Qwen,ChatGPT,Claude,大模型对比,LLM评测">
+    <meta name="description" content="2026年5月国内大模型能力排行榜，涵盖DeepSeek V4、GLM-5.1、MiniMax M2.7、通义千问Qwen3等主流大模型的综合排名、API价格对比和选型指南。每半个月更新。">
+    <meta name="keywords" content="大模型排行榜,国产大模型,DeepSeek V4,GLM-5.1,ChatGPT,Claude,大模型对比,LLM评测">
     <meta name="author" content="老刘聊AI">
     
     <!-- Open Graph -->
@@ -86,6 +86,18 @@
             gap: 10px;
         }
         
+        /* ===== UPDATE BANNER ===== */
+        .update-banner {
+            background: linear-gradient(135deg, #C9A227, #e6c345);
+            color: #fff;
+            padding: 24px 28px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+        }
+        .update-banner h3 { font-size: 1.1rem; margin-bottom: 12px; }
+        .update-banner ul { list-style: none; padding: 0; }
+        .update-banner li { padding: 4px 0; font-size: 0.9rem; }
+        
         /* ===== RANKING TABLE ===== */
         .ranking-table {
             background: #fff;
@@ -127,12 +139,13 @@
         .rank-1 { background: #C9A227; color: #fff; }
         .rank-2 { background: #8E8E8E; color: #fff; }
         .rank-3 { background: #CD7F32; color: #fff; }
+        .rank-new { background: #27AE60; color: #fff; }
         .rank-default { background: #E8E8E8; color: var(--color-muted); }
         
         .model-name { font-weight: 600; color: var(--color-primary); }
         .model-org { font-size: 0.8rem; color: var(--color-muted); }
-        .model-score { font-weight: 700; color: var(--color-accent); }
-        .arena-rank { font-size: 0.85rem; color: var(--color-muted); }
+        .model-score { font-weight: 700; color: var(--color-accent); font-size: 0.85rem; }
+        .arena-rank { font-size: 0.8rem; color: var(--color-muted); }
         .model-advantage { font-size: 0.85rem; color: var(--color-text); }
         
         /* ===== FIVE TIGERS CARDS ===== */
@@ -294,6 +307,8 @@
             
             .tigers-grid { grid-template-columns: 1fr; }
             .scenario-row { grid-template-columns: 40px 1.2fr 1.5fr; }
+            
+            .update-banner { padding: 18px 20px; }
         }
     </style>
 </head>
@@ -308,12 +323,27 @@
         <div class="hero-content">
             <span class="hero-badge">📊 大模型排行榜</span>
             <h1 class="hero-title">国内大模型能力排行榜</h1>
-            <p class="hero-desc">基于 LMSYS Chatbot Arena、SuperCLUE、C-Eval 等权威评测，追踪国产大模型最新能力变化。</p>
-            <p class="hero-update">🕐 2026年5月第1期 · 每半个月更新</p>
+            <p class="hero-desc">基于 LMSYS Chatbot Arena、Artificial Analysis、厂商技术报告等权威数据，追踪国产大模型最新能力变化。</p>
+            <p class="hero-update">🕐 2026年5月第1期 · 每半个月更新 · 下次更新：5月20日</p>
         </div>
     </section>
     
     <main>
+        <!-- ===== 最新重大更新 ===== -->
+        <section class="section">
+            <h2 class="section-title">🔥 最新重大更新（2026年4-5月）</h2>
+            <div class="update-banner">
+                <h3>本月国产大模型集中爆发，48小时内多款旗舰接连亮相：</h3>
+                <ul>
+                    <li>📅 03-18 <strong>MiniMax M2.7</strong> — 首款"自我进化"模型，$0.30/M</li>
+                    <li>📅 04-10 <strong>GLM-5.1</strong>（智谱） — 国产编程Agent旗舰，SWE-bench Pro国产第一</li>
+                    <li>📅 04-23 <strong>GPT-5.5</strong>（OpenAI） — Terminal Bench 82.7%大幅领先</li>
+                    <li>📅 04-24 <strong>DeepSeek-V4-Pro</strong> — 1.6T全球最大开源MoE，1M上下文</li>
+                    <li>📅 04-24 <strong>Kimi K2.6</strong> — 1.1T参数，GDPval-AA 1,484 Elo</li>
+                </ul>
+            </div>
+        </section>
+        
         <!-- ===== 综合排名 ===== -->
         <section class="section">
             <h2 class="section-title">🏆 国内大模型综合排名 Top 15</h2>
@@ -321,223 +351,232 @@
                 <div class="ranking-header">
                     <span>排名</span>
                     <span>模型</span>
-                    <span>综合得分</span>
+                    <span>核心指标</span>
                     <span>Arena排名</span>
                     <span>核心优势</span>
                 </div>
                 <div class="ranking-row">
-                    <span><span class="rank-badge rank-1">1</span></span>
-                    <span><div class="model-name">DeepSeek R1</div><div class="model-org">深度求索</div></span>
-                    <span class="model-score">70.5</span>
+                    <span><span class="rank-badge rank-new">🔥</span></span>
+                    <span><div class="model-name">DeepSeek V4-Pro</div><div class="model-org">深度求索</div></span>
+                    <span class="model-score">GDPval 1,554</span>
+                    <span class="arena-rank">全球前5</span>
+                    <span class="model-advantage">1.6T开源最大MoE，1M上下文</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-new">🔥</span></span>
+                    <span><div class="model-name">GLM-5.1</div><div class="model-org">智谱AI</div></span>
+                    <span class="model-score">SWE 58.4%</span>
                     <span class="arena-rank">全球前10</span>
-                    <span class="model-advantage">国产综合最优，推理3倍提速</span>
+                    <span class="model-advantage">国产编程第一，8小时长程Agent</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-new">🔥</span></span>
+                    <span><div class="model-name">MiniMax M2.7</div><div class="model-org">MiniMax</div></span>
+                    <span class="model-score">GDPval 1,495</span>
+                    <span class="arena-rank">全球前10</span>
+                    <span class="model-advantage">文字创作91.7分第一，$0.30/M</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-new">🔥</span></span>
+                    <span><div class="model-name">DeepSeek V4-Flash</div><div class="model-org">深度求索</div></span>
+                    <span class="model-score">$0.14/M</span>
+                    <span class="arena-rank">开源</span>
+                    <span class="model-advantage">全球最低定价开源模型</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-new">🔥</span></span>
+                    <span><div class="model-name">Kimi K2.6</div><div class="model-org">月之暗面</div></span>
+                    <span class="model-score">GDPval 1,484</span>
+                    <span class="arena-rank">全球前10</span>
+                    <span class="model-advantage">1.1T参数，20万字超长上下文</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-1">1</span></span>
+                    <span><div class="model-name">Qwen3-Max</div><div class="model-org">阿里云</div></span>
+                    <span class="model-score">全球前10</span>
+                    <span class="arena-rank">全球前10</span>
+                    <span class="model-advantage">数学+编程单项全球领先</span>
                 </div>
                 <div class="ranking-row">
                     <span><span class="rank-badge rank-2">2</span></span>
-                    <span><div class="model-name">Qwen2.5-Max</div><div class="model-org">阿里云</div></span>
-                    <span class="model-score">69.2</span>
-                    <span class="arena-rank">全球第7</span>
-                    <span class="model-advantage">数学+编程单项第一</span>
-                </div>
-                <div class="ranking-row">
-                    <span><span class="rank-badge rank-3">3</span></span>
-                    <span><div class="model-name">DeepSeek-V3</div><div class="model-org">深度求索</div></span>
-                    <span class="model-score">68.8</span>
-                    <span class="arena-rank">全球前10</span>
-                    <span class="model-advantage">开源天花板，训练成本600万美元</span>
-                </div>
-                <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">4</span></span>
-                    <span><div class="model-name">SenseChat 5.5</div><div class="model-org">商汤科技</div></span>
-                    <span class="model-score">68.5</span>
-                    <span class="arena-rank">-</span>
-                    <span class="model-advantage">文科81.8，NLP领先</span>
-                </div>
-                <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">5</span></span>
-                    <span><div class="model-name">文心一言 4.0</div><div class="model-org">百度</div></span>
-                    <span class="model-score">67.2</span>
-                    <span class="arena-rank">-</span>
-                    <span class="model-advantage">MMLU中文第一，情感识别92%</span>
-                </div>
-                <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">6</span></span>
-                    <span><div class="model-name">讯飞星火 4.0 Ultra</div><div class="model-org">科大讯飞</div></span>
-                    <span class="model-score">65.8</span>
-                    <span class="arena-rank">HAI前十</span>
-                    <span class="model-advantage">语音交互领先</span>
-                </div>
-                <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">7</span></span>
-                    <span><div class="model-name">Doubao-1.5-pro</div><div class="model-org">字节跳动</div></span>
-                    <span class="model-score">65.2</span>
+                    <span><div class="model-name">豆包1.5 Pro</div><div class="model-org">字节跳动</div></span>
+                    <span class="model-score">月活3亿+</span>
                     <span class="arena-rank">-</span>
                     <span class="model-advantage">语音识别+实时交互</span>
                 </div>
                 <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">8</span></span>
-                    <span><div class="model-name">GLM-4-Plus</div><div class="model-org">智谱AI</div></span>
-                    <span class="model-score">64.5</span>
+                    <span><span class="rank-badge rank-3">3</span></span>
+                    <span><div class="model-name">文心一言5.5</div><div class="model-org">百度</div></span>
+                    <span class="model-score">MMLU中文第一</span>
                     <span class="arena-rank">-</span>
-                    <span class="model-advantage">清华系，多模态强</span>
+                    <span class="model-advantage">情感识别92%</span>
                 </div>
                 <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">9</span></span>
-                    <span><div class="model-name">Kimi K2.5</div><div class="model-org">月之暗面</div></span>
-                    <span class="model-score">63.8</span>
+                    <span><span class="rank-badge rank-default">4</span></span>
+                    <span><div class="model-name">讯飞星火4.0 Ultra</div><div class="model-org">科大讯飞</div></span>
+                    <span class="model-score">HAI前十</span>
                     <span class="arena-rank">-</span>
-                    <span class="model-advantage">20万字超长上下文</span>
+                    <span class="model-advantage">语音交互领先</span>
                 </div>
                 <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">10</span></span>
-                    <span><div class="model-name">Baichuan 4</div><div class="model-org">百川智能</div></span>
-                    <span class="model-score">62.5</span>
+                    <span><span class="rank-badge rank-default">5</span></span>
+                    <span><div class="model-name">SenseChat 5.5</div><div class="model-org">商汤科技</div></span>
+                    <span class="model-score">文科81.8</span>
                     <span class="arena-rank">-</span>
-                    <span class="model-advantage">医疗法律垂直专精</span>
+                    <span class="model-advantage">NLP领先</span>
                 </div>
                 <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">11</span></span>
+                    <span><span class="rank-badge rank-default">6</span></span>
+                    <span><div class="model-name">Baichuan 4s</div><div class="model-org">百川智能</div></span>
+                    <span class="model-score">垂直专精</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">医疗法律垂直领域</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">7</span></span>
                     <span><div class="model-name">Yi-Large</div><div class="model-org">零一万物</div></span>
-                    <span class="model-score">61.8</span>
+                    <span class="model-score">多模态</span>
                     <span class="arena-rank">-</span>
-                    <span class="model-advantage">多模态+代码生成</span>
+                    <span class="model-advantage">多模态+代码</span>
                 </div>
                 <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">12</span></span>
-                    <span><div class="model-name">MiniMax abab7</div><div class="model-org">MiniMax</div></span>
-                    <span class="model-score">61.2</span>
-                    <span class="arena-rank">-</span>
-                    <span class="model-advantage">语音合成+角色扮演</span>
-                </div>
-                <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">13</span></span>
+                    <span><span class="rank-badge rank-default">8</span></span>
                     <span><div class="model-name">混元大模型</div><div class="model-org">腾讯</div></span>
-                    <span class="model-score">59.8</span>
+                    <span class="model-score">-</span>
                     <span class="arena-rank">-</span>
                     <span class="model-advantage">微信生态深度整合</span>
                 </div>
                 <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">14</span></span>
+                    <span><span class="rank-badge rank-default">9</span></span>
                     <span><div class="model-name">阶跃星辰 Step-2</div><div class="model-org">阶跃星辰</div></span>
-                    <span class="model-score">58.5</span>
+                    <span class="model-score">万亿参数</span>
                     <span class="arena-rank">-</span>
                     <span class="model-advantage">万亿参数MoE架构</span>
                 </div>
                 <div class="ranking-row">
-                    <span><span class="rank-badge rank-default">15</span></span>
+                    <span><span class="rank-badge rank-default">10</span></span>
                     <span><div class="model-name">InternLM2</div><div class="model-org">上海AI实验室</div></span>
-                    <span class="model-score">57.8</span>
+                    <span class="model-score">工具调用</span>
                     <span class="arena-rank">-</span>
-                    <span class="model-advantage">开源高效，工具调用强</span>
+                    <span class="model-advantage">开源高效</span>
                 </div>
             </div>
         </section>
         
         <!-- ===== 大模型五虎 ===== -->
         <section class="section">
-            <h2 class="section-title">🐯 国产大模型五虎</h2>
+            <h2 class="section-title">🐯 国产大模型五虎深度分析</h2>
             <div class="tigers-grid">
                 <div class="tiger-card">
-                    <h3>🥇 DeepSeek 深度求索</h3>
-                    <div class="tagline">性价比之王</div>
-                    <div class="detail"><strong>旗舰模型：</strong>R1 / V3</div>
-                    <div class="detail"><strong>训练成本：</strong>仅600万美元（OpenAI的1/274）</div>
-                    <div class="detail"><strong>API价格：</strong>¥1/百万输入，¥2/百万输出</div>
-                    <div class="detail"><strong>优势：</strong>推理速度3倍提升，开源生态完善</div>
-                    <div class="detail"><strong>场景：</strong>政务文档、金融研报、科研分析</div>
+                    <h3>🥇 DeepSeek V4</h3>
+                    <div class="tagline">开源之王</div>
+                    <div class="detail"><strong>V4-Pro：</strong>1.6T/49B，1M上下文，$1.74/M</div>
+                    <div class="detail"><strong>V4-Flash：</strong>284B/13B，1M上下文，$0.14/M ← 史上最低</div>
+                    <div class="detail"><strong>架构突破：</strong>混合注意力，1M上下文FLOPs降至V3的27%</div>
+                    <div class="detail"><strong>GPQA Diamond：</strong>90.1%，HLE 37.7%，开源最强推理</div>
+                    <div class="detail"><strong>场景：</strong>科研推理、大型代码库分析、超长文档处理</div>
                 </div>
                 <div class="tiger-card">
-                    <h3>🥈 Qwen 通义千问</h3>
-                    <div class="tagline">数学编程冠军</div>
-                    <div class="detail"><strong>旗舰模型：</strong>Qwen2.5-Max / Qwen 3-Plus</div>
-                    <div class="detail"><strong>架构：</strong>MoE架构，20万亿token预训练</div>
-                    <div class="detail"><strong>API价格：</strong>¥4/百万输入，¥12/百万输出</div>
-                    <div class="detail"><strong>优势：</strong>数学+编程单项全球第一</div>
+                    <h3>🥈 智谱AI GLM-5.1</h3>
+                    <div class="tagline">国产编程Agent旗舰</div>
+                    <div class="detail"><strong>参数：</strong>754B/40B MoE，200K上下文</div>
+                    <div class="detail"><strong>SWE-bench Pro：</strong>58.4% 国产第一、开源第一</div>
+                    <div class="detail"><strong>核心能力：</strong>8小时长程Coding Agent，前端UI生成突出</div>
+                    <div class="detail"><strong>幻觉压制：</strong>国产第一梯队最佳</div>
+                    <div class="detail"><strong>场景：</strong>大型代码仓库重构、全栈应用生成、深度Agent</div>
+                </div>
+                <div class="tiger-card">
+                    <h3>🥉 MiniMax M2.7</h3>
+                    <div class="tagline">性价比之王</div>
+                    <div class="detail"><strong>激活参数：</strong>~10B，Token生成~100 TPS</div>
+                    <div class="detail"><strong>文字创作：</strong>均分91.7第一，超越GPT-5.4</div>
+                    <div class="detail"><strong>API定价：</strong>$0.30/M，四款中最低</div>
+                    <div class="detail"><strong>核心能力：</strong>首款"自我进化"模型，办公场景突出</div>
+                    <div class="detail"><strong>场景：</strong>内容生产、营销文案、客服、办公自动化</div>
+                </div>
+                <div class="tiger-card">
+                    <h3>🏆 通义千问 Qwen3</h3>
+                    <div class="tagline">数学编程强将</div>
+                    <div class="detail"><strong>架构：</strong>MoE，20万亿token预训练</div>
+                    <div class="detail"><strong>核心优势：</strong>数学+编程单项全球领先</div>
+                    <div class="detail"><strong>开源：</strong>全尺寸开源(0.5B-72B)</div>
                     <div class="detail"><strong>场景：</strong>跨境电商、多语言客服、技术文档</div>
                 </div>
                 <div class="tiger-card">
-                    <h3>🥉 智谱AI GLM系列</h3>
-                    <div class="tagline">清华技术派</div>
-                    <div class="detail"><strong>旗舰模型：</strong>GLM-4-Plus</div>
-                    <div class="detail"><strong>背景：</strong>清华大学系，估值最高国产大模型企业</div>
-                    <div class="detail"><strong>API价格：</strong>¥5/百万输入，¥5/百万输出</div>
-                    <div class="detail"><strong>优势：</strong>多模态能力强，CodeGeeX代码专精</div>
-                    <div class="detail"><strong>场景：</strong>代码开发、内容创作、图像生成</div>
-                </div>
-                <div class="tiger-card">
-                    <h3>🏆 文心一言 百度</h3>
-                    <div class="tagline">中文生态整合</div>
-                    <div class="detail"><strong>旗舰模型：</strong>文心一言4.0 / ERNIE 4.5</div>
-                    <div class="detail"><strong>优势：</strong>MMLU中文评测第一，情感识别92%</div>
-                    <div class="detail"><strong>场景：</strong>营销内容、政务问答、知识图谱</div>
-                </div>
-                <div class="tiger-card">
-                    <h3>🎙️ 讯飞星火 科大讯飞</h3>
-                    <div class="tagline">语音交互专家</div>
-                    <div class="detail"><strong>旗舰模型：</strong>讯飞星火4.0 Ultra</div>
-                    <div class="detail"><strong>优势：</strong>斯坦福HAI报告国产唯一前十</div>
-                    <div class="detail"><strong>场景：</strong>教育辅导、语音助手、智能硬件</div>
+                    <h3>📚 Kimi K2.6</h3>
+                    <div class="tagline">长上下文专家</div>
+                    <div class="detail"><strong>参数：</strong>1.1T，20万字+上下文</div>
+                    <div class="detail"><strong>GDPval-AA：</strong>1,484 Elo</div>
+                    <div class="detail"><strong>核心优势：</strong>长文档分析、网页浏览、信息整合</div>
+                    <div class="detail"><strong>用户口碑：</strong>免费使用，口碑极佳</div>
+                    <div class="detail"><strong>场景：</strong>长文档分析、学术研究、信息检索</div>
                 </div>
             </div>
         </section>
         
         <!-- ===== API价格对比 ===== -->
         <section class="section">
-            <h2 class="section-title">💰 API 价格对比</h2>
+            <h2 class="section-title">💰 API 价格对比（2026年5月最新）</h2>
             <div class="price-table">
                 <div class="price-header">
                     <span>模型</span>
-                    <span>输入(¥/百万token)</span>
-                    <span>输出(¥/百万token)</span>
-                    <span>免费额度</span>
+                    <span>输入($/M token)</span>
+                    <span>输出($/M token)</span>
+                    <span>亮点</span>
                 </div>
                 <div class="price-row price-best">
-                    <span><strong>🏆 DeepSeek V3</strong></span>
-                    <span>¥1</span>
-                    <span>¥2</span>
-                    <span>500万tokens</span>
+                    <span><strong>🏆 DeepSeek V4-Flash</strong></span>
+                    <span><strong>$0.14</strong></span>
+                    <span>$0.28</span>
+                    <span>史上最低定价</span>
+                </div>
+                <div class="price-row price-best">
+                    <span><strong>🏆 MiniMax M2.7</strong></span>
+                    <span><strong>$0.30</strong></span>
+                    <span>-</span>
+                    <span>速度100 TPS</span>
                 </div>
                 <div class="price-row">
-                    <span>Kimi K2.5</span>
-                    <span>¥2</span>
-                    <span>¥6</span>
-                    <span>注册送额度</span>
+                    <span>DeepSeek V4-Pro</span>
+                    <span>$1.74</span>
+                    <span>$3.48</span>
+                    <span>缓存命中$0.145</span>
                 </div>
                 <div class="price-row">
-                    <span>Qwen 3-Plus</span>
-                    <span>¥4</span>
-                    <span>¥12</span>
+                    <span>GLM-5.1</span>
+                    <span>$1.74</span>
+                    <span>-</span>
+                    <span>国产编程第一</span>
+                </div>
+                <div class="price-row">
+                    <span>Kimi K2.6</span>
+                    <span>~$0.28</span>
+                    <span>~$0.84</span>
+                    <span>长上下文</span>
+                </div>
+                <div class="price-row">
+                    <span>Qwen3-Plus</span>
+                    <span>~$0.56</span>
+                    <span>~$1.68</span>
                     <span>Turbo版限免</span>
                 </div>
                 <div class="price-row">
-                    <span>文心一言 ERNIE 4.5</span>
-                    <span>¥4</span>
-                    <span>¥8</span>
-                    <span>部分限免</span>
+                    <span>文心一言5.5</span>
+                    <span>~$0.56</span>
+                    <span>~$1.12</span>
+                    <span>百度生态</span>
                 </div>
                 <div class="price-row">
-                    <span>GLM-4-Plus</span>
-                    <span>¥5</span>
-                    <span>¥5</span>
-                    <span>2500万tokens</span>
+                    <span>讯飞星火4.0 Ultra</span>
+                    <span>~$0.84</span>
+                    <span>~$0.84</span>
+                    <span>语音领先</span>
                 </div>
-                <div class="price-row">
-                    <span>讯飞星火 4.0 Ultra</span>
-                    <span>¥6</span>
-                    <span>¥6</span>
-                    <span>200万tokens</span>
-                </div>
-                <div class="price-row">
-                    <span>MiniMax abab7</span>
-                    <span>¥4</span>
-                    <span>¥8</span>
-                    <span>注册送额度</span>
-                </div>
-                <div class="price-row">
-                    <span>Baichuan 4s</span>
-                    <span>¥4</span>
-                    <span>¥8</span>
-                    <span>注册送额度</span>
+                <div class="price-row" style="opacity: 0.6;">
+                    <span>GPT-5.5（国际）</span>
+                    <span>$5.00</span>
+                    <span>$30.00</span>
+                    <span>企业级最强</span>
                 </div>
             </div>
         </section>
@@ -551,24 +590,25 @@
                 <div class="scenario-tab" onclick="showScenario('longtext')">📚 长文档</div>
                 <div class="scenario-tab" onclick="showScenario('price')">💰 性价比</div>
                 <div class="scenario-tab" onclick="showScenario('chinese')">🇨🇳 中文创作</div>
+                <div class="scenario-tab" onclick="showScenario('stem')">🔬 数学/科研</div>
             </div>
             
             <div id="scenario-code" class="scenario-content active">
                 <div class="scenario-table">
                     <div class="scenario-row">
                         <span><span class="scenario-rank">1</span></span>
-                        <span><strong>DeepSeek R1</strong></span>
-                        <span>推理快 + 代码强 + 性价比最高</span>
+                        <span><strong>GLM-5.1</strong></span>
+                        <span>SWE-bench Pro 58.4%国产第一，8小时长程Agent</span>
                     </div>
                     <div class="scenario-row">
                         <span><span class="scenario-rank">2</span></span>
-                        <span><strong>Qwen2.5-Max</strong></span>
-                        <span>编程单项全球第一</span>
+                        <span><strong>DeepSeek V4-Pro</strong></span>
+                        <span>1M上下文+开源最强+MIT协议</span>
                     </div>
                     <div class="scenario-row">
                         <span><span class="scenario-rank">3</span></span>
-                        <span><strong>GLM-4 / CodeGeeX</strong></span>
-                        <span>国产代码专精</span>
+                        <span><strong>MiniMax M2.7</strong></span>
+                        <span>性价比最高，$0.30/M</span>
                     </div>
                 </div>
             </div>
@@ -577,18 +617,18 @@
                 <div class="scenario-table">
                     <div class="scenario-row">
                         <span><span class="scenario-rank">1</span></span>
-                        <span><strong>Kimi K2.5</strong></span>
-                        <span>20万字超长上下文</span>
+                        <span><strong>DeepSeek V4-Pro/Flash</strong></span>
+                        <span>1M tokens（约800页PDF/50万行代码）</span>
                     </div>
                     <div class="scenario-row">
                         <span><span class="scenario-rank">2</span></span>
-                        <span><strong>DeepSeek R1</strong></span>
-                        <span>长文本处理专家</span>
+                        <span><strong>GPT-5.5</strong></span>
+                        <span>1M tokens (API)</span>
                     </div>
                     <div class="scenario-row">
                         <span><span class="scenario-rank">3</span></span>
-                        <span><strong>Qwen 3-Plus</strong></span>
-                        <span>百万级上下文</span>
+                        <span><strong>Kimi K2.6</strong></span>
+                        <span>20万字+</span>
                     </div>
                 </div>
             </div>
@@ -597,18 +637,18 @@
                 <div class="scenario-table">
                     <div class="scenario-row">
                         <span><span class="scenario-rank">1</span></span>
-                        <span><strong>DeepSeek V3</strong></span>
-                        <span>¥1-2/百万token，性价比之王</span>
+                        <span><strong>DeepSeek V4-Flash</strong></span>
+                        <span>$0.14/M 输入，史上最低</span>
                     </div>
                     <div class="scenario-row">
                         <span><span class="scenario-rank">2</span></span>
-                        <span><strong>Qwen开源版</strong></span>
-                        <span>全尺寸免费开源</span>
+                        <span><strong>MiniMax M2.7</strong></span>
+                        <span>$0.30/M + 100 TPS</span>
                     </div>
                     <div class="scenario-row">
                         <span><span class="scenario-rank">3</span></span>
-                        <span><strong>GLM-4-Plus</strong></span>
-                        <span>¥5-5均衡定价</span>
+                        <span><strong>GLM-5.1</strong></span>
+                        <span>$1.74/M，编程能力最强</span>
                     </div>
                 </div>
             </div>
@@ -617,18 +657,38 @@
                 <div class="scenario-table">
                     <div class="scenario-row">
                         <span><span class="scenario-rank">1</span></span>
-                        <span><strong>DeepSeek R1</strong></span>
-                        <span>中文长文本处理专家</span>
+                        <span><strong>MiniMax M2.7</strong></span>
+                        <span>文字创作均分91.7第一</span>
                     </div>
                     <div class="scenario-row">
                         <span><span class="scenario-rank">2</span></span>
-                        <span><strong>Qwen2.5-Max</strong></span>
-                        <span>数学编程双冠 + 中文优化</span>
+                        <span><strong>DeepSeek V4-Flash</strong></span>
+                        <span>多语言训练比例高+超低成本</span>
                     </div>
                     <div class="scenario-row">
                         <span><span class="scenario-rank">3</span></span>
-                        <span><strong>文心一言4.0</strong></span>
+                        <span><strong>文心一言5.5</strong></span>
                         <span>MMLU中文评测第一</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="scenario-stem" class="scenario-content">
+                <div class="scenario-table">
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">1</span></span>
+                        <span><strong>DeepSeek V4-Pro</strong></span>
+                        <span>GPQA Diamond 90.1%，开源最强推理</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">2</span></span>
+                        <span><strong>MiniMax M2.7</strong></span>
+                        <span>GPQA Diamond 87.0%</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">3</span></span>
+                        <span><strong>GPT-5.5</strong></span>
+                        <span>闭源旗舰（未公布具体分数）</span>
                     </div>
                 </div>
             </div>
@@ -641,40 +701,40 @@
                 <div class="trend-item">
                     <div class="trend-icon">🔓</div>
                     <h4>开源崛起</h4>
-                    <p>DeepSeek-V3、LLaMA 3等开源模型性能逼近闭源，企业部署成本大幅降低</p>
+                    <p>DeepSeek V4-Pro（1.6T）、GLM-5.1、MiniMax M2.7均开源，性能逼近闭源</p>
                 </div>
                 <div class="trend-item">
-                    <div class="trend-icon">📉</div>
-                    <h4>成本暴跌</h4>
-                    <p>训练成本降低90%+，API价格持续走低，AI使用门槛越来越低</p>
+                    <div class="trend-icon">💰</div>
+                    <h4>价格战白热化</h4>
+                    <p>V4-Flash $0.14/M vs GPT-5.5 $5/M，相差35倍</p>
                 </div>
                 <div class="trend-item">
                     <div class="trend-icon">📄</div>
                     <h4>长上下文标配</h4>
-                    <p>百万级token成为新标准，Kimi已实现20万字上下文</p>
+                    <p>1M tokens成为旗舰标准（V4-Pro、GPT-5.5）</p>
                 </div>
                 <div class="trend-item">
-                    <div class="trend-icon">🎨</div>
-                    <h4>多模态标配</h4>
-                    <p>Gemini 2.0原生多模态引领趋势，文生图/视频能力快速提升</p>
+                    <div class="trend-icon">🤖</div>
+                    <h4>Agent工作流</h4>
+                    <p>多模型组合+场景路由成标配：轻量→MiniMax，编程→GLM，科研→V4-Pro</p>
                 </div>
                 <div class="trend-item">
-                    <div class="trend-icon">🎯</div>
-                    <h4>垂直深耕</h4>
-                    <p>医疗、法律、金融专业模型涌现，通用模型不再万能</p>
+                    <div class="trend-icon">🧠</div>
+                    <h4>思维链默认开启</h4>
+                    <p>V4系列默认开启Thinking Mode，推理能力大幅提升</p>
                 </div>
                 <div class="trend-item">
                     <div class="trend-icon">📊</div>
-                    <h4>差距收窄</h4>
-                    <p>Top模型Elo分差<50分，场景匹配度比绝对分数更重要</p>
+                    <h4>差距收窄至3-6个月</h4>
+                    <p>国产与国际差距仅3-6个月，场景匹配度比绝对分数更重要</p>
                 </div>
             </div>
         </section>
     </main>
     
     <footer>
-        <p>数据来源：LMSYS Chatbot Arena · SuperCLUE · C-Eval · Artificial Analysis · 厂商技术报告</p>
-        <p>每半个月更新一次 · 关注 <a href="index.html">老刘聊AI</a> 获取最新大模型动态</p>
+        <p>数据来源：LMSYS Chatbot Arena · Artificial Analysis · DeepSeek技术报告 · 智谱AI开放文档 · JeecgBoot AI专题研究</p>
+        <p>每半个月更新一次 · 下次更新：2026年5月20日 · 关注 <a href="index.html">老刘聊AI</a> 获取最新大模型动态</p>
     </footer>
     
     <script>
