@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国内大模型排行榜 - 老刘聊AI · AI工具集</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="2026年5月国内大模型能力排行榜，涵盖DeepSeek、通义千问、智谱GLM、文心一言等主流大模型的综合排名、API价格对比和选型指南。每半个月更新。">
+    <meta name="keywords" content="大模型排行榜,国产大模型,DeepSeek,Qwen,ChatGPT,Claude,大模型对比,LLM评测">
+    <meta name="author" content="老刘聊AI">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="国内大模型排行榜 - 老刘聊AI">
+    <meta property="og:description" content="2026年5月国内大模型能力排行榜，每半个月更新">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_CN">
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #F5F1E8;
+            --bg-card: #FFFFFF;
+            --color-primary: #1E3A5F;
+            --color-accent: #C9A227;
+            --color-text: #2C3E50;
+            --color-muted: #6B7B8C;
+            --shadow-soft: 0 4px 20px rgba(30, 58, 95, 0.08);
+            --shadow-hover: 0 8px 40px rgba(30, 58, 95, 0.15);
+            --radius: 12px;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Source Serif 4', serif;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--bg-main); color: var(--color-text); line-height: 1.7; }
+        
+        /* ===== HEADER ===== */
+        header { background: var(--color-primary); padding: 30px 40px; }
+        .header-back { max-width: 1000px; margin: 0 auto; }
+        .back-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { color: var(--color-accent); }
+        
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #1E3A5F 0%, #2D5A87 50%, #C9A227 100%);
+            color: #fff;
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .hero-content { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+        .hero-badge { display: inline-block; font-size: 0.85rem; font-weight: 600; padding: 6px 16px; background: var(--color-accent); color: #fff; border-radius: 6px; margin-bottom: 24px; }
+        .hero-title { font-family: var(--font-display); font-size: 3.2rem; font-weight: 900; margin-bottom: 16px; }
+        .hero-desc { font-size: 1.15rem; opacity: 0.9; line-height: 1.6; max-width: 700px; }
+        .hero-update { margin-top: 20px; font-size: 0.9rem; opacity: 0.7; }
+        
+        /* ===== MAIN ===== */
+        main { max-width: 1000px; margin: 0 auto; padding: 50px 40px; }
+        
+        .section { margin-bottom: 50px; }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(201,162,39,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* ===== RANKING TABLE ===== */
+        .ranking-table {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .ranking-header {
+            display: grid;
+            grid-template-columns: 60px 1fr 100px 80px 120px;
+            padding: 14px 20px;
+            background: var(--color-primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .ranking-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 100px 80px 120px;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(30,58,95,0.08);
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .ranking-row:hover { background: rgba(201,162,39,0.05); }
+        .ranking-row:last-child { border-bottom: none; }
+        
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .rank-1 { background: #C9A227; color: #fff; }
+        .rank-2 { background: #8E8E8E; color: #fff; }
+        .rank-3 { background: #CD7F32; color: #fff; }
+        .rank-default { background: #E8E8E8; color: var(--color-muted); }
+        
+        .model-name { font-weight: 600; color: var(--color-primary); }
+        .model-org { font-size: 0.8rem; color: var(--color-muted); }
+        .model-score { font-weight: 700; color: var(--color-accent); }
+        .arena-rank { font-size: 0.85rem; color: var(--color-muted); }
+        .model-advantage { font-size: 0.85rem; color: var(--color-text); }
+        
+        /* ===== FIVE TIGERS CARDS ===== */
+        .tigers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .tiger-card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            padding: 24px;
+            transition: all 0.3s;
+            border-left: 4px solid var(--color-accent);
+        }
+        .tiger-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .tiger-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+        .tiger-card .tagline {
+            font-size: 0.85rem;
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .tiger-card .detail {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+        .tiger-card .detail strong { color: var(--color-primary); }
+        
+        /* ===== PRICE TABLE ===== */
+        .price-table {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .price-header {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            padding: 12px 20px;
+            background: var(--color-primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .price-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(30,58,95,0.08);
+            font-size: 0.9rem;
+        }
+        .price-row:hover { background: rgba(201,162,39,0.05); }
+        .price-row:last-child { border-bottom: none; }
+        .price-best { background: rgba(201,162,39,0.1); }
+        
+        /* ===== SCENARIO CARDS ===== */
+        .scenario-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .scenario-tab {
+            padding: 10px 20px;
+            background: #fff;
+            border: 2px solid rgba(30,58,95,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            transition: all 0.2s;
+        }
+        .scenario-tab:hover { border-color: var(--color-accent); color: var(--color-accent); }
+        .scenario-tab.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+        
+        .scenario-content { display: none; }
+        .scenario-content.active { display: block; }
+        
+        .scenario-table {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+        .scenario-row {
+            display: grid;
+            grid-template-columns: 50px 1.5fr 2fr;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(30,58,95,0.08);
+            align-items: center;
+        }
+        .scenario-row:hover { background: rgba(201,162,39,0.05); }
+        .scenario-row:last-child { border-bottom: none; }
+        .scenario-rank {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        
+        /* ===== TRENDS ===== */
+        .trends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .trend-item {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            padding: 20px;
+        }
+        .trend-item .trend-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .trend-item h4 { font-size: 1rem; color: var(--color-primary); margin-bottom: 6px; }
+        .trend-item p { font-size: 0.85rem; color: var(--color-muted); }
+        
+        /* ===== FOOTER ===== */
+        footer { background: var(--color-primary); color: rgba(255,255,255,0.7); padding: 30px 40px; text-align: center; font-size: 0.85rem; }
+        footer a { color: var(--color-accent); text-decoration: none; }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero { padding: 50px 20px; }
+            .hero-title { font-size: 2rem; }
+            main { padding: 30px 16px; }
+            
+            .ranking-header, .ranking-row {
+                grid-template-columns: 40px 1fr 70px;
+                font-size: 0.8rem;
+            }
+            .ranking-header > :nth-child(4),
+            .ranking-header > :nth-child(5),
+            .ranking-row > :nth-child(4),
+            .ranking-row > :nth-child(5) { display: none; }
+            
+            .price-header, .price-row {
+                grid-template-columns: 1.2fr 0.8fr 0.8fr;
+            }
+            .price-header > :nth-child(4),
+            .price-row > :nth-child(4) { display: none; }
+            
+            .tigers-grid { grid-template-columns: 1fr; }
+            .scenario-row { grid-template-columns: 40px 1.2fr 1.5fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-back">
+            <a href="index.html" class="back-link">← 返回老刘聊AI</a>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">📊 大模型排行榜</span>
+            <h1 class="hero-title">国内大模型能力排行榜</h1>
+            <p class="hero-desc">基于 LMSYS Chatbot Arena、SuperCLUE、C-Eval 等权威评测，追踪国产大模型最新能力变化。</p>
+            <p class="hero-update">🕐 2026年5月第1期 · 每半个月更新</p>
+        </div>
+    </section>
+    
+    <main>
+        <!-- ===== 综合排名 ===== -->
+        <section class="section">
+            <h2 class="section-title">🏆 国内大模型综合排名 Top 15</h2>
+            <div class="ranking-table">
+                <div class="ranking-header">
+                    <span>排名</span>
+                    <span>模型</span>
+                    <span>综合得分</span>
+                    <span>Arena排名</span>
+                    <span>核心优势</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-1">1</span></span>
+                    <span><div class="model-name">DeepSeek R1</div><div class="model-org">深度求索</div></span>
+                    <span class="model-score">70.5</span>
+                    <span class="arena-rank">全球前10</span>
+                    <span class="model-advantage">国产综合最优，推理3倍提速</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-2">2</span></span>
+                    <span><div class="model-name">Qwen2.5-Max</div><div class="model-org">阿里云</div></span>
+                    <span class="model-score">69.2</span>
+                    <span class="arena-rank">全球第7</span>
+                    <span class="model-advantage">数学+编程单项第一</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-3">3</span></span>
+                    <span><div class="model-name">DeepSeek-V3</div><div class="model-org">深度求索</div></span>
+                    <span class="model-score">68.8</span>
+                    <span class="arena-rank">全球前10</span>
+                    <span class="model-advantage">开源天花板，训练成本600万美元</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">4</span></span>
+                    <span><div class="model-name">SenseChat 5.5</div><div class="model-org">商汤科技</div></span>
+                    <span class="model-score">68.5</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">文科81.8，NLP领先</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">5</span></span>
+                    <span><div class="model-name">文心一言 4.0</div><div class="model-org">百度</div></span>
+                    <span class="model-score">67.2</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">MMLU中文第一，情感识别92%</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">6</span></span>
+                    <span><div class="model-name">讯飞星火 4.0 Ultra</div><div class="model-org">科大讯飞</div></span>
+                    <span class="model-score">65.8</span>
+                    <span class="arena-rank">HAI前十</span>
+                    <span class="model-advantage">语音交互领先</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">7</span></span>
+                    <span><div class="model-name">Doubao-1.5-pro</div><div class="model-org">字节跳动</div></span>
+                    <span class="model-score">65.2</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">语音识别+实时交互</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">8</span></span>
+                    <span><div class="model-name">GLM-4-Plus</div><div class="model-org">智谱AI</div></span>
+                    <span class="model-score">64.5</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">清华系，多模态强</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">9</span></span>
+                    <span><div class="model-name">Kimi K2.5</div><div class="model-org">月之暗面</div></span>
+                    <span class="model-score">63.8</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">20万字超长上下文</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">10</span></span>
+                    <span><div class="model-name">Baichuan 4</div><div class="model-org">百川智能</div></span>
+                    <span class="model-score">62.5</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">医疗法律垂直专精</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">11</span></span>
+                    <span><div class="model-name">Yi-Large</div><div class="model-org">零一万物</div></span>
+                    <span class="model-score">61.8</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">多模态+代码生成</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">12</span></span>
+                    <span><div class="model-name">MiniMax abab7</div><div class="model-org">MiniMax</div></span>
+                    <span class="model-score">61.2</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">语音合成+角色扮演</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">13</span></span>
+                    <span><div class="model-name">混元大模型</div><div class="model-org">腾讯</div></span>
+                    <span class="model-score">59.8</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">微信生态深度整合</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">14</span></span>
+                    <span><div class="model-name">阶跃星辰 Step-2</div><div class="model-org">阶跃星辰</div></span>
+                    <span class="model-score">58.5</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">万亿参数MoE架构</span>
+                </div>
+                <div class="ranking-row">
+                    <span><span class="rank-badge rank-default">15</span></span>
+                    <span><div class="model-name">InternLM2</div><div class="model-org">上海AI实验室</div></span>
+                    <span class="model-score">57.8</span>
+                    <span class="arena-rank">-</span>
+                    <span class="model-advantage">开源高效，工具调用强</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== 大模型五虎 ===== -->
+        <section class="section">
+            <h2 class="section-title">🐯 国产大模型五虎</h2>
+            <div class="tigers-grid">
+                <div class="tiger-card">
+                    <h3>🥇 DeepSeek 深度求索</h3>
+                    <div class="tagline">性价比之王</div>
+                    <div class="detail"><strong>旗舰模型：</strong>R1 / V3</div>
+                    <div class="detail"><strong>训练成本：</strong>仅600万美元（OpenAI的1/274）</div>
+                    <div class="detail"><strong>API价格：</strong>¥1/百万输入，¥2/百万输出</div>
+                    <div class="detail"><strong>优势：</strong>推理速度3倍提升，开源生态完善</div>
+                    <div class="detail"><strong>场景：</strong>政务文档、金融研报、科研分析</div>
+                </div>
+                <div class="tiger-card">
+                    <h3>🥈 Qwen 通义千问</h3>
+                    <div class="tagline">数学编程冠军</div>
+                    <div class="detail"><strong>旗舰模型：</strong>Qwen2.5-Max / Qwen 3-Plus</div>
+                    <div class="detail"><strong>架构：</strong>MoE架构，20万亿token预训练</div>
+                    <div class="detail"><strong>API价格：</strong>¥4/百万输入，¥12/百万输出</div>
+                    <div class="detail"><strong>优势：</strong>数学+编程单项全球第一</div>
+                    <div class="detail"><strong>场景：</strong>跨境电商、多语言客服、技术文档</div>
+                </div>
+                <div class="tiger-card">
+                    <h3>🥉 智谱AI GLM系列</h3>
+                    <div class="tagline">清华技术派</div>
+                    <div class="detail"><strong>旗舰模型：</strong>GLM-4-Plus</div>
+                    <div class="detail"><strong>背景：</strong>清华大学系，估值最高国产大模型企业</div>
+                    <div class="detail"><strong>API价格：</strong>¥5/百万输入，¥5/百万输出</div>
+                    <div class="detail"><strong>优势：</strong>多模态能力强，CodeGeeX代码专精</div>
+                    <div class="detail"><strong>场景：</strong>代码开发、内容创作、图像生成</div>
+                </div>
+                <div class="tiger-card">
+                    <h3>🏆 文心一言 百度</h3>
+                    <div class="tagline">中文生态整合</div>
+                    <div class="detail"><strong>旗舰模型：</strong>文心一言4.0 / ERNIE 4.5</div>
+                    <div class="detail"><strong>优势：</strong>MMLU中文评测第一，情感识别92%</div>
+                    <div class="detail"><strong>场景：</strong>营销内容、政务问答、知识图谱</div>
+                </div>
+                <div class="tiger-card">
+                    <h3>🎙️ 讯飞星火 科大讯飞</h3>
+                    <div class="tagline">语音交互专家</div>
+                    <div class="detail"><strong>旗舰模型：</strong>讯飞星火4.0 Ultra</div>
+                    <div class="detail"><strong>优势：</strong>斯坦福HAI报告国产唯一前十</div>
+                    <div class="detail"><strong>场景：</strong>教育辅导、语音助手、智能硬件</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== API价格对比 ===== -->
+        <section class="section">
+            <h2 class="section-title">💰 API 价格对比</h2>
+            <div class="price-table">
+                <div class="price-header">
+                    <span>模型</span>
+                    <span>输入(¥/百万token)</span>
+                    <span>输出(¥/百万token)</span>
+                    <span>免费额度</span>
+                </div>
+                <div class="price-row price-best">
+                    <span><strong>🏆 DeepSeek V3</strong></span>
+                    <span>¥1</span>
+                    <span>¥2</span>
+                    <span>500万tokens</span>
+                </div>
+                <div class="price-row">
+                    <span>Kimi K2.5</span>
+                    <span>¥2</span>
+                    <span>¥6</span>
+                    <span>注册送额度</span>
+                </div>
+                <div class="price-row">
+                    <span>Qwen 3-Plus</span>
+                    <span>¥4</span>
+                    <span>¥12</span>
+                    <span>Turbo版限免</span>
+                </div>
+                <div class="price-row">
+                    <span>文心一言 ERNIE 4.5</span>
+                    <span>¥4</span>
+                    <span>¥8</span>
+                    <span>部分限免</span>
+                </div>
+                <div class="price-row">
+                    <span>GLM-4-Plus</span>
+                    <span>¥5</span>
+                    <span>¥5</span>
+                    <span>2500万tokens</span>
+                </div>
+                <div class="price-row">
+                    <span>讯飞星火 4.0 Ultra</span>
+                    <span>¥6</span>
+                    <span>¥6</span>
+                    <span>200万tokens</span>
+                </div>
+                <div class="price-row">
+                    <span>MiniMax abab7</span>
+                    <span>¥4</span>
+                    <span>¥8</span>
+                    <span>注册送额度</span>
+                </div>
+                <div class="price-row">
+                    <span>Baichuan 4s</span>
+                    <span>¥4</span>
+                    <span>¥8</span>
+                    <span>注册送额度</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== 场景选型指南 ===== -->
+        <section class="section">
+            <h2 class="section-title">📌 场景选型指南</h2>
+            
+            <div class="scenario-tabs">
+                <div class="scenario-tab active" onclick="showScenario('code')">💻 代码开发</div>
+                <div class="scenario-tab" onclick="showScenario('longtext')">📚 长文档</div>
+                <div class="scenario-tab" onclick="showScenario('price')">💰 性价比</div>
+                <div class="scenario-tab" onclick="showScenario('chinese')">🇨🇳 中文创作</div>
+            </div>
+            
+            <div id="scenario-code" class="scenario-content active">
+                <div class="scenario-table">
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">1</span></span>
+                        <span><strong>DeepSeek R1</strong></span>
+                        <span>推理快 + 代码强 + 性价比最高</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">2</span></span>
+                        <span><strong>Qwen2.5-Max</strong></span>
+                        <span>编程单项全球第一</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">3</span></span>
+                        <span><strong>GLM-4 / CodeGeeX</strong></span>
+                        <span>国产代码专精</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="scenario-longtext" class="scenario-content">
+                <div class="scenario-table">
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">1</span></span>
+                        <span><strong>Kimi K2.5</strong></span>
+                        <span>20万字超长上下文</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">2</span></span>
+                        <span><strong>DeepSeek R1</strong></span>
+                        <span>长文本处理专家</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">3</span></span>
+                        <span><strong>Qwen 3-Plus</strong></span>
+                        <span>百万级上下文</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="scenario-price" class="scenario-content">
+                <div class="scenario-table">
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">1</span></span>
+                        <span><strong>DeepSeek V3</strong></span>
+                        <span>¥1-2/百万token，性价比之王</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">2</span></span>
+                        <span><strong>Qwen开源版</strong></span>
+                        <span>全尺寸免费开源</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">3</span></span>
+                        <span><strong>GLM-4-Plus</strong></span>
+                        <span>¥5-5均衡定价</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="scenario-chinese" class="scenario-content">
+                <div class="scenario-table">
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">1</span></span>
+                        <span><strong>DeepSeek R1</strong></span>
+                        <span>中文长文本处理专家</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">2</span></span>
+                        <span><strong>Qwen2.5-Max</strong></span>
+                        <span>数学编程双冠 + 中文优化</span>
+                    </div>
+                    <div class="scenario-row">
+                        <span><span class="scenario-rank">3</span></span>
+                        <span><strong>文心一言4.0</strong></span>
+                        <span>MMLU中文评测第一</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== 趋势观察 ===== -->
+        <section class="section">
+            <h2 class="section-title">🔥 2026年关键趋势</h2>
+            <div class="trends-grid">
+                <div class="trend-item">
+                    <div class="trend-icon">🔓</div>
+                    <h4>开源崛起</h4>
+                    <p>DeepSeek-V3、LLaMA 3等开源模型性能逼近闭源，企业部署成本大幅降低</p>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-icon">📉</div>
+                    <h4>成本暴跌</h4>
+                    <p>训练成本降低90%+，API价格持续走低，AI使用门槛越来越低</p>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-icon">📄</div>
+                    <h4>长上下文标配</h4>
+                    <p>百万级token成为新标准，Kimi已实现20万字上下文</p>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-icon">🎨</div>
+                    <h4>多模态标配</h4>
+                    <p>Gemini 2.0原生多模态引领趋势，文生图/视频能力快速提升</p>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-icon">🎯</div>
+                    <h4>垂直深耕</h4>
+                    <p>医疗、法律、金融专业模型涌现，通用模型不再万能</p>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-icon">📊</div>
+                    <h4>差距收窄</h4>
+                    <p>Top模型Elo分差<50分，场景匹配度比绝对分数更重要</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>数据来源：LMSYS Chatbot Arena · SuperCLUE · C-Eval · Artificial Analysis · 厂商技术报告</p>
+        <p>每半个月更新一次 · 关注 <a href="index.html">老刘聊AI</a> 获取最新大模型动态</p>
+    </footer>
+    
+    <script>
+        function showScenario(id) {
+            document.querySelectorAll('.scenario-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.scenario-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById('scenario-' + id).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
