@@ -90,7 +90,7 @@ export default async function handler(request: Request) {
         'Authorization': `Bearer ${process.env.ZHIPU_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'glm-4-flash',
+        model: 'glm-4-flash', // GLM-4-Flash 免费模型
         messages,
         temperature: 0.8,
         max_tokens: 2000,
