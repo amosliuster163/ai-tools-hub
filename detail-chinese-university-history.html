@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国大学历史 - 老刘聊AI · AI工具集</title>
+    <meta name="description" content="Claude Code 技能包：输入中国大学名称，自动联网搜索可靠信息，根据不同用户画像输出结构化、可信、适配的内容。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1E3A5F;
+            --accent-color: #C9A227;
+            --bg-color: #F5F1E8;
+            --text-color: #333333;
+            --light-text: #666666;
+            --border-color: #E0DCC8;
+            --card-bg: #FFFFFF;
+            --hover-shadow: 0 12px 24px rgba(30, 58, 95, 0.15);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+        
+        nav {
+            background: linear-gradient(135deg, var(--primary-color), #2A4A6F);
+            padding: 1.2rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        nav a:hover {
+            color: var(--accent-color);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #1E3A5F 0%, #2E5D8A 50%, #3A6A9F 100%);
+            color: #fff;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom right, transparent 49%, var(--bg-color) 50%);
+        }
+        
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .hero .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 1rem;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        
+        .section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            margin-bottom: 1.2rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .section h3 {
+            color: var(--primary-color);
+            margin: 1.2rem 0 0.6rem;
+            font-size: 1.15rem;
+        }
+        
+        .section p { margin-bottom: 0.8rem; }
+        
+        .section ul, .section ol {
+            margin: 0.5rem 0 1rem 1.5rem;
+        }
+        
+        .section li { margin-bottom: 0.4rem; }
+        
+        .install-steps {
+            background: #f0f4f8;
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+            font-family: 'Menlo', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.3rem;
+        }
+        
+        .badge-blue { background: #dbe9f7; color: #1a5276; }
+        .badge-gold { background: #fef5e7; color: #9a7d2a; }
+        .badge-green { background: #e8f5e9; color: #2e7d32; }
+        .badge-red { background: #fce4ec; color: #c62828; }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .feature-item {
+            background: #f8f6f0;
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .feature-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.4rem;
+        }
+        
+        .feature-item p { font-size: 0.9rem; color: var(--light-text); margin: 0; }
+        
+        .cta-btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+        
+        .cta-btn:hover {
+            background: #2A4A6F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+        }
+        
+        .cta-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .cta-btn.secondary:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+        
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .compare-table th, .compare-table td {
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+            text-align: left;
+        }
+        
+        .compare-table th {
+            background: var(--primary-color);
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .compare-table tr:nth-child(even) {
+            background: #f8f6f0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        footer a { color: var(--primary-color); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .container { padding: 1rem; }
+            .section { padding: 1.2rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .cta-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">← 老刘聊AI · AI工具集</a>
+    </nav>
+    
+    <section class="hero">
+        <h1>🏫 中国大学历史</h1>
+        <p class="subtitle">Claude Code 技能包 — 输入大学名称，自动查询可信信息，按用户画像智能适配输出</p>
+        <span class="hero-badge">🧩 Claude Code 技能 · v2026.1</span>
+    </section>
+    
+    <main class="container">
+        
+        <!-- 简介 -->
+        <section class="section">
+            <h2>📖 这是什么？</h2>
+            <p>一个专为 <strong>Claude Code</strong> 打造的技能包，用来查询中国大学信息。不是简单的百科搬运，而是做了三层功夫：</p>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h4>🔍 自动联网搜索</h4>
+                    <p>每次查询自动搜索官网、教育部信息，交叉验证确保准确</p>
+                </div>
+                <div class="feature-item">
+                    <h4>👤 用户画像适配</h4>
+                    <p>小学生问→1-3句话讲亮点；研究者问→深度数据+时间线</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📋 结构化输出</h4>
+                    <p>基本信息、学科实力、历史沿革、知名校友，清晰易读</p>
+                </div>
+                <div class="feature-item">
+                    <h4>✅ 信源可验证</h4>
+                    <p>每条关键信息标注 [来源：xxx]，用户可以点过去核对</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 安装说明 -->
+        <section class="section">
+            <h2>⚡ 安装方法</h2>
+            <p>只需两步即可安装到 Claude Code：</p>
+            
+            <div class="install-steps">
+                <span style="color: var(--accent-color); font-weight: 600;"># 1. 克隆/下载技能包</span>
+                git clone https://github.com/amosliuster163/chinese-university-history-skill.git
+                
+                <span style="color: var(--accent-color); font-weight: 600;"># 2. 复制到 Claude Code 技能目录</span>
+                mkdir -p ~/.claude/skills/chinese-university-history
+                cp -r chinese-university-history-skill/* ~/.claude/skills/chinese-university-history/
+            </div>
+            
+            <p style="color: var(--light-text); font-size: 0.9rem;">💡 安装后重启 Claude Code 即可生效。输入"介绍一下浙江大学"测试。</p>
+            
+            <div class="cta-group">
+                <a href="https://github.com/amosliuster163/chinese-university-history-skill" target="_blank" class="cta-btn">📥 前往 GitHub 下载</a>
+                <a href="https://github.com/amosliuster163/chinese-university-history-skill/archive/refs/heads/main.zip" target="_blank" class="cta-btn secondary">📦 直接下载 ZIP</a>
+            </div>
+        </section>
+        
+        <!-- 使用演示 -->
+        <section class="section">
+            <h2>🎬 使用示例</h2>
+            
+            <h3>场景一：小学生问大学</h3>
+            <div class="install-steps" style="background: #fef9ef;">
+<用户> 清华大学是什么样的学校？
+
+<Claude Code>
+清华大学
+这是中国最顶尖的大学之一，属于"985工程"和"双一流"高校，相当于大学里的"国家队"。
+
+🌟 最厉害的地方：清华的工科在全国排第一，很多造火箭、造芯片的科学家都从这里毕业。
+[来源：清华大学官网 + 教育部]
+            </div>
+            
+            <h3>场景二：考生对比学校</h3>
+            <div class="install-steps" style="background: #fef9ef;">
+<用户> 武大和华科哪个好？
+
+<Claude Code>
+**对比：武汉大学 vs 华中科技大学**
+
+| 维度 | 武汉大学 | 华中科技大学 |
+|------|---------|------------|
+| 创办时间 | 1893年（自强学堂） | 1952年（华中工学院） |
+| 学科评估 A+ 数 | 4个 | 4个 |
+| 双一流学科数 | 11个 | 9个 |
+| 校区位置 | 武汉·珞珈山 | 武汉·喻家山 |
+
+**要点分析**
+- 武大以人文社科和理科见长，校园环境优美
+- 华科以工科和医科见长，科研产出密集
+- 两校都是教育部直属全国重点大学，均为双一流建设高校
+[来源：教育部学科评估 + 两校官网]
+            </div>
+            
+            <h3>场景三：研究者查深度数据</h3>
+            <div class="install-steps" style="background: #fef9ef;">
+<用户> 我要写一篇关于浙大科研的论文，需要详细数据
+
+<Claude Code>
+[深度模式] 浙江大学 — 教育部直属全国重点大学，双一流建设高校
+
+**学科评估详情**
+- 计算机科学与技术：A+（第五轮，2022年）
+- 控制科学与工程：A+
+- 光学工程：A+
+- 软件工程：A+
+...（全部学科按等级排列）
+
+**科研平台**
+- 国家重点实验室：10个（含计算机辅助设计与图形学、工业控制技术等）
+- 国家工程研究中心：7个
+- 2011协同创新中心：2个
+
+**历史发展详细时间线**
+- 1897年：求是书院创立 [来源：浙大官网]
+- 1928年：定名国立浙江大学
+- 1998年：四校合并组建新浙江大学
+...
+[来源：浙江大学官网 + 教育部]
+            </div>
+        </section>
+        
+        <!-- 核心特色 -->
+        <section class="section">
+            <h2>✨ 核心特色</h2>
+            <table class="compare-table">
+                <tr>
+                    <th>特色</th>
+                    <th>说明</th>
+                </tr>
+                <tr>
+                    <td><strong>信源分级</strong></td>
+                    <td>官网 > 教育部 > 学术排名 > 百科，P3级信源（自媒体等）绝不引用</td>
+                </tr>
+                <tr>
+                    <td><strong>数据分级策略</strong></td>
+                    <td>稳定数据（创立年、校训）读本地知识库 + 交叉验证；年度数据（排名、就业率）每次联网搜最新</td>
+                </tr>
+                <tr>
+                    <td><strong>预装知识库</strong></td>
+                    <td>985/211/双一流完整名录 + 头部10所985高校详细数据（学科评估、科研平台等）</td>
+                </tr>
+                <tr>
+                    <td><strong>兜底机制</strong></td>
+                    <td>"宁可不说，不可瞎编" — 找不到可靠信息时明确告知用户</td>
+                </tr>
+                <tr>
+                    <td><strong>学校更名处理</strong></td>
+                    <td>用户说"北京广播学院"→自动提示"现更名为中国传媒大学"</td>
+                </tr>
+            </table>
+        </section>
+        
+        <!-- 技术栈 -->
+        <section class="section">
+            <h2>🔧 技术信息</h2>
+            <ul>
+                <li><strong>平台</strong>：Claude Code (Claude CLI)</li>
+                <li><strong>技能类型</strong>：SKILL.md 技能包</li>
+                <li><strong>包含文件</strong>：SKILL.md（工作流+规则）、references/（大学知识库名录+数据）、scripts/（测试用例）</li>
+                <li><strong>本地知识库版本</strong>：v2026.1（数据截至2026年6月）</li>
+                <li><strong>触发方式</strong>：用户在 Claude Code 中输入大学名称自动触发</li>
+            </ul>
+        </section>
+        
+        <!-- 安装引导 -->
+        <section class="section" style="text-align: center; background: linear-gradient(135deg, #1E3A5F, #2E5D8A); color: #fff;">
+            <h2 style="color: var(--accent-color); border-bottom-color: var(--accent-color);">🚀 立即安装</h2>
+            <p style="color: rgba(255,255,255,0.9);">先决条件：已安装 Claude Code（claude.ai/code）</p>
+            <div class="cta-group" style="justify-content: center;">
+                <a href="https://github.com/amosliuster163/chinese-university-history-skill" target="_blank" class="cta-btn" style="background: var(--accent-color); color: var(--primary-color);">📥 GitHub 仓库</a>
+                <a href="https://github.com/amosliuster163/chinese-university-history-skill/archive/refs/heads/main.zip" target="_blank" class="cta-btn secondary" style="border-color: #fff; color: #fff;">📦 下载 ZIP</a>
+            </div>
+            <p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 1rem;">开源 · 免费 · MIT License</p>
+        </section>
+    </main>
+    
+    <footer>
+        <p>AI Tools Hub · <a href="https://amosliuster163.github.io/ai-tools-hub/">返回首页</a> · <a href="https://github.com/amosliuster163/chinese-university-history-skill">GitHub</a></p>
+        <p style="margin-top: 0.5rem;">Powered by OpenClaw · 中国大学历史 Skill 包 v2026.1</p>
+    </footer>
+</body>
+</html>
