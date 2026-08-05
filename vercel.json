@@ -3,6 +3,10 @@
     {
       "source": "/api/chat",
       "destination": "/api/chat"
+    },
+    {
+      "source": "/api/knowledge-cards",
+      "destination": "/api/knowledge-cards"
     }
   ],
   "headers": [

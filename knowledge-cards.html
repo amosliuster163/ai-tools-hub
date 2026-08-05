@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识卡片在线生成器 - 老刘聊AI</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background:#F5F1E8; color:#2C3E50; line-height:1.7; }
+  .container { max-width:960px; margin:0 auto; padding:20px; }
+  .back-link { display:inline-block; margin:16px 0; color:#1E3A5F; text-decoration:none; font-size:14px; }
+  .back-link:hover { text-decoration:underline; }
+  .header { background:linear-gradient(135deg,#4F46E5 0%,#9333EA 100%); color:#fff; padding:44px 36px; border-radius:12px; margin-bottom:24px; }
+  .header h1 { font-size:1.9rem; margin-bottom:8px; }
+  .header p { font-size:1rem; opacity:.92; }
+  .panel { background:#fff; padding:28px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.07); margin-bottom:24px; }
+  .panel h2 { color:#1E3A5F; font-size:1.05rem; margin-bottom:14px; }
+  .panel h2 small { font-weight:400; color:#8296B0; font-size:.85rem; margin-left:8px; }
+  textarea, input, select { font-family:inherit; font-size:.95rem; border:1.5px solid #DDE3EA; border-radius:8px; padding:10px 12px; width:100%; background:#FBFCFE; }
+  textarea:focus, input:focus, select:focus { outline:none; border-color:#7C3AED; }
+  textarea { min-height:88px; resize:vertical; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .chip { font-size:.82rem; padding:5px 12px; border-radius:999px; border:1px solid #D8C9A3; background:#FDFAF3; color:#7A6A3A; cursor:pointer; transition:.15s; }
+  .chip:hover { background:#C9A227; color:#fff; border-color:#C9A227; }
+  .row { display:flex; gap:16px; margin-top:14px; flex-wrap:wrap; }
+  .row label { display:flex; align-items:center; gap:8px; font-size:.9rem; color:#4A5B6E; }
+  .row select { width:auto; }
+  .keyrow { display:flex; gap:10px; }
+  .keyrow input { flex:1; }
+  .hint { font-size:.85rem; color:#8296B0; margin-top:10px; }
+  .hint a { color:#7C3AED; cursor:pointer; text-decoration:underline; }
+  .hidden { display:none; }
+  #pasteArea { margin-top:12px; }
+  #pasteArea textarea { min-height:120px; font-family:'SF Mono','Fira Code',monospace; font-size:.82rem; }
+  .btn { font-size:.95rem; padding:10px 22px; border-radius:8px; border:1px solid #1E3A5F; background:#fff; color:#1E3A5F; cursor:pointer; transition:.15s; margin-top:16px; }
+  .btn:hover { background:#1E3A5F; color:#fff; }
+  .btn.primary { background:#1E3A5F; color:#fff; border-color:#1E3A5F; font-size:1.05rem; padding:13px 32px; }
+  .btn.primary:hover { background:#2C4A6F; }
+  .btn.primary:disabled { opacity:.5; cursor:not-allowed; }
+  .btn.small { padding:6px 14px; font-size:.85rem; margin-top:0; }
+  .btn:disabled { opacity:.45; cursor:not-allowed; }
+  .btn.violet { border-color:#7C3AED; color:#7C3AED; }
+  .btn.violet:hover { background:#7C3AED; color:#fff; }
+  .preview-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  .preview-head .btn { margin-top:0; }
+  iframe#preview { width:100%; height:640px; border:1px solid #DDE3EA; border-radius:10px; margin-top:16px; background:#0B1F3A; }
+  #status { margin-top:14px; font-size:.9rem; min-height:22px; }
+  #status.err { color:#C0392B; }
+  #status.ok { color:#27ae60; }
+  #status.wait { color:#7A6A3A; }
+  .steps { display:flex; gap:8px; margin-bottom:16px; font-size:.8rem; color:#8296B0; }
+  .steps b { color:#1E3A5F; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="detail-knowledge-cards.html" class="back-link">← 返回技能介绍页</a>
+
+  <div class="header">
+    <h1>🃏 知识卡片在线生成器</h1>
+    <p>写下主题提示词，AI 生成「滑一下出一条」的知识卡片流 —— 在线预览、一键下载、离线可转发</p>
+  </div>
+
+  <div class="panel">
+    <h2>① 写提示词</h2>
+    <textarea id="prompt" placeholder="例：把乔布斯拆解成 40 张卡片，覆盖生平轨迹 / 伟大作品 / 核心思考 / 起落沉浮 / 创业启示"></textarea>
+    <div class="chips" id="chips"></div>
+
+    <div class="row">
+      <label>张数
+        <select id="count">
+          <option>15</option>
+          <option selected>20</option>
+          <option>30</option>
+          <option>40</option>
+        </select>
+      </label>
+      <label>骨架
+        <select id="skeleton">
+          <option value="auto">自动判断</option>
+          <option value="person">人物五段式（生平/作品/思考/起落/启发）</option>
+          <option value="slang">行业黑话（品类/交易/价格/玩法/风险）</option>
+          <option value="product">产品概念（概览/能力/记忆/交互）</option>
+          <option value="general">通用知识（默认7类）</option>
+        </select>
+      </label>
+    </div>
+
+    <h2 style="margin-top:22px;">② 连接 AI<span style="font-weight:400;color:#8296B0;font-size:.82rem;margin-left:8px;">二选一</span></h2>
+    <div class="keyrow">
+      <input type="password" id="apiKey" placeholder="填入你自己的 DeepSeek API Key（推荐 · 只存本机浏览器 · platform.deepseek.com 免费申请）">
+      <button class="btn small" id="btnTestKey">测试</button>
+    </div>
+    <p class="hint">没有 Key？点 <a id="btnCopyPrompt">📋 复制生成提示词</a>，去任意 AI 工具（DeepSeek / 豆包 / Kimi / ChatGPT）生成，把返回的 JSON 粘贴到下面渲染。</p>
+    <div id="pasteArea" class="hidden">
+      <textarea id="pasteJson" placeholder="粘贴 AI 返回的 JSON 到这里，然后点下方按钮…"></textarea>
+      <button class="btn violet" id="btnRenderPaste">🎨 渲染粘贴的 JSON</button>
+    </div>
+
+    <button class="btn primary" id="btnGenerate">⚡ 生成知识卡片</button>
+    <div id="status"></div>
+  </div>
+
+  <div class="panel preview">
+    <div class="preview-head">
+      <h2>③ 预览 & 下载</h2>
+      <div>
+        <button class="btn" id="btnDownload" disabled>📥 下载 HTML 卡片流</button>
+        <button class="btn" id="btnCopyJson" disabled>📋 复制 JSON</button>
+      </div>
+    </div>
+    <iframe id="preview" title="卡片预览"></iframe>
+  </div>
+
+  <p style="text-align:center;color:#8296B0;font-size:.82rem;margin-bottom:40px;">生成结果遵循 MIT 协议，可自由使用 · 由 DeepSeek 驱动 · 老刘聊AI 2026</p>
+</div>
+
+<script id="deckTemplate" type="text/plain"><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__</title>
+<style>
+  :root{
+    --navy:#08182E; --navy-2:#0E2A4D; --navy-3:#143A66;
+    --gold:#C9A227; --gold-2:#E7CE7A; --gold-3:#8A6F1A;
+    --ink:#F3EFE4; --ink-2:#C7D3E4; --muted:#8296B0;
+    --serif:"Source Han Serif SC","Noto Serif SC","Songti SC","STSong",serif;
+    --sans:"Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans); color:var(--ink); overflow:hidden;
+    background:
+      radial-gradient(1200px 700px at 18% -8%, rgba(20,58,102,.85), transparent 60%),
+      radial-gradient(900px 600px at 92% 108%, rgba(201,162,39,.13), transparent 62%),
+      linear-gradient(160deg,#0B1F3A 0%,var(--navy) 62%,#050F1E 100%);
+    display:flex; align-items:center; justify-content:center;
+  }
+  body::after{
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.32;
+    background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+    background-size:56px 56px;
+  }
+
+  /* ---------- 顶栏 ---------- */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:30; display:flex;
+    align-items:center; gap:14px; padding:14px 26px;
+    background:linear-gradient(180deg,rgba(5,15,30,.92),transparent);
+  }
+  .brand{font-family:var(--serif); font-size:16px; color:var(--gold-2); letter-spacing:.06em}
+  .brand small{font-family:var(--sans); color:var(--muted); font-size:11.5px; margin-left:10px; letter-spacing:.14em}
+  .spacer{flex:1}
+  .btn{
+    font-size:12px; letter-spacing:.1em; color:var(--ink-2); cursor:pointer;
+    padding:6px 14px; border-radius:999px; border:1px solid rgba(201,162,39,.32);
+    background:rgba(255,255,255,.03); transition:.2s; white-space:nowrap;
+  }
+  .btn:hover{color:var(--navy); background:var(--gold-2); border-color:var(--gold-2)}
+  .btn.on{color:var(--navy); background:var(--gold); border-color:var(--gold)}
+
+  /* ---------- 筛选条 ---------- */
+  .filters{
+    position:fixed; top:54px; left:0; right:0; z-index:29; display:flex; gap:7px;
+    justify-content:center; flex-wrap:wrap; padding:4px 24px;
+  }
+  .chip{
+    font-size:11.5px; letter-spacing:.08em; color:var(--muted); cursor:pointer;
+    padding:4px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.1); transition:.18s;
+  }
+  .chip:hover{color:var(--gold-2); border-color:rgba(201,162,39,.45)}
+  .chip.on{color:var(--gold); border-color:var(--gold); background:rgba(201,162,39,.12)}
+
+  /* ---------- 舞台 ---------- */
+  .stage{width:min(1240px,94vw); position:relative; z-index:10; margin-top:52px}
+  .meta{display:flex; justify-content:space-between; align-items:baseline;
+        color:var(--muted); font-size:11.5px; letter-spacing:.16em; margin-bottom:9px}
+  .counter{color:var(--gold); font-weight:700; font-size:12.5px; letter-spacing:.1em}
+
+  .card{
+    position:relative; border-radius:20px; overflow:hidden;
+    background:linear-gradient(158deg,rgba(20,58,102,.55),rgba(8,24,46,.84));
+    border:1px solid rgba(201,162,39,.3);
+    box-shadow:0 30px 70px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+    backdrop-filter:blur(8px);
+    transition:transform .3s cubic-bezier(.22,.9,.28,1), opacity .3s;
+  }
+  .card.out-next{transform:translateX(-26px) scale(.985); opacity:0}
+  .card.out-prev{transform:translateX(26px) scale(.985); opacity:0}
+
+  /* ===== 双栏核心布局 ===== */
+  .split{display:grid; grid-template-columns:minmax(300px,37%) 1fr; align-items:stretch}
+  .lcol{
+    position:relative; padding:34px 34px 30px 40px;
+    background:linear-gradient(180deg,rgba(201,162,39,.055),rgba(201,162,39,.012));
+    border-right:1px solid rgba(201,162,39,.22);
+    display:flex; flex-direction:column;
+  }
+  .lcol::before{
+    content:""; position:absolute; left:0; top:30px; bottom:30px; width:2px;
+    background:linear-gradient(180deg,transparent,var(--gold),transparent); opacity:.6;
+  }
+  .rcol{padding:34px 40px 30px 36px; display:flex; flex-direction:column; gap:2px}
+
+  .idx{font-family:var(--serif); font-size:15px; color:var(--gold-3);
+       letter-spacing:.22em; margin-bottom:14px}
+  h1{font-family:var(--serif); font-size:clamp(28px,3.1vw,40px); color:var(--gold-2);
+     letter-spacing:.02em; line-height:1.2; word-break:break-word}
+  .en{color:var(--muted); font-size:12.5px; letter-spacing:.11em; margin-top:8px; line-height:1.5}
+  .tags{display:flex; gap:6px; flex-wrap:wrap; margin:14px 0 18px}
+  .tag{font-size:11px; letter-spacing:.05em; padding:3px 10px; border-radius:999px;
+       border:1px solid rgba(201,162,39,.42); color:var(--gold)}
+  .tag.plain{border-color:rgba(255,255,255,.14); color:var(--muted)}
+
+  .def h2{font-size:10.5px; letter-spacing:.3em; color:var(--gold); margin-bottom:8px; font-weight:600}
+  .def p{font-size:15px; line-height:1.85; color:var(--ink)}
+  .lfoot{margin-top:auto; padding-top:16px; color:var(--muted); font-size:11px; letter-spacing:.08em}
+
+  section{margin-bottom:15px}
+  section:last-child{margin-bottom:0}
+  section h2{font-size:10.5px; letter-spacing:.3em; color:var(--gold); margin-bottom:6px; font-weight:600}
+  section p{font-size:14.6px; line-height:1.8; color:var(--ink)}
+  section.analogy{padding:12px 16px; border-radius:10px; background:rgba(201,162,39,.08);
+                  border-left:2px solid rgba(201,162,39,.55)}
+  section.analogy p{color:var(--gold-2); font-family:var(--serif); font-size:15.5px; line-height:1.7}
+  .rel{margin-top:auto; padding-top:14px; border-top:1px solid rgba(255,255,255,.08);
+       color:var(--muted); font-size:12.2px; line-height:1.7}
+  .rel b{color:var(--gold); font-weight:600; letter-spacing:.18em; font-size:10.5px; margin-right:10px}
+  .risk{margin-top:14px; padding:11px 15px; border-radius:10px; font-size:12.4px; line-height:1.65;
+        background:rgba(201,162,39,.11); border-left:3px solid var(--gold); color:var(--gold-2)}
+
+  /* ---------- 进度 / 提示 ---------- */
+  .bar{height:2.5px; background:rgba(255,255,255,.07); border-radius:3px; margin-top:12px; overflow:hidden}
+  .bar i{display:block; height:100%; width:0;
+         background:linear-gradient(90deg,var(--gold-3),var(--gold),var(--gold-2));
+         transition:width .32s ease}
+  .hint{text-align:center; margin-top:12px; color:var(--muted); font-size:11px; letter-spacing:.1em}
+  .hint kbd{border:1px solid rgba(255,255,255,.16); border-radius:5px; padding:1px 6px;
+            font-family:var(--sans); font-size:10.5px; margin:0 2px; color:var(--ink-2)}
+
+  /* ---------- 封面 / 结尾 ---------- */
+  .cover{text-align:center; padding:56px 46px; grid-column:1/-1}
+  .cover .kicker{font-size:11.5px; letter-spacing:.42em; color:var(--gold); margin-bottom:20px}
+  .cover h1{font-size:clamp(36px,5.4vw,58px); margin-bottom:16px}
+  .cover .sub{color:var(--ink-2); font-size:15px; line-height:1.95; margin-bottom:28px}
+  .cover .stats{display:flex; justify-content:center; gap:44px; flex-wrap:wrap; margin-bottom:30px}
+  .cover .stats b{display:block; font-family:var(--serif); font-size:32px; color:var(--gold-2)}
+  .cover .stats span{font-size:11px; letter-spacing:.2em; color:var(--muted)}
+  .cover .go{display:inline-block; padding:11px 32px; border-radius:999px;
+             border:1px solid var(--gold); color:var(--gold); cursor:pointer;
+             font-size:13px; letter-spacing:.2em; transition:.2s}
+  .cover .go:hover{background:var(--gold); color:var(--navy)}
+
+  /* ---------- 索引面板 ---------- */
+  .panel{position:fixed; inset:0; z-index:40; display:none; padding:80px 40px 40px;
+         background:rgba(4,12,24,.94); backdrop-filter:blur(10px); overflow-y:auto}
+  .panel.open{display:block}
+  .panel h3{font-family:var(--serif); font-size:21px; color:var(--gold-2); margin-bottom:18px;
+            text-align:center; letter-spacing:.08em}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(172px,1fr));
+        gap:8px; max-width:1160px; margin:0 auto}
+  .gitem{padding:10px 13px; border-radius:10px; cursor:pointer; font-size:13.5px;
+         border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.025); transition:.16s}
+  .gitem:hover{border-color:var(--gold); color:var(--gold-2); transform:translateY(-1px)}
+  .gitem em{display:block; font-style:normal; font-size:10.5px; color:var(--muted);
+            letter-spacing:.08em; margin-top:3px}
+  .gitem .dot{display:inline-block; width:5px; height:5px; border-radius:50%;
+              background:var(--gold); margin-right:7px; vertical-align:middle}
+
+  .toast{position:fixed; left:50%; bottom:34px; transform:translateX(-50%) translateY(16px);
+         background:var(--gold); color:var(--navy); font-size:12.5px; letter-spacing:.08em;
+         padding:9px 22px; border-radius:999px; opacity:0; pointer-events:none;
+         transition:.25s; z-index:60; font-weight:600}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+  /* ---------- 高屏放大：填满留白，提升可读性 ---------- */
+  @media (min-height:1000px) and (min-width:1300px){
+    .stage{width:min(1340px,94vw)}
+    .lcol{padding:44px 42px 38px 50px}
+    .rcol{padding:44px 50px 38px 44px}
+    h1{font-size:clamp(38px,3.6vw,50px)}
+    .en{font-size:14px; margin-top:10px}
+    .def p{font-size:17px; line-height:1.95}
+    section p{font-size:16.5px; line-height:1.92}
+    section.analogy p{font-size:17.5px; line-height:1.8}
+    section{margin-bottom:20px}
+    section.analogy{padding:15px 19px}
+    .idx{font-size:16px; margin-bottom:18px}
+    .rel{font-size:13.5px; padding-top:18px}
+    .risk{font-size:13.5px; padding:13px 17px}
+    .tags{margin:17px 0 22px}
+    .tag{font-size:12px; padding:4px 12px}
+  }
+
+  /* ---------- 矮屏压缩：保证一屏看全 ---------- */
+  @media (max-height:820px){
+    .lcol,.rcol{padding-top:26px; padding-bottom:24px}
+    h1{font-size:clamp(26px,2.7vw,34px)}
+    .def p{font-size:14.2px; line-height:1.76}
+    section p{font-size:13.8px; line-height:1.72}
+    section{margin-bottom:12px}
+    section.analogy{padding:10px 14px}
+    section.analogy p{font-size:14.6px}
+    .tags{margin:11px 0 15px}
+  }
+  @media (max-height:700px){
+    .lcol,.rcol{padding-top:20px; padding-bottom:18px}
+    h1{font-size:clamp(23px,2.4vw,29px)}
+    .def p{font-size:13.4px; line-height:1.7}
+    section p{font-size:13px; line-height:1.66}
+    section{margin-bottom:9px}
+    .idx{margin-bottom:9px; font-size:13px}
+    .en{font-size:11.5px; margin-top:6px}
+    .rel{font-size:11.4px; padding-top:11px}
+    .risk{font-size:11.6px; padding:9px 13px; margin-top:11px}
+    .hint{margin-top:9px}
+  }
+
+  /* ---------- 窄屏降级为单栏 ---------- */
+  @media (max-width:900px){
+    .split{grid-template-columns:1fr}
+    .lcol{border-right:none; border-bottom:1px solid rgba(201,162,39,.22); padding:26px 24px 22px}
+    .rcol{padding:22px 24px 26px}
+    .card{max-height:none}
+    .stage{width:94vw}
+  }
+  @media (max-width:640px){
+    .topbar{padding:12px 15px; gap:8px}
+    .brand small{display:none}
+    .btn{padding:5px 11px; font-size:11px}
+    .filters{top:48px}
+    .stage{margin-top:66px}
+    .wrap{max-height:none}
+    h1{font-size:29px}
+  }
+  /* 窄屏下允许卡片整体滚动兜底 */
+  @media (max-width:900px){
+    body{overflow:auto; align-items:flex-start; padding:0 0 40px}
+    .stage{margin-top:96px}
+  }
+
+  @media print{
+    body{background:#fff; color:#111; overflow:visible; display:block}
+    .topbar,.filters,.hint,.bar,.panel,.toast{display:none!important}
+    .card{box-shadow:none; border-color:#ccc; background:#fff; color:#111}
+    .lcol{background:#faf7ee}
+    h1{color:#8A6F1A}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">__TITLE__<small>__SUBTITLE__</small></div>
+  <div class="spacer"></div>
+  <div class="btn" id="btnIndex">目录</div>
+  <div class="btn" id="btnCopy">复制本条</div>
+  <div class="btn" id="btnAuto">自动播放</div>
+</div>
+
+<div class="filters" id="filters"></div>
+
+<div class="stage">
+  <div class="meta"><span id="catName">滑动开始</span><span class="counter" id="counter"></span></div>
+  <div class="card split" id="card"></div>
+  <div class="bar"><i id="bar"></i></div>
+  <p class="hint">
+    滚轮 / 触控板滑动　·　<kbd>←</kbd><kbd>→</kbd> 方向键　·　<kbd>空格</kbd> 下一条　·　点击卡片继续
+  </p>
+</div>
+
+<div class="panel" id="panel">
+  <h3>全部名词索引</h3>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ALL       = __DATA__;
+const CATS      = __CATS__;
+const RISKS     = __RISKS__;
+const RISK_TEXT = __RISKTEXT__;
+
+let pool = ALL.slice();
+let idx  = -1;                  // -1 = 封面，pool.length = 结尾页
+let lock = false, auto = null, filter = 'all';
+
+const $ = id => document.getElementById(id);
+const card = $('card'), counter = $('counter'), bar = $('bar'), catName = $('catName');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sec = (label, text, cls) => text ? `<section class="${cls||''}"><h2>${label}</h2><p>${esc(text)}</p></section>` : '';
+
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+/* ---------- 筛选条 ---------- */
+function buildFilters(){
+  const counts = {};
+  ALL.forEach(t => counts[t.category] = (counts[t.category] || 0) + 1);
+  const items = [['all', '全部 ' + ALL.length]].concat(
+    Object.keys(CATS).filter(c => counts[c]).map(c => [c, CATS[c] + ' ' + counts[c]]));
+  $('filters').innerHTML = items.map(([k, label]) =>
+    `<span class="chip ${k === filter ? 'on' : ''}" data-cat="${k}">${label}</span>`).join('');
+  $('filters').querySelectorAll('.chip').forEach(el => el.onclick = () => applyFilter(el.dataset.cat));
+}
+
+function applyFilter(cat){
+  filter = cat;
+  pool = cat === 'all' ? ALL.slice() : ALL.filter(t => t.category === cat);
+  idx = 0; buildFilters(); buildGrid(); render();
+  toast(cat === 'all' ? '已显示全部名词' : CATS[cat] + ' · ' + pool.length + ' 条');
+}
+
+/* ---------- 索引面板 ---------- */
+function buildGrid(){
+  $('grid').innerHTML = pool.map((t, i) =>
+    `<div class="gitem" data-i="${i}"><span class="dot"></span>${esc(t.termZh)}
+       <em>${esc(CATS[t.category] || t.category)}</em></div>`).join('');
+  $('grid').querySelectorAll('.gitem').forEach(el => el.onclick = () => {
+    idx = +el.dataset.i; $('panel').classList.remove('open'); render();
+  });
+}
+
+/* ---------- 渲染 ---------- */
+function renderCover(){
+  const cats  = Object.keys(CATS).filter(c => ALL.some(t => t.category === c)).length;
+  const risky = ALL.filter(t => t.riskFlag && t.riskFlag !== 'none').length;
+  card.className = 'card';
+  card.innerHTML = `<div class="cover">
+    <div class="kicker">__KICKER__</div>
+    <h1>__TITLE__</h1>
+    <p class="sub">每滑动一次，出现一条行业名词释义。<br>
+       左栏给定义，右栏给用法 —— 一屏看全，不用上下找。</p>
+    <div class="stats">
+      <div><b>${ALL.length}</b><span>名词</span></div>
+      <div><b>${cats}</b><span>分类</span></div>
+      <div><b>${risky}</b><span>合规提示</span></div>
+    </div>
+    <div class="go" id="goFirst">开始滑动</div>
+  </div>`;
+  counter.textContent = ''; catName.textContent = '封面'; bar.style.width = '0%';
+  $('goFirst').onclick = e => { e.stopPropagation(); idx = 0; render(); };
+}
+
+function renderEnd(){
+  card.className = 'card';
+  card.innerHTML = `<div class="cover">
+    <div class="kicker">END OF DECK</div>
+    <h1>已滑完 ${pool.length} 条</h1>
+    <p class="sub">回看某一条可打开顶部「目录」，或用左方向键往回滑。<br>
+       想换个主题，点上方分类标签重新筛一遍。</p>
+    <div class="go" id="goRestart">从头再来</div>
+  </div>`;
+  counter.textContent = pool.length + ' / ' + pool.length;
+  catName.textContent = '已完成'; bar.style.width = '100%';
+  $('goRestart').onclick = e => { e.stopPropagation(); idx = 0; render(); };
+}
+
+function render(){
+  if (idx < 0)            return renderCover();
+  if (idx >= pool.length) return renderEnd();
+
+  const t = pool[idx];
+  const riskName = RISKS[t.riskFlag] || t.riskFlag;
+  const riskBody = RISK_TEXT[t.riskFlag] || RISK_TEXT._default;
+  const risk = (t.riskFlag && t.riskFlag !== 'none')
+    ? `<div class="risk">⚠️ 风险提示（${esc(riskName)}）：${esc(riskBody)}本卡片为名词解释，不构成法律意见。</div>` : '';
+  const low = (t.confidence ?? 1) < 0.6
+    ? `<div class="risk">⚠️ 行业内无统一口径，以下为常见用法，使用前建议与合作方对齐定义。</div>` : '';
+
+  card.className = 'card split';
+  card.innerHTML = `
+    <div class="lcol">
+      <div class="idx">${String(idx + 1).padStart(2, '0')} / ${String(pool.length).padStart(2, '0')}</div>
+      <h1>${esc(t.termZh)}</h1>
+      ${t.termEn ? `<div class="en">${esc(t.termEn)}</div>` : ''}
+      <div class="tags">
+        <span class="tag">${esc(CATS[t.category] || t.category)}</span>
+        ${(t.aliases || []).map(a => `<span class="tag plain">${esc(a)}</span>`).join('')}
+      </div>
+      <div class="def"><h2>定义</h2><p>${esc(t.definition)}</p></div>
+      <div class="lfoot">${esc(t.sourceType || '')}　·　confidence ${(t.confidence ?? 0).toFixed(2)}</div>
+    </div>
+    <div class="rcol">
+      ${sec('说人话', t.plainAnalogy, 'analogy')}
+      ${sec('为什么重要', t.whyItMatters)}
+      ${sec('常见误用', t.misuse)}
+      ${t.metricHint ? sec('量化口径', t.metricHint) : ''}
+      ${(t.relatedTerms || []).length
+          ? `<p class="rel"><b>关联词</b>${t.relatedTerms.map(esc).join('　/　')}</p>` : ''}
+      ${low}${risk}
+    </div>`;
+  counter.textContent = (idx + 1) + ' / ' + pool.length;
+  catName.textContent = CATS[t.category] || t.category;
+  bar.style.width = ((idx + 1) / pool.length * 100) + '%';
+}
+
+/* ---------- 翻页 ---------- */
+function go(step){
+  if (lock) return;
+  const next = idx + step;
+  if (next < -1 || next > pool.length) return;
+  lock = true;
+  card.classList.add(step > 0 ? 'out-next' : 'out-prev');
+  setTimeout(() => {
+    idx = next; render();
+    card.classList.remove('out-next', 'out-prev');
+    setTimeout(() => lock = false, 170);
+  }, 210);
+}
+
+/* 真·鼠标滑动：一次手势翻一条，节流抵消触控板惯性 */
+let wheelAt = 0;
+window.addEventListener('wheel', e => {
+  if ($('panel').classList.contains('open')) return;
+  if (window.innerWidth <= 900) return;        // 窄屏交给原生滚动
+  const now = Date.now();
+  if (now - wheelAt < 430 || Math.abs(e.deltaY) < 6) return;
+  wheelAt = now; go(e.deltaY > 0 ? 1 : -1);
+}, { passive: true });
+
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') return $('panel').classList.remove('open');
+  if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)){ e.preventDefault(); go(1); }
+  if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)){ e.preventDefault(); go(-1); }
+});
+card.addEventListener('click', e => { if (!e.target.closest('.go')) go(1); });
+
+/* 触屏：左右滑为主，上下滑为辅 */
+let tx = null, ty = null;
+window.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+window.addEventListener('touchend', e => {
+  if (tx === null) return;
+  const dx = tx - e.changedTouches[0].clientX;
+  const dy = ty - e.changedTouches[0].clientY;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(dx > 0 ? 1 : -1);
+  else if (window.innerWidth > 900 && Math.abs(dy) > 50) go(dy > 0 ? 1 : -1);
+  tx = ty = null;
+}, { passive: true });
+
+/* ---------- 顶栏动作 ---------- */
+$('btnIndex').onclick = () => $('panel').classList.toggle('open');
+$('panel').onclick = e => { if (e.target === $('panel')) $('panel').classList.remove('open'); };
+
+/* 复制到剪贴板：优先用异步 Clipboard API，失败或不可用时回退到 execCommand。
+   关键修复：生成的单文件 HTML 常被以 file:// 形式离线打开，此时
+   navigator.clipboard 在非安全上下文（Safari / 未聚焦时 Chrome）会被禁用或 reject，
+   导致复制按钮"点了没反应"。execCommand 兜底方案可在所有上下文下可靠复制。 */
+function copyText(text){
+  const fallback = () => new Promise((resolve, reject) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { ta.setSelectionRange(0, ta.value.length); } catch (e) {}
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    ok ? resolve() : reject(new Error('execCommand copy failed'));
+  });
+
+  if (navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(text).catch(() => fallback());
+  }
+  return fallback();
+}
+
+$('btnCopy').onclick = () => {
+  if (idx < 0 || idx >= pool.length) return toast('当前不是名词卡片');
+  const t = pool[idx];
+  const txt = [
+    `【${t.termZh}】${t.termEn || ''}　·　${CATS[t.category] || t.category}`, ``,
+    `定义：${t.definition}`,
+    `说人话：${t.plainAnalogy}`,
+    `为什么重要：${t.whyItMatters}`,
+    t.misuse ? `常见误用：${t.misuse}` : '',
+    t.metricHint ? `量化口径：${t.metricHint}` : '',
+    (t.relatedTerms || []).length ? `关联词：${t.relatedTerms.join(' / ')}` : ''
+  ].filter(Boolean).join('\n');
+  copyText(txt)
+    .then(() => toast('已复制「' + t.termZh + '」'))
+    .catch(() => toast('复制失败，请手动选中'));
+};
+
+$('btnAuto').onclick = () => {
+  const b = $('btnAuto');
+  if (auto){ clearInterval(auto); auto = null; b.classList.remove('on'); b.textContent = '自动播放'; return; }
+  b.classList.add('on'); b.textContent = '停止播放';
+  auto = setInterval(() => {
+    if (idx >= pool.length){ clearInterval(auto); auto = null; b.classList.remove('on'); b.textContent = '自动播放'; return; }
+    go(1);
+  }, 5200);
+};
+
+buildFilters(); buildGrid(); render();
+<\/script>
+</body>
+</html>
+</script>
+
+<script>
+/* ================= 常量（与技能渲染引擎一致） ================= */
+const CATEGORY_LABEL = {
+  traffic:"流量获取", conversion:"转化成交", product:"产品形态",
+  business:"商业模式", metrics:"数据指标", delivery:"交付履约", compliance:"合规风控"
+};
+const RISK_LABEL = { advertising:"宣传合规", qualification:"资质要求", dataPrivacy:"数据合规" };
+const RISK_TEXT = {
+  advertising:"涉及广告宣传合规边界，投放前请由法务确认话术。",
+  qualification:"涉及经营资质要求，开展业务前请核验属地主管部门最新规定。",
+  dataPrivacy:"涉及个人信息处理合规，触达用户前请确认授权链路完整。",
+  counterfeit:"涉及版权与假货风险，交易前请核验正版标识与授权链路。",
+  fraud:"涉及交易欺诈高发场景，建议全程走平台担保并保留完整凭证。",
+  minor:"涉及未成年人消费，需监护人知情同意，并留存可追溯的支付记录。",
+  overPerm:"涉及工具授权范围，请确保只声明完成任务所必需的最小权限。",
+  dataLeak:"涉及敏感信息处理，避免向外输出密钥、令牌与个人身份信息。",
+  hallucination:"涉及外部事实陈述，发布前请交叉核验来源并标注不确定性。",
+  promptInjection:"涉及不可信输入，执行前请隔离并校验外部指令，避免被诱导越权。",
+  _default:"涉及资质或宣传合规边界，落地前请由法务确认。"
+};
+const SKELETON_GUIDE = {
+  auto: "根据主题自动判断最合适的分类骨架（人物→五段式；行业黑话→产业链路；产品→模块；通用知识→通用分类）。",
+  person: "分类骨架用人物五段式：life(生平轨迹)/works(伟大作品)/mind(核心思考)/fall(起落沉浮)/lesson(创业启示)。fall 段必须至少3张，写失败与争议，否则整套是吹捧。",
+  slang: "分类骨架用产业链路式：品类/交易/价格/品相/玩法/风险，覆盖这个圈子真正有壁垒的黑话。",
+  product: "分类骨架用架构模块式：概览/能力/扩展/记忆/交互，讲清这个产品每个模块是什么、解决什么问题。",
+  general: "分类骨架用通用知识7类：流量获取/转化成交/产品形态/商业模式/数据指标/交付履约/合规风控，或按主题自定更贴切的分类。"
+};
+const SYSTEM_PROMPT = `你是「知识卡片生成引擎」。用户给出主题提示词，你产出一组可分享的知识卡片，每张卡片把一件事讲透。
+
+必须只输出一个合法 JSON 对象，不要输出 markdown 代码块、不要任何解释文字。格式：
+{
+  "title": "封面大标题（如：乔布斯拆解 · 40张卡片）",
+  "kicker": "封面英文小标（如：STEVE JOBS · A DECONSTRUCTION）",
+  "subtitle": "封面副标题（如：生平 · 作品 · 思考 · 起落 · 启发）",
+  "categories": { "life": "生平轨迹", ... },
+  "terms": [ {卡片对象} ]
+}
+
+每张卡片对象字段：
+- termId: 3字母前缀+4位数字编号（如 job-0007, fin-0012）
+- termZh: 卡片标题，2-20字，一眼看懂
+- category: 必须属于 categories 里的某个 key
+- definition: 定义，30-160字，写全不要截断
+- plainAnalogy: 说人话，用生活化类比让外行秒懂，禁止引入新黑话
+- whyItMatters: 为什么重要，一句话说清价值
+- misuse: 常见误读，必须有实质内容（这是信息增量最高的栏，禁止写"无"或留空；想不出这条的误读就换选题）
+- relatedTerms: 关联词数组，最多5个，和其他卡片串成知识网
+- metricHint: 关键数字（销量/价格/年份/规模），没有把握就留空字符串
+- riskFlag: "none" 或风险标签（advertising/qualification/dataPrivacy/counterfeit/fraud/minor/overPerm/dataLeak/hallucination/promptInjection）
+- sourceType: industryConsensus（行业共识）/ documented（有据可查）/ inferred（推断）
+- confidence: 可信度 0-1
+
+硬性规则：
+1. 张数严格等于用户要求的数量。
+2. misuse 是每张卡的灵魂，逐张检查不能为空。
+3. 不编造数据：不确定的数字删掉或留空，需要数据就基于公开常识。
+4. confidence<0.6 的卡片要谨慎措辞。
+5. 人物类必须包含失败与争议内容（fall 段至少3张），否则整套牌是吹捧，立不住。
+6. 正文用简体中文，字段名保持英文 camelCase。`;
+
+/* ================= 工具 ================= */
+const $ = id => document.getElementById(id);
+const statusEl = $('status');
+let lastDeck = null;   // {html, title}
+let lastData = null;   // {terms, categories, title, kicker, subtitle}
+
+const EXAMPLES = [
+  { label:"💡 乔布斯人物拆解", p:"把乔布斯拆解成一组卡片，覆盖生平轨迹/伟大作品/核心思考/起落沉浮/创业启示，misuse 写常见误读" },
+  { label:"🎮 谷子经济黑话", p:"做一套谷子经济/吧唧/周边圈子的行业黑话卡片，含品类、交易、价格、品相、玩法、风险" },
+  { label:"🤖 大模型术语", p:"把大模型常见术语做成知识卡片：Transformer、RAG、Agent、微调、上下文窗口、Token…" },
+  { label:"📈 私域流量术语", p:"做一套私域流量运营术语卡片：私域、公域、SOP、企微、裂变、转化漏斗…" },
+];
+$('chips').innerHTML = EXAMPLES.map(e => `<span class="chip" data-p="${e.p}">${e.label}</span>`).join('');
+$('chips').querySelectorAll('.chip').forEach(c => c.onclick = () => { $('prompt').value = c.dataset.p; $('prompt').focus(); });
+
+function setStatus(msg, cls){ statusEl.textContent = msg; statusEl.className = cls || ''; }
+
+function buildUserPrompt(){
+  const prompt = $('prompt').value.trim();
+  const count = $('count').value;
+  const sk = $('skeleton').value;
+  if (!prompt){ setStatus('⚠️ 先写个提示词，或点上面的示例', 'err'); return null; }
+  const guide = SKELETON_GUIDE[sk];
+  return `主题：${prompt}\n张数：${count} 张\n分类骨架：${guide}\n请按上述要求输出 JSON。`;
+}
+
+/* ================= DeepSeek 调用 ================= */
+async function callDeepSeek(messages, apiKey){
+  const res = await fetch('https://api.deepseek.com/chat/completions', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+apiKey },
+    body: JSON.stringify({
+      model:'deepseek-chat',
+      messages,
+      response_format:{ type:'json_object' },
+      temperature:0.7,
+      max_tokens: 8192
+    })
+  });
+  if (!res.ok){
+    const t = await res.text();
+    let msg = 'API 错误 ' + res.status;
+    try { msg = JSON.parse(t).error?.message || msg; } catch(e){}
+    throw new Error(msg);
+  }
+  const j = await res.json();
+  return JSON.parse(j.choices[0].message.content);
+}
+
+async function generateViaProxy(userPrompt){
+  const res = await fetch('/api/knowledge-cards', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify({ prompt:userPrompt })
+  });
+  const j = await res.json().catch(() => ({ ok:false, error:'响应解析失败' }));
+  if (!res.ok || !j.ok) throw new Error(j.error || ('请求失败 ' + res.status));
+  return j.data;
+}
+
+/* ================= 校验 & 渲染 ================= */
+function validate(data, wantCount){
+  const terms = Array.isArray(data.terms) ? data.terms : null;
+  if (!terms || !terms.length) throw new Error('AI 返回的 JSON 里没有 terms 数组，请重试');
+  const cats = data.categories && Object.keys(data.categories).length ? data.categories : CATEGORY_LABEL;
+  const missing = [...new Set(terms.map(t => t.category))].filter(c => !cats[c]);
+  if (missing.length) throw new Error('AI 返回了未知分类: ' + missing.join(', ') + '，请重试');
+  const bad = terms.filter(t => !t.termZh || !t.definition || !t.misuse);
+  if (bad.length) throw new Error('有 ' + bad.length + ' 张卡片缺字段（termZh/definition/misuse），请重试');
+  return { terms, categories:cats };
+}
+
+function buildDeckHTML(data){
+  const { terms, categories } = data;
+  const title = data.title || (terms.length + ' 张知识卡片');
+  const kicker = data.kicker || 'KNOWLEDGE CARD DECK';
+  const subtitle = data.subtitle || (new Date().toLocaleDateString('zh-CN') + ' · 老刘聊AI');
+  const tpl = $('deckTemplate').textContent;
+  return tpl
+    .replace('__DATA__', JSON.stringify(terms))
+    .replace('__CATS__', JSON.stringify(categories))
+    .replace('__RISKS__', JSON.stringify(RISK_LABEL))
+    .replace('__RISKTEXT__', JSON.stringify(RISK_TEXT))
+    .split('__TITLE__').join(title)
+    .split('__KICKER__').join(kicker)
+    .split('__SUBTITLE__').join(subtitle);
+}
+
+function showDeck(data){
+  const html = buildDeckHTML(data);
+  lastDeck = html;
+  lastData = data;
+  $('preview').srcdoc = html;
+  $('btnDownload').disabled = false;
+  $('btnCopyJson').disabled = false;
+}
+
+/* ================= 主流程 ================= */
+async function doGenerate(){
+  const userPrompt = buildUserPrompt();
+  if (!userPrompt) return;
+  const apiKey = $('apiKey').value.trim();
+  $('btnGenerate').disabled = true;
+  try {
+    setStatus(apiKey ? '⏳ 正在调用你的 DeepSeek Key 生成卡片（约 30-90 秒）…' : '⏳ 正在通过站长代理生成（未配置 Key 时也可用「复制提示词」模式）…', 'wait');
+    let data;
+    if (apiKey){
+      data = await callDeepSeek([
+        { role:'system', content:SYSTEM_PROMPT },
+        { role:'user', content:userPrompt }
+      ], apiKey);
+    } else {
+      data = await generateViaProxy(userPrompt);
+    }
+    const { terms, categories } = validate(data, $('count').value);
+    showDeck({ ...data, terms, categories });
+    setStatus(`✅ 生成成功：${terms.length} 张卡片。滑一下翻一张，右上角可筛选 / 复制 / 自动播放。`, 'ok');
+  } catch(e){
+    console.error(e);
+    if (String(e.message).includes('NO_KEY') || String(e.message).includes('站长未配置')){
+      setStatus('😅 站长暂未开放免费额度。请填入你自己的 DeepSeek Key，或点「复制提示词」用任意 AI 生成。', 'err');
+    } else {
+      setStatus('❌ ' + e.message, 'err');
+    }
+  } finally {
+    $('btnGenerate').disabled = false;
+  }
+}
+$('btnGenerate').onclick = doGenerate;
+
+/* 测试 Key */
+$('btnTestKey').onclick = async () => {
+  const apiKey = $('apiKey').value.trim();
+  if (!apiKey){ setStatus('⚠️ 先填入 DeepSeek API Key', 'err'); return; }
+  $('btnTestKey').disabled = true;
+  try {
+    await callDeepSeek([
+      { role:'system', content:'只回复两个字：正常' },
+      { role:'user', content:'测试' }
+    ], apiKey);
+    setStatus('✅ Key 有效，可以生成卡片了', 'ok');
+  } catch(e){
+    setStatus('❌ Key 无效或网络不通：' + e.message, 'err');
+  } finally {
+    $('btnTestKey').disabled = false;
+  }
+};
+
+/* 无 Key：复制提示词模式 */
+$('btnCopyPrompt').onclick = () => {
+  const userPrompt = buildUserPrompt();
+  if (!userPrompt) return;
+  const full = `【角色设定】\n${SYSTEM_PROMPT}\n\n【本次任务】\n${userPrompt}\n\n请只输出 JSON，不要 markdown 代码块。`;
+  navigator.clipboard.writeText(full).then(() => {
+    setStatus('📋 提示词已复制！去任意 AI 工具粘贴生成，把返回的 JSON 粘贴到下面', 'ok');
+    $('pasteArea').classList.remove('hidden');
+    $('pasteJson').focus();
+  }).catch(() => setStatus('复制失败，请手动复制', 'err'));
+};
+
+$('btnRenderPaste').onclick = () => {
+  const raw = $('pasteJson').value.trim();
+  if (!raw){ setStatus('⚠️ 先粘贴 JSON', 'err'); return; }
+  try {
+    const data = JSON.parse(raw);
+    const { terms, categories } = validate(data, 0);
+    showDeck({ ...data, terms, categories });
+    setStatus(`✅ 渲染成功：${terms.length} 张卡片。`, 'ok');
+  } catch(e){
+    setStatus('❌ JSON 解析失败：' + e.message + '（检查是否有多余文字/逗号）', 'err');
+  }
+};
+
+/* 下载 & 复制 */
+$('btnDownload').onclick = () => {
+  if (!lastDeck) return;
+  const blob = new Blob(['\ufeff' + lastDeck], { type:'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  const title = lastData?.title || '知识卡片';
+  a.href = URL.createObjectURL(blob);
+  a.download = title.replace(/[\\/:*?"<>|]/g, '').slice(0, 40) + '.html';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+};
+
+$('btnCopyJson').onclick = () => {
+  if (!lastData) return;
+  const payload = {
+    title: lastData.title, kicker: lastData.kicker, subtitle: lastData.subtitle,
+    categories: lastData.categories, terms: lastData.terms
+  };
+  navigator.clipboard.writeText(JSON.stringify(payload, null, 2))
+    .then(() => setStatus('📋 JSON 已复制（可保存复用，或导入技能包的 assets/ 目录）', 'ok'))
+    .catch(() => setStatus('复制失败，请手动复制', 'err'));
+};
+
+/* Key 存 localStorage（仅本机浏览器） */
+const savedKey = localStorage.getItem('kc_deepseek_key');
+if (savedKey) $('apiKey').value = savedKey;
+$('apiKey').addEventListener('change', () => {
+  const v = $('apiKey').value.trim();
+  v ? localStorage.setItem('kc_deepseek_key', v) : localStorage.removeItem('kc_deepseek_key');
+});
+</script>
+</body>
+</html>
