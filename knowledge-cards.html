@@ -720,7 +720,9 @@ async function callDeepSeek(messages, apiKey){
 }
 
 async function generateViaProxy(userPrompt){
-  const res = await fetch('/api/knowledge-cards', {
+  // GitHub Pages 上相对路径 /api 会 404，自动切到 Vercel 域名（CORS 已开放）
+  const API_BASE = location.hostname.includes('github.io') ? 'https://ai-tools-hub-zeta.vercel.app' : '';
+  const res = await fetch(API_BASE + '/api/knowledge-cards', {
     method:'POST',
     headers:{ 'Content-Type':'application/json' },
     body: JSON.stringify({ prompt:userPrompt })
