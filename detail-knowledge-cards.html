@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识卡片生成器（Skill）- 老刘聊AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F1E8; color: #2C3E50; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .back-link { display: inline-block; margin: 20px 0; color: #1E3A5F; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tool-header { background: linear-gradient(135deg, #4F46E5 0%, #9333EA 100%); color: #fff; padding: 60px 40px; border-radius: 12px; margin-bottom: 40px; }
+        .tool-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .tool-header p { font-size: 1.2rem; opacity: 0.9; }
+        .tool-body { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 40px; }
+        .tool-body h2 { color: #1E3A5F; margin: 30px 0 15px; border-bottom: 2px solid #C9A227; padding-bottom: 8px; }
+        .tool-body h2:first-child { margin-top: 0; }
+        pre { background: #f8f9fa; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+        code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9rem; }
+        .badge { display: inline-block; background: #1E3A5F; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; margin-right: 8px; }
+        .badge.free { background: #27ae60; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .feature-card { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #7C3AED; }
+        .feature-card h3 { font-size: 1rem; margin-bottom: 5px; }
+        .feature-card p { font-size: 0.9rem; color: #6B7B8C; }
+        .download-btn { display: inline-block; background: #1E3A5F; color: #fff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.1rem; margin-top: 20px; }
+        .download-btn:hover { background: #2C4A6F; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; font-size: 0.9rem; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back-link">← 返回首页</a>
+    
+    <div class="tool-header">
+        <h1>🃏 知识卡片生成器</h1>
+        <p>WorkBuddy 技能 · 把任何主题做成"滑一下出一条"的卡片流</p>
+        <div style="margin-top:15px;">
+            <span class="badge free">🆓 免费</span>
+            <span class="badge">📦 WorkBuddy Skill</span>
+            <span class="badge">🐍 Python</span>
+        </div>
+    </div>
+    
+    <div class="tool-body">
+        <h2>功能特点</h2>
+        <div class="features">
+            <div class="feature-card">
+                <h3>🎯 万能主题</h3>
+                <p>人物生平、行业黑话、产品概念、知识点…都套同一个框架</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎴 五模块卡片</h3>
+                <p>定义 / 说人话 / 为什么重要 / 常见误读 / 关联词，一张卡讲透一件事</p>
+            </div>
+            <div class="feature-card">
+                <h3>📜 可滑动网页卡片流</h3>
+                <p>一次生成 20–40 张，滚轮滑一下翻一张，离线能开、能转发、能录屏</p>
+            </div>
+            <div class="feature-card">
+                <h3>✨ 生成模式</h3>
+                <p>没有预置词库？AI 按五步流程从零生成高质量词库再渲染</p>
+            </div>
+        </div>
+        
+        <h2>安装（两步）</h2>
+        <pre><code># 1. 解压 zip，得到「知识卡片」文件夹
+# 2. 复制到 WorkBuddy 的技能目录：
+macOS:    ~/.workbuddy/skills/知识卡片
+Windows:  C:\Users\你的用户名\.workbuddy\skills\知识卡片
+
+# 复制完重启一下 WorkBuddy，技能即生效</code></pre>
+        
+        <h2>使用（直接对话触发）</h2>
+        <pre><code>"用知识卡片，给我做一套乔布斯拆解，40 张"
+"做 20 张私域流量术语卡"
+"把大模型常见概念做成可滑动的卡片"</code></pre>
+        <p>技能自动：确定分类 → 生成词条 → 渲染成网页 → 把 <code>.html</code> 交给你。双击用浏览器打开，滚轮滑一下翻一张，右上角可按板块筛选，每张卡可一键复制文案，直接拿去写脚本 / 做图文 / 当培训讲义。</p>
+        
+        <h2>包里有什么</h2>
+        <pre><code>知识卡片/
+├── SKILL.md              ← 技能说明（含生成模式五步规范）
+├── 分发说明.md           ← 安装与使用文档
+├── scripts/
+│   ├── render_deck.py    ← 渲染网页卡片流（纯Python标准库）
+│   └── next_term.py      ← 对话模式词库游标（可选）
+├── assets/               ← 5 套现成词库（当模板改最快）
+│   ├── terms-jobs.json      40张乔布斯拆解（人物五段式）
+│   ├── terms-trump.json     38张特朗普拆解（生成模式实战）
+│   ├── terms-leijun.json    18张雷军生平
+│   ├── terms-workbuddy.json 17条产品概念释义
+│   ├── terms-guzi.json      37条谷子经济黑话
+│   └── card-template.html   单卡片HTML模板
+└── references/
+    └── term-bank.md          ← 通用 starter 词库</code></pre>
+        
+        <h2>示例卡片长什么样</h2>
+        <table>
+            <tr><th>字段</th><th>示例（乔布斯 · 1976车库开张）</th></tr>
+            <tr><td>定义</td><td>21 岁的乔布斯和沃兹尼亚克在养父母车库里创立苹果，首款产品 Apple I 由沃兹独自设计。</td></tr>
+            <tr><td>说人话</td><td>就像两个年轻人租了间车库开始捣鼓自己的东西。</td></tr>
+            <tr><td>常见误读</td><td>很多人以为乔布斯是技术大牛。他不是——他负责 vision 和逼人做到极致，代码是沃兹写的。</td></tr>
+            <tr><td>关联词</td><td>沃兹尼亚克 · Apple I · Apple II</td></tr>
+        </table>
+        
+        <h2>许可</h2>
+        <p>MIT 开源协议，可自由学习、修改、二次分发。当前版本 v1.1.0。</p>
+        
+        <a href="downloads/knowledge-cards-skill.zip" class="download-btn" download>📥 下载 Skill 包（71KB）</a>
+        <p style="margin-top:10px;color:#6B7B8C;font-size:0.9rem;">包含：SKILL.md + 5套示例词库 + 渲染脚本 + 安装文档</p>
+    </div>
+    
+    <p style="text-align:center;color:#6B7B8C;margin-bottom:40px;">老刘聊AI · 2026</p>
+</div>
+</body>
+</html>
