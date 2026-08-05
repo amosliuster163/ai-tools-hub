@@ -1,9 +1,16 @@
 /**
  * 知识卡片在线生成器 - 后端代理
  * Vercel Edge Function，安全调用 DeepSeek（key 在服务端，不暴露给浏览器）
- * 调用方式: POST /api/knowledge-cards  { prompt: string }
- * 无 Key 用户走这里（消耗站长 DEEPSEEK_API_KEY 额度）；
- * 用户自带 Key 时前端直连 DeepSeek，不经过本接口。
+ * 调用方式: POST /api/knowledge-cards  { prompt: string, clientId?: string }
+ *
+ * 限流（仅代理模式，站长额度）：
+ * - 前端软限制（localStorage）只防正常用户，后端硬限制才是真防线
+ * - 硬限制用 Upstash Redis（免费 tier）REST API，无 SDK 依赖：
+ *   配置环境变量 UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN 即启用
+ *   未配置时自动跳过硬限制（仅剩前端软限制）
+ * - 限额可配：KC_DAILY_PER_USER（默认 10 次/人/天，IP+设备ID 双维度）
+ *             KC_DAILY_GLOBAL（默认 300 次/全站/天）
+ * - 用户自带 Key 时前端直连 DeepSeek，不经过本接口，不受限
  */
 
 export const config = {
@@ -79,9 +86,38 @@ export default async function handler(request: Request) {
     return json({ ok: false, error: '缺少 prompt' }, 400);
   }
 
+  /* ---------- 限流：IP + 设备ID 双维度计数（Upstash 可选） ---------- */
+  const U = process.env.UPSTASH_REDIS_REST_URL;
+  const T = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (U && T) {
+    const perUser = parseInt(process.env.KC_DAILY_PER_USER || '10', 10) || 10;
+    const globalCap = parseInt(process.env.KC_DAILY_GLOBAL || '300', 10) || 300;
+    const date = new Date().toISOString().slice(0, 10);
+    const clientId = String(body.clientId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 64) || 'anon';
+    const ip = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim().slice(0, 64) || 'unknown';
+
+    try {
+      const [userRes, globalRes] = await Promise.all([
+        incr(`${U}`, T, `kc:u:${date}:${clientId}`),
+        incr(`${U}`, T, `kc:g:${date}`),
+      ]);
+      const userCount = userRes ?? 0;
+      const globalCount = globalRes ?? 0;
+      if (userCount > perUser) {
+        return json({ ok: false, error: 'DAILY_LIMIT_USER', limit: perUser }, 429);
+      }
+      if (globalCount > globalCap) {
+        return json({ ok: false, error: 'DAILY_LIMIT_GLOBAL', limit: globalCap }, 429);
+      }
+    } catch (e) {
+      // Upstash 不可用时放行，不让限流服务影响主功能
+      console.error('rate-limit error:', e);
+    }
+  }
+
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
-    return json({ ok: false, error: 'NO_KEY: 站长未配置 DEEPSEEK_API_KEY 环境变量' }, 503);
+    return json({ ok: false, error: 'NO_KEY: *** DEEPSEEK_API_KEY 环境变量' }, 503);
   }
 
   const userPrompt = prompt.includes('张数') && prompt.includes('分类骨架')
@@ -139,6 +175,21 @@ export default async function handler(request: Request) {
   } catch (e: any) {
     return json({ ok: false, error: '代理调用失败: ' + (e?.message || e) }, 502);
   }
+}
+
+/** Upstash Redis REST：INCR + 24h 过期（pipeline），返回自增后的值 */
+async function incr(url: string, token: string, key: string): Promise<number | null> {
+  const res = await fetch(`${url}/pipeline`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify([
+      ['INCR', key],
+      ['EXPIRE', key, 86400],
+    ]),
+  });
+  if (!res.ok) return null;
+  const j: any = await res.json();
+  return j?.[0]?.result ?? null;
 }
 
 function json(obj: any, status = 200) {

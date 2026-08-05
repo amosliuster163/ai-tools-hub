@@ -676,6 +676,21 @@ const statusEl = $('status');
 let lastDeck = null;   // {html, title}
 let lastData = null;   // {terms, categories, title, kicker, subtitle}
 
+/* —— 设备 ID + 站长额度软限制（仅代理模式计数） —— */
+const DAILY_SOFT_LIMIT = 10;   // 每人每天可免费生成次数（与后端硬限制一致）
+function getClientId(){
+  let id = localStorage.getItem('kc_client_id');
+  if (!id){
+    id = (crypto.randomUUID && crypto.randomUUID()) ||
+         'kc-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('kc_client_id', id);
+  }
+  return id;
+}
+function usageKey(){ return 'kc_usage_' + new Date().toISOString().slice(0, 10); }
+function todayUsage(){ return parseInt(localStorage.getItem(usageKey()) || '0', 10) || 0; }
+function bumpUsage(){ localStorage.setItem(usageKey(), String(todayUsage() + 1)); }
+
 const EXAMPLES = [
   { label:"💡 乔布斯人物拆解", p:"把乔布斯拆解成一组卡片，覆盖生平轨迹/伟大作品/核心思考/起落沉浮/创业启示，misuse 写常见误读" },
   { label:"🎮 谷子经济黑话", p:"做一套谷子经济/吧唧/周边圈子的行业黑话卡片，含品类、交易、价格、品相、玩法、风险" },
@@ -725,7 +740,7 @@ async function generateViaProxy(userPrompt){
   const res = await fetch(API_BASE + '/api/knowledge-cards', {
     method:'POST',
     headers:{ 'Content-Type':'application/json' },
-    body: JSON.stringify({ prompt:userPrompt })
+    body: JSON.stringify({ prompt:userPrompt, clientId:getClientId() })
   });
   const j = await res.json().catch(() => ({ ok:false, error:'响应解析失败' }));
   if (!res.ok || !j.ok) throw new Error(j.error || ('请求失败 ' + res.status));
@@ -784,14 +799,27 @@ async function doGenerate(){
         { role:'user', content:userPrompt }
       ], apiKey);
     } else {
+      // 软限制：本地计数（后端还有 IP+设备ID 硬限制兜底）
+      const used = todayUsage();
+      if (used >= DAILY_SOFT_LIMIT){
+        setStatus('😅 今日免费额度已用完（' + DAILY_SOFT_LIMIT + ' 次/天/人）。填自己的 DeepSeek Key 或「复制提示词」可继续生成。', 'err');
+        return;
+      }
       data = await generateViaProxy(userPrompt);
     }
     const { terms, categories } = validate(data, $('count').value);
     showDeck({ ...data, terms, categories });
-    setStatus(`✅ 生成成功：${terms.length} 张卡片。滑一下翻一张，右上角可筛选 / 复制 / 自动播放。`, 'ok');
+    if (!apiKey) bumpUsage();
+    const left = Math.max(0, DAILY_SOFT_LIMIT - todayUsage());
+    setStatus(`✅ 生成成功：${terms.length} 张卡片。今日免费额度剩余 ${left} 次。滑一下翻一张，右上角可筛选 / 复制 / 自动播放。`, 'ok');
   } catch(e){
     console.error(e);
-    if (String(e.message).includes('NO_KEY') || String(e.message).includes('站长未配置')){
+    const msg = String(e.message);
+    if (msg.includes('DAILY_LIMIT_USER')){
+      setStatus('😅 今日免费生成次数已达上限（' + DAILY_SOFT_LIMIT + ' 次/人/天），明天再来；或填自己的 DeepSeek Key / 复制提示词，不受限。', 'err');
+    } else if (msg.includes('DAILY_LIMIT_GLOBAL')){
+      setStatus('😅 今天全站免费额度已被用完（站长配置上限），明天再来；或填自己的 DeepSeek Key，不受限。', 'err');
+    } else if (msg.includes('NO_KEY') || msg.includes('站长未配置')){
       setStatus('😅 站长暂未开放免费额度。请填入你自己的 DeepSeek Key，或点「复制提示词」用任意 AI 生成。', 'err');
     } else {
       setStatus('❌ ' + e.message, 'err');
