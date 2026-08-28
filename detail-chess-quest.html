@@ -47,9 +47,16 @@
         .step-item::before { counter-increment: step; content: counter(step); position: absolute; left: 20px; top: 20px; width: 30px; height: 30px; border-radius: 50%; background: var(--color-accent); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
         .step-title { font-weight: 600; color: var(--color-primary); margin-bottom: 4px; }
         .step-desc { font-size: 0.9rem; color: var(--color-muted); }
-        .link-buttons { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px; }
-        .link-btn-card { display: inline-block; padding: 14px 28px; border-radius: var(--radius); font-weight: 600; text-decoration: none; color: #fff; background: var(--color-primary); box-shadow: var(--shadow-soft); }
-        .link-btn-card.ghost { background: transparent; color: var(--color-primary); border: 2px solid var(--color-primary); }
+        .play-hero { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; background: #fff; padding: 36px 40px; border-radius: var(--radius); box-shadow: var(--shadow-soft); }
+        .play-info { flex: 1; min-width: 260px; }
+        .play-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--color-primary); margin-bottom: 12px; }
+        .play-note { font-size: 0.9rem; color: var(--color-muted); margin-top: 12px; }
+        .play-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .link-btn-card { display: inline-block; padding: 14px 28px; border-radius: var(--radius); font-weight: 600; text-decoration: none; text-align: center; color: #fff; background: #1F3D2B; box-shadow: var(--shadow-soft); }
+        .link-btn-card.alt { background: var(--color-primary); }
+        .qr-box { text-align: center; }
+        .qr-box img { width: 180px; height: 180px; border: 8px solid #fff; border-radius: 8px; box-shadow: var(--shadow-soft); background: #fff; }
+        .qr-caption { font-size: 0.85rem; color: var(--color-muted); margin-top: 10px; }
         footer { background: var(--color-primary); color: rgba(255,255,255,0.7); padding: 30px 40px; text-align: center; }
         @media (max-width: 768px) {
             .hero-title { font-size: 2.2rem; }
@@ -74,6 +81,23 @@
     </section>
 
     <main>
+        <section class="section">
+            <div class="play-hero">
+                <div class="play-info">
+                    <div class="play-title">立即开玩 · 无需注册</div>
+                    <div class="play-note">手机扫码直接进入游戏，或选择线路在浏览器打开。</div>
+                    <div class="play-buttons">
+                        <a class="link-btn-card" href="https://chess-quest-dbx.pages.dev/" target="_blank">▶ 开玩（国内直连线路）</a>
+                        <a class="link-btn-card alt" href="https://chess-quest-cyan.vercel.app/" target="_blank">开玩（海外线路）</a>
+                    </div>
+                </div>
+                <div class="qr-box">
+                    <img src="qr-chess-quest.svg" alt="Chess Quest 二维码">
+                    <div class="qr-caption">手机扫码 · 直接进入游戏</div>
+                </div>
+            </div>
+        </section>
+
         <section class="section">
             <h2 class="section-title">核心定位</h2>
             <p class="section-content">
@@ -156,10 +180,6 @@
             <p class="section-content">
                 当前版本 <strong>v1.3.0</strong>（2026-08-28）：黑方 AI 选向 bug 修复、残局追杀强化、对抗测试台 21 项断言全部通过、PWA 离线支持、用户反馈收集。开源在 GitHub，持续迭代中。
             </p>
-            <div class="link-buttons">
-                <a class="link-btn-card" href="https://chess-quest-cyan.vercel.app/" target="_blank">在线试玩 →</a>
-                <a class="link-btn-card ghost" href="https://github.com/amosliuster163/Chess-Quest" target="_blank">GitHub 仓库</a>
-            </div>
         </section>
     </main>
 
@@ -167,6 +187,8 @@
         <p>老刘聊AI · 2026</p>
         <p style="margin-top:8px;font-size:0.8rem;">
             <a href="https://github.com/amosliuster163" style="color:rgba(255,255,255,0.7);">GitHub: amosliuster163</a>
+            <span style="margin:0 8px;">·</span>
+            <a href="https://github.com/amosliuster163/Chess-Quest" style="color:rgba(255,255,255,0.7);">Chess-Quest 源码</a>
         </p>
     </footer>
 </body>
