@@ -196,7 +196,7 @@
             const type = document.querySelector('input[name="fbtype"]:checked').value;
             btn.disabled = true;
             try {
-                const res = await fetch('/api/feedback-listen', {
+                const res = await fetch('https://ai-tools-hub-zeta.vercel.app/api/feedback-listen', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ type, detail: text, page: 'listen-repeat', timestamp: new Date().toISOString() })
