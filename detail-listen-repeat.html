@@ -48,6 +48,15 @@
         .step-title { font-weight: 600; color: var(--color-primary); margin-bottom: 4px; }
         .step-desc { font-size: 0.9rem; color: var(--color-muted); }
         .note-card { background: #FDF6E3; border-left: 4px solid var(--color-accent); padding: 20px; border-radius: 8px; margin-top: 24px; font-size: 0.95rem; }
+        .fb-form { background: #fff; padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow-soft); margin-top: 24px; }
+        .fb-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+        .fb-type { display: none; }
+        .fb-type + label { padding: 6px 16px; border: 1px solid #D5DCE2; border-radius: 6px; font-size: 0.85rem; cursor: pointer; color: var(--color-muted); }
+        .fb-type:checked + label { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+        .fb-text { width: 100%; min-height: 80px; padding: 10px 12px; border: 1px solid #D5DCE2; border-radius: 6px; font-family: var(--font-body); font-size: 0.9rem; resize: vertical; }
+        .fb-submit { margin-top: 12px; background: var(--color-accent); color: #fff; border: none; padding: 10px 24px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+        .fb-submit:disabled { opacity: 0.6; cursor: default; }
+        .fb-msg { margin-top: 10px; font-size: 0.85rem; color: #1E7B4F; display: none; }
         footer { background: var(--color-primary); color: rgba(255,255,255,0.7); padding: 30px 40px; text-align: center; }
         @media (max-width: 768px) {
             .hero-title { font-size: 2.2rem; }
@@ -158,8 +167,54 @@
                 <strong>说明：</strong>音频素材来自 ELLLO.org，遵循其教育许可仅用于个人学习与小范围演示，不作公开分发，因此本页不提供下载入口。
             </div>
         </section>
+
+        <section class="section">
+            <h2 class="section-title">反馈与问题收集</h2>
+            <p class="section-content">使用中遇到问题、听写内容有误或有功能建议，欢迎留言，作者会逐条查看。</p>
+            <div class="fb-form">
+                <div class="fb-row">
+                    <input class="fb-type" type="radio" name="fbtype" id="fb-bug" value="bug" checked>
+                    <label for="fb-bug">问题反馈</label>
+                    <input class="fb-type" type="radio" name="fbtype" id="fb-content" value="content">
+                    <label for="fb-content">内容纠错</label>
+                    <input class="fb-type" type="radio" name="fbtype" id="fb-idea" value="idea">
+                    <label for="fb-idea">功能建议</label>
+                </div>
+                <textarea class="fb-text" id="fb-input" placeholder="简单描述问题或建议，例如：第 3 练第 12 句时间戳对不上 / 希望支持导出听写记录"></textarea>
+                <button class="fb-submit" id="fb-submit" onclick="submitFeedback()">提交反馈</button>
+                <div class="fb-msg" id="fb-msg"></div>
+            </div>
+        </section>
     </main>
     
+    <script>
+        async function submitFeedback() {
+            const btn = document.getElementById('fb-submit');
+            const msg = document.getElementById('fb-msg');
+            const text = document.getElementById('fb-input').value.trim();
+            if (!text) { msg.textContent = '请先填写反馈内容'; msg.style.color = '#B45309'; msg.style.display = 'block'; return; }
+            const type = document.querySelector('input[name="fbtype"]:checked').value;
+            btn.disabled = true;
+            try {
+                const res = await fetch('/api/feedback-listen', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, detail: text, page: 'listen-repeat', timestamp: new Date().toISOString() })
+                });
+                if (!res.ok) throw new Error('bad status');
+                msg.textContent = '已收到，感谢反馈！';
+                msg.style.color = '#1E7B4F';
+                msg.style.display = 'block';
+                document.getElementById('fb-input').value = '';
+            } catch (e) {
+                msg.textContent = '提交失败，请稍后再试';
+                msg.style.color = '#B45309';
+                msg.style.display = 'block';
+            }
+            btn.disabled = false;
+        }
+    </script>
+
     <footer>
         <p>老刘聊AI · 2026</p>
         <p style="margin-top:8px;font-size:0.8rem;">
